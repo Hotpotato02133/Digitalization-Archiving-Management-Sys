@@ -1,0 +1,340 @@
+/* ==========================================================================
+   DATS - dashboard button system
+   One pill shape, one set of heights, one set of states for every action
+   button in admin/ and staff/. Load this AFTER the page stylesheets.
+   ========================================================================== */
+
+:root {
+  --btn-height: 36px;
+  --btn-height-sm: 30px;
+  --btn-height-lg: 42px;
+  --btn-radius: 999px;
+  --btn-pad: 18px;
+  --btn-pad-sm: 13px;
+  --btn-ease: .16s cubic-bezier(.4, 0, .2, 1);
+  --gold-deep: #c39c2c;
+  --maroon-soft: #f3e3e4;
+}
+
+/* --- Shared shape --------------------------------------------------------
+   Height is set explicitly rather than through vertical padding, so every
+   button in a row lines up no matter what its label or icon is. */
+.gold-button,
+.login-submit,
+.outline-button,
+.modal-cancel,
+.settings-discard,
+.approve-button,
+.reject-button,
+.archive-button,
+.view-files-btn,
+.view-document-button,
+.students-table .student-row-action,
+.student-file-actions a,
+.student-file-actions button,
+.year-pagination button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  height: var(--btn-height);
+  padding: 0 var(--btn-pad);
+  border: 1px solid transparent;
+  border-radius: var(--btn-radius);
+  font: 800 10px/1 var(--sans);
+  letter-spacing: .01em;
+  white-space: nowrap;
+  text-decoration: none;
+  cursor: pointer;
+  transition: background var(--btn-ease), color var(--btn-ease),
+              border-color var(--btn-ease), box-shadow var(--btn-ease),
+              transform var(--btn-ease);
+}
+
+.gold-button svg,
+.login-submit svg,
+.outline-button svg,
+.modal-cancel svg,
+.settings-discard svg,
+.approve-button svg,
+.reject-button svg,
+.archive-button svg,
+.view-files-btn svg,
+.view-document-button svg,
+.students-table .student-row-action svg,
+.student-file-actions a svg,
+.student-file-actions button svg,
+.year-pagination button svg {
+  width: 14px;
+  height: 14px;
+  flex: 0 0 14px;
+}
+
+/* Keep a button from being stretched by a flex parent. */
+.welcome-row .gold-button,
+.table-heading .gold-button,
+.modal-actions .login-submit,
+.modal-actions .modal-cancel,
+.modal-actions .outline-button { align-self: center; }
+
+/* .login-submit carries margin-top: 22px for standing alone under a field.
+   Inside a footer row that margin is centred with the button and knocks it
+   out of line with its neighbours. */
+.modal-actions .login-submit { margin: 0; }
+
+/* --- Primary: gold ------------------------------------------------------- */
+.gold-button,
+.login-submit,
+.view-files-btn,
+.archive-button,
+.student-file-actions a.primary,
+.student-file-actions button.gold-button {
+  color: var(--maroon-dark);
+  background: var(--gold);
+  border-color: var(--gold);
+  box-shadow: 0 1px 2px rgba(42, 23, 26, .08);
+}
+
+.gold-button:hover,
+.login-submit:hover,
+.view-files-btn:hover,
+.archive-button:hover,
+.student-file-actions a.primary:hover,
+.student-file-actions button.gold-button:hover {
+  background: var(--gold-deep);
+  border-color: var(--gold-deep);
+  box-shadow: 0 3px 10px rgba(42, 23, 26, .16);
+}
+
+/* --- Solid maroon -------------------------------------------------------- */
+.approve-button,
+.modal-actions .login-submit {
+  color: var(--white);
+  background: var(--maroon);
+  border-color: var(--maroon);
+  box-shadow: 0 1px 2px rgba(42, 23, 26, .12);
+}
+
+.approve-button:hover,
+.modal-actions .login-submit:hover {
+  background: var(--maroon-dark);
+  border-color: var(--maroon-dark);
+  box-shadow: 0 3px 10px rgba(42, 23, 26, .2);
+}
+
+/* --- Soft tinted --------------------------------------------------------- */
+.reject-button,
+.view-document-button,
+.students-table .student-row-action {
+  color: var(--maroon);
+  background: var(--maroon-soft);
+  border-color: transparent;
+}
+
+.reject-button:hover,
+.view-document-button:hover,
+.students-table .student-row-action:hover {
+  color: var(--maroon-dark);
+  background: #ecd5d7;
+  border-color: transparent;
+}
+
+.view-document-button { background: var(--gold-pale); }
+.view-document-button:hover { background: #f2e4c4; }
+
+/* --- Outline / quiet ----------------------------------------------------- */
+.outline-button,
+.modal-cancel,
+.settings-discard,
+.folder-modal .outline-button {
+  color: var(--ink);
+  background: var(--white);
+  border-color: var(--line);
+  box-shadow: none;
+}
+
+.outline-button:hover,
+.modal-cancel:hover,
+.settings-discard:hover,
+.folder-modal .outline-button:hover {
+  color: var(--maroon);
+  background: var(--paper);
+  border-color: #d9c9c5;
+}
+
+/* --- Small / dense ------------------------------------------------------- */
+.students-table .student-row-action,
+.view-document-button,
+.view-files-btn,
+.student-file-actions a,
+.student-file-actions button {
+  height: var(--btn-height-sm);
+  padding: 0 var(--btn-pad-sm);
+  font-size: 9px;
+}
+
+.archive-button { height: var(--btn-height-lg); padding: 0 22px; font-size: 11px; }
+
+/* --- Pagination ---------------------------------------------------------- */
+.year-pagination button {
+  min-width: var(--btn-height-sm);
+  height: var(--btn-height-sm);
+  padding: 0 11px;
+  color: var(--ink);
+  background: var(--white);
+  border-color: var(--line);
+  font: 500 9px/1 var(--mono);
+}
+
+.year-pagination button:hover:not(:disabled) { color: var(--maroon); background: var(--paper); border-color: #d9c9c5; }
+
+.year-pagination button.active {
+  color: var(--maroon-dark);
+  background: var(--gold-pale);
+  border-color: rgba(214, 173, 58, .85);
+  font-weight: 700;
+}
+
+/* --- Icon-only: perfect circles ------------------------------------------ */
+.mini-action,
+.course-delete,
+.delete-college,
+.course-edit,
+.course-add-major,
+.view-button,
+.more-button,
+.modal-close,
+.header-icon,
+.users-table .row-action,
+.students-table .row-action,
+.history-table .row-action {
+  display: inline-grid;
+  place-items: center;
+  width: var(--btn-height-sm);
+  height: var(--btn-height-sm);
+  padding: 0;
+  color: var(--muted);
+  background: transparent;
+  border: 1px solid transparent;
+  border-radius: 50%;
+  cursor: pointer;
+  transition: color var(--btn-ease), background var(--btn-ease), border-color var(--btn-ease);
+}
+
+.mini-action:hover,
+.course-edit:hover,
+.course-add-major:hover,
+.view-button:hover,
+.more-button:hover,
+.modal-close:hover,
+.header-icon:hover,
+.mobile-menu:hover,
+.users-table .row-action:hover,
+.students-table .row-action:hover,
+.history-table .row-action:hover {
+  color: var(--maroon);
+  background: var(--gold-pale);
+  border-color: transparent;
+}
+
+.course-delete:hover,
+.delete-college:hover { color: var(--maroon); background: var(--maroon-soft); border-color: transparent; }
+
+.mini-action svg,
+.course-delete svg,
+.delete-college svg,
+.course-edit svg,
+.course-add-major svg,
+.view-button svg,
+.more-button svg,
+.modal-close svg,
+.users-table .row-action svg,
+.students-table .row-action svg,
+.history-table .row-action svg { width: 15px; height: 15px; }
+
+.header-icon svg, .mobile-menu svg { width: 17px; height: 17px; }
+
+/* The course list sizes its icon buttons into a fixed 24px grid track. */
+.course-list .course-edit,
+.course-list .course-delete,
+.course-list .course-add-major { width: 24px; height: 24px; }
+
+.course-list .course-edit svg,
+.course-list .course-delete svg,
+.course-list .course-add-major svg { width: 13px; height: 13px; }
+
+/* --- Shared states ------------------------------------------------------- */
+.gold-button:active,
+.login-submit:active,
+.outline-button:active,
+.modal-cancel:active,
+.settings-discard:active,
+.approve-button:active,
+.reject-button:active,
+.archive-button:active,
+.view-files-btn:active,
+.view-document-button:active,
+.students-table .student-row-action:active,
+.year-pagination button:active:not(:disabled) { transform: translateY(1px); box-shadow: none; }
+
+.gold-button:focus-visible,
+.login-submit:focus-visible,
+.outline-button:focus-visible,
+.modal-cancel:focus-visible,
+.settings-discard:focus-visible,
+.approve-button:focus-visible,
+.reject-button:focus-visible,
+.archive-button:focus-visible,
+.view-files-btn:focus-visible,
+.view-document-button:focus-visible,
+.students-table .student-row-action:focus-visible,
+.year-pagination button:focus-visible,
+.mini-action:focus-visible,
+.course-delete:focus-visible,
+.delete-college:focus-visible,
+.view-button:focus-visible,
+.more-button:focus-visible,
+.modal-close:focus-visible,
+.header-icon:focus-visible,
+.mobile-menu:focus-visible {
+  outline: 2px solid var(--maroon);
+  outline-offset: 2px;
+}
+
+.gold-button:disabled,
+.login-submit:disabled,
+.outline-button:disabled,
+.modal-cancel:disabled,
+.settings-discard:disabled,
+.approve-button:disabled,
+.reject-button:disabled,
+.archive-button:disabled,
+.view-files-btn:disabled,
+.year-pagination button:disabled,
+.student-file-actions a.disabled {
+  opacity: .45;
+  box-shadow: none;
+  cursor: not-allowed;
+  pointer-events: none;
+  transform: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .gold-button, .login-submit, .outline-button, .modal-cancel, .settings-discard,
+  .approve-button, .reject-button, .archive-button, .view-files-btn,
+  .view-document-button, .year-pagination button,
+  .students-table .student-row-action { transition: none; }
+
+  .gold-button:active, .login-submit:active, .approve-button:active { transform: none; }
+}
+
+/* --- Narrow screens ------------------------------------------------------ */
+@media (max-width: 760px) {
+  .welcome-row .gold-button,
+  .table-heading .gold-button { width: 100%; }
+
+  .modal-actions { flex-wrap: wrap; }
+  .modal-actions .login-submit,
+  .modal-actions .modal-cancel,
+  .modal-actions .outline-button { flex: 1 1 auto; }
+}

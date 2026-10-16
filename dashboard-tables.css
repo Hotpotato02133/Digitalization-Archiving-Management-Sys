@@ -1,0 +1,444 @@
+/* ==========================================================================
+   DATS - dashboard table system
+   Single source of truth for every data table in admin/ and staff/.
+   Covers .users-table, .students-table, .history-table, .student-year-table.
+   ========================================================================== */
+
+/* --- Scroll container ----------------------------------------------------
+   Horizontal + vertical scrolling live here so the sticky header has a
+   scrollport to stick to. The layered backgrounds are the pure-CSS scroll
+   shadow: the white gradients are attached `local` (they scroll away with
+   the content) and uncover the `scroll`-attached shadows underneath, so an
+   edge shadow shows only while there is more table to reach. */
+.users-table-wrap,
+.students-table-wrap,
+.history-table-wrap,
+.student-year-table-wrap {
+  position: relative;
+  overflow: auto;
+  max-height: clamp(300px, 60vh, 700px);
+  overscroll-behavior-x: contain;
+  background:
+    linear-gradient(to right, var(--white) 30%, rgba(255, 255, 255, 0)) left center,
+    linear-gradient(to left, var(--white) 30%, rgba(255, 255, 255, 0)) right center,
+    radial-gradient(farthest-side at 0 50%, rgba(42, 23, 26, .14), rgba(42, 23, 26, 0)) left center,
+    radial-gradient(farthest-side at 100% 50%, rgba(42, 23, 26, .14), rgba(42, 23, 26, 0)) right center;
+  background-repeat: no-repeat;
+  background-size: 44px 100%, 44px 100%, 15px 100%, 15px 100%;
+  background-attachment: local, local, scroll, scroll;
+  scrollbar-width: thin;
+  scrollbar-color: #d9cdca transparent;
+}
+
+.users-table-wrap::-webkit-scrollbar,
+.students-table-wrap::-webkit-scrollbar,
+.history-table-wrap::-webkit-scrollbar,
+.student-year-table-wrap::-webkit-scrollbar { width: 9px; height: 9px; }
+
+.users-table-wrap::-webkit-scrollbar-thumb,
+.students-table-wrap::-webkit-scrollbar-thumb,
+.history-table-wrap::-webkit-scrollbar-thumb,
+.student-year-table-wrap::-webkit-scrollbar-thumb { background: #ded2cf; border: 2px solid var(--white); border-radius: 20px; }
+
+.users-table-wrap::-webkit-scrollbar-thumb:hover,
+.students-table-wrap::-webkit-scrollbar-thumb:hover,
+.history-table-wrap::-webkit-scrollbar-thumb:hover,
+.student-year-table-wrap::-webkit-scrollbar-thumb:hover { background: #c9b8b4; }
+
+/* The table headers mark their actions column with .sr-only, but no
+   stylesheet ever defined it, so "Actions" rendered as visible text.
+   Screen readers still announce the column. */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* --- Table --------------------------------------------------------------- */
+.users-table,
+.students-table,
+.history-table,
+.student-year-table {
+  width: 100%;
+  border-collapse: separate;   /* `collapse` drops borders on sticky cells */
+  border-spacing: 0;
+  background: var(--white);
+  text-align: left;
+  font-variant-numeric: tabular-nums;
+}
+
+.users-table { min-width: 640px; }
+.history-table { min-width: 760px; }
+.students-table { min-width: 1180px; }
+.student-year-table { min-width: 420px; }
+
+/* --- Header -------------------------------------------------------------- */
+.users-table thead th,
+.students-table thead th,
+.history-table thead th,
+.student-year-table thead th {
+  position: sticky;
+  top: 0;
+  z-index: 3;
+  padding: 13px 16px;
+  color: var(--muted);
+  background: var(--paper);
+  border-bottom: 1px solid var(--line);
+  font: 500 9px/1.2 var(--mono);
+  letter-spacing: .07em;
+  text-transform: uppercase;
+  text-align: left;
+  white-space: nowrap;
+  vertical-align: middle;
+}
+
+/* --- Rows ---------------------------------------------------------------- */
+/* Every cell paints --row-bg, so zebra, hover and the sticky columns all
+   agree on one colour per row and sticky cells stay opaque while scrolling. */
+.users-table tbody tr,
+.students-table tbody tr,
+.history-table tbody tr,
+.student-year-table tbody tr { --row-bg: var(--white); }
+
+.students-table tbody tr:nth-child(even) { --row-bg: #fcfaf8; }
+
+.users-table tbody tr:hover,
+.students-table tbody tr:hover,
+.history-table tbody tr:hover,
+.student-year-table tbody tr:hover { --row-bg: #fbf5ec; }
+
+.users-table tbody td,
+.students-table tbody td,
+.history-table tbody td,
+.student-year-table tbody td {
+  padding: 13px 16px;
+  color: var(--ink);
+  background: var(--row-bg);
+  border-bottom: 1px solid var(--line);
+  font-size: 10px;
+  line-height: 1.45;
+  vertical-align: middle;
+  transition: background .13s ease;
+}
+
+.users-table tbody tr:last-child td,
+.students-table tbody tr:last-child td,
+.history-table tbody tr:last-child td,
+.student-year-table tbody tr:last-child td { border-bottom: 0; }
+
+.users-table tbody td small,
+.students-table tbody td small,
+.history-table tbody td small,
+.student-year-table tbody td small { color: var(--muted); font-size: 9px; }
+
+/* Gold marker tracks the hovered row across wide tables. */
+.users-table tbody td:first-child,
+.history-table tbody td:first-child,
+.student-year-table tbody td:first-child { box-shadow: inset 3px 0 0 transparent; }
+
+.users-table tbody tr:hover td:first-child,
+.history-table tbody tr:hover td:first-child,
+.student-year-table tbody tr:hover td:first-child { box-shadow: inset 3px 0 0 var(--gold); }
+
+/* --- Action column ------------------------------------------------------- */
+.users-table th:last-child,
+.users-table td:last-child,
+.students-table th:last-child,
+.students-table td:last-child,
+.history-table th:last-child,
+.history-table td:last-child,
+.student-year-table th:last-child,
+.student-year-table td:last-child { width: 1%; text-align: right; white-space: nowrap; }
+
+.users-table .row-action,
+.students-table .row-action,
+.history-table .row-action {
+  display: inline-grid;
+  place-items: center;
+  width: 28px;
+  height: 28px;
+  margin: 0;
+  padding: 0;
+  color: var(--muted);
+  background: transparent;
+  border: 1px solid transparent;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: color .13s ease, background .13s ease, border-color .13s ease;
+}
+
+.users-table .row-action:hover,
+.students-table .row-action:hover,
+.history-table .row-action:hover { color: var(--maroon); background: var(--white); border-color: var(--line); }
+
+.users-table .row-action:focus-visible,
+.students-table .row-action:focus-visible,
+.history-table .row-action:focus-visible { outline: 2px solid var(--maroon); outline-offset: 1px; }
+
+.users-table .row-action svg,
+.students-table .row-action svg,
+.history-table .row-action svg { width: 15px; }
+
+/* --- Students table: pin identity and actions while the rest scrolls ----- */
+.students-table th:first-child,
+.students-table td:first-child {
+  position: sticky;
+  left: 0;
+  z-index: 2;
+  box-shadow: 1px 0 0 var(--line), 12px 0 15px -14px rgba(42, 23, 26, .5);
+}
+
+.students-table th:last-child,
+.students-table td:last-child {
+  position: sticky;
+  right: 0;
+  z-index: 2;
+  box-shadow: -1px 0 0 var(--line), -12px 0 15px -14px rgba(42, 23, 26, .5);
+}
+
+.students-table thead th:first-child,
+.students-table thead th:last-child { z-index: 4; }
+
+.students-table tbody td { vertical-align: top; }
+.students-table tbody td:first-child { vertical-align: middle; }
+
+/* --- Cell content -------------------------------------------------------- */
+.table-user,
+.history-file,
+.student-identity { display: flex; align-items: center; gap: 10px; min-width: 0; }
+
+.student-identity { align-items: flex-start; min-width: 250px; }
+
+.table-user strong,
+.history-file strong,
+.student-identity strong { font-size: 10px; line-height: 1.35; }
+
+.mono-cell { color: var(--maroon) !important; font-family: var(--mono); font-size: 9px !important; letter-spacing: .02em; }
+
+/* --- Badges -------------------------------------------------------------- */
+.status-badge,
+.history-status {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 4px 9px;
+  border-radius: 20px;
+  font: 8px/1.4 var(--mono);
+  letter-spacing: .04em;
+  white-space: nowrap;
+}
+
+/* A dot makes state readable at a glance, before the label is read. */
+.active-status::before,
+.inactive-status::before,
+.history-status.uploaded::before,
+.history-status.processing::before,
+.history-status.review-status::before {
+  content: '';
+  flex: 0 0 5px;
+  width: 5px;
+  height: 5px;
+  background: currentColor;
+  border-radius: 50%;
+}
+
+/* --- Empty + loading states ---------------------------------------------- */
+.empty-users,
+.empty-students,
+.empty-history,
+.history-empty,
+.table-loading {
+  padding: 38px 24px;
+  color: var(--muted);
+  text-align: center;
+  font-size: 11px;
+}
+
+td.table-loading,
+td.history-empty { border-bottom: 0; }
+
+/* --- Sortable headers ---------------------------------------------------- */
+.users-table thead th[data-sort-key],
+.students-table thead th[data-sort-key],
+.history-table thead th[data-sort-key],
+.student-year-table thead th[data-sort-key] { cursor: pointer; user-select: none; padding-right: 27px; }
+
+.users-table thead th[data-sort-key]:hover,
+.students-table thead th[data-sort-key]:hover,
+.history-table thead th[data-sort-key]:hover,
+.student-year-table thead th[data-sort-key]:hover { color: var(--maroon); background: var(--gold-pale); }
+
+.users-table thead th[data-sort-key]::after,
+.students-table thead th[data-sort-key]::after,
+.history-table thead th[data-sort-key]::after,
+.student-year-table thead th[data-sort-key]::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  right: 11px;
+  width: 6px;
+  height: 6px;
+  margin-top: -5px;
+  border-right: 1.5px solid currentColor;
+  border-bottom: 1.5px solid currentColor;
+  opacity: .25;
+  transform: rotate(45deg);
+  transition: opacity .13s ease, transform .13s ease;
+}
+
+.users-table thead th[aria-sort="ascending"]::after,
+.students-table thead th[aria-sort="ascending"]::after,
+.history-table thead th[aria-sort="ascending"]::after,
+.student-year-table thead th[aria-sort="ascending"]::after {
+  margin-top: -1px;
+  opacity: 1;
+  transform: rotate(-135deg);
+}
+
+.users-table thead th[aria-sort="descending"]::after,
+.students-table thead th[aria-sort="descending"]::after,
+.history-table thead th[aria-sort="descending"]::after,
+.student-year-table thead th[aria-sort="descending"]::after { opacity: 1; }
+
+.users-table thead th[aria-sort]:not([aria-sort="none"]),
+.students-table thead th[aria-sort]:not([aria-sort="none"]),
+.history-table thead th[aria-sort]:not([aria-sort="none"]),
+.student-year-table thead th[aria-sort]:not([aria-sort="none"]) { color: var(--maroon); }
+
+.users-table thead th[data-sort-key]:focus-visible,
+.students-table thead th[data-sort-key]:focus-visible,
+.history-table thead th[data-sort-key]:focus-visible,
+.student-year-table thead th[data-sort-key]:focus-visible { outline: 2px solid var(--maroon); outline-offset: -2px; }
+
+/* --- Row action menus ---------------------------------------------------- */
+/* Re-anchored to <body> by dashboard-tables.js so the scroll container
+   cannot clip them. */
+.user-action-menu.is-anchored,
+.student-action-menu.is-anchored {
+  position: fixed;
+  top: auto;
+  right: auto;
+  z-index: 30;
+  border-radius: 4px;
+  box-shadow: 0 14px 32px rgba(42, 23, 26, .22);
+}
+
+/* --- Small screens: rows become stacked cards ---------------------------- */
+@media (max-width: 760px) {
+  .users-table-wrap,
+  .students-table-wrap,
+  .history-table-wrap,
+  .student-year-table-wrap { max-height: none; overflow: visible; background: var(--white); }
+
+  .users-table,
+  .students-table,
+  .history-table,
+  .student-year-table { min-width: 0; }
+
+  .users-table thead,
+  .students-table thead,
+  .history-table thead,
+  .student-year-table thead {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+  }
+
+  .users-table tbody tr,
+  .students-table tbody tr,
+  .history-table tbody tr,
+  .student-year-table tbody tr {
+    display: block;
+    padding: 6px 14px 10px;
+    border-bottom: 1px solid var(--line);
+  }
+
+  .users-table tbody td,
+  .students-table tbody td,
+  .history-table tbody td,
+  .student-year-table tbody td {
+    display: grid;
+    grid-template-columns: 92px 1fr;
+    align-items: center;
+    gap: 10px;
+    padding: 7px 0;
+    border-bottom: 0;
+    box-shadow: none !important;
+  }
+
+  .users-table tbody td::before,
+  .students-table tbody td::before,
+  .history-table tbody td::before,
+  .student-year-table tbody td::before {
+    content: attr(data-label);
+    color: var(--muted);
+    font: 500 8px/1.3 var(--mono);
+    letter-spacing: .06em;
+    text-transform: uppercase;
+  }
+
+  .users-table tbody td:first-child,
+  .students-table tbody td:first-child,
+  .history-table tbody td:first-child,
+  .student-year-table tbody td:first-child {
+    position: static;
+    grid-template-columns: 1fr;
+    padding: 12px 0 10px;
+  }
+
+  .users-table tbody td:first-child::before,
+  .students-table tbody td:first-child::before,
+  .history-table tbody td:first-child::before,
+  .student-year-table tbody td:first-child::before { display: none; }
+
+  .users-table tbody td:last-child,
+  .students-table tbody td:last-child,
+  .history-table tbody td:last-child,
+  .student-year-table tbody td:last-child {
+    position: static;
+    width: auto;
+    grid-template-columns: 1fr;
+    justify-items: start;
+    text-align: left;
+  }
+
+  .users-table tbody td:last-child::before,
+  .students-table tbody td:last-child::before,
+  .history-table tbody td:last-child::before,
+  .student-year-table tbody td:last-child::before { display: none; }
+
+  /* Grid items stretch by default, which would blow the pills out to the
+     full width of the card. */
+  .users-table tbody td .status-badge,
+  .students-table tbody td .status-badge,
+  .history-table tbody td .history-status { justify-self: start; }
+
+  .students-table tbody td { vertical-align: middle; }
+  .student-identity { min-width: 0; }
+
+  /* The search + filter row above the table is part of the same panel and
+     is the only thing left overflowing once the rows stack. */
+  .users-toolbar,
+  .history-toolbar { flex-wrap: wrap; }
+
+  .users-toolbar .search-box,
+  .history-toolbar .search-box { flex: 1 0 100%; }
+
+  .users-toolbar select,
+  .history-toolbar select { flex: 1 1 auto; min-width: 0; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .users-table tbody td,
+  .students-table tbody td,
+  .history-table tbody td,
+  .student-year-table tbody td { transition: none; }
+}

@@ -1,0 +1,237 @@
+.gradesheets-main .panel {
+  width: 88.8%;
+  max-width: 1180px;
+  margin: 0 auto 20px;
+}
+.sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0; }
+
+.ghost-button {
+  display: inline-flex; align-items: center; gap: 6px; padding: 8px 12px;
+  color: var(--maroon-dark); background: var(--white); border: 1px solid var(--line);
+  font: 700 10px var(--sans); cursor: pointer;
+}
+.ghost-button svg { width: 13px; height: 13px; }
+.ghost-button:hover:not(:disabled) { border-color: var(--gold); }
+.ghost-button:disabled { opacity: .55; cursor: not-allowed; }
+.ghost-button.gs-danger { color: #a5342a; }
+.gs-primary { display: inline-flex; align-items: center; gap: 6px; width: auto; margin: 0; padding: 9px 14px; }
+.gs-primary svg { width: 14px; height: 14px; }
+
+/* ---- Search: same component and dropdown as the Files page student search ---- */
+.gs-search-toolbar { margin-bottom: 16px; }
+.gs-search-toolbar .search-box { position: relative; min-height: 40px; width: 100%; max-width: 520px; background: var(--white); }
+.gs-search-toolbar .search-box input { width: 100%; }
+.search-suggestions { position: absolute; top: calc(100% + 8px); left: -1px; right: -1px; z-index: 6; max-height: 288px; overflow-y: auto; padding: 6px; background: var(--white); border: 1px solid var(--line); border-radius: 12px; box-shadow: 0 16px 34px rgba(48,39,35,.14); }
+.search-suggestions[hidden] { display: none; }
+.search-suggestion-item { display: flex; align-items: center; gap: 10px; width: 100%; padding: 9px 10px; color: var(--ink); background: transparent; border: 0; border-radius: 8px; text-align: left; cursor: pointer; font: inherit; }
+.search-suggestion-item:hover, .search-suggestion-item.active { background: var(--gold-pale); }
+.search-suggestion-item strong { display: block; font-size: 10px; }
+.search-suggestion-item small { display: block; margin-top: 2px; color: var(--muted); font-size: 9px; }
+.search-suggestion-item .gs-suggestion-meta { margin-left: auto; color: var(--muted); font: 8px var(--mono); white-space: nowrap; }
+.search-suggestion-empty { padding: 12px 10px; color: var(--muted); font-size: 10px; text-align: center; }
+.student-mini-avatar { display: grid; place-items: center; flex: 0 0 26px; width: 26px; height: 26px; color: var(--white); background: var(--maroon); border-radius: 50%; font: 7px var(--mono); }
+
+/* ---- Results ---- */
+.gs-empty { display: grid; justify-items: center; gap: 6px; padding: 34px 16px; color: var(--muted); text-align: center; font-size: 10px; border: 1px dashed var(--line); }
+.gs-empty svg { width: 26px; height: 26px; color: var(--gold); }
+.gs-empty strong { color: var(--ink); font-size: 12px; }
+.gs-student-summary { display: flex; flex-wrap: wrap; align-items: center; gap: 12px; padding: 14px 16px; margin-bottom: 12px; background: var(--paper); border: 1px solid var(--line); }
+.gs-student-summary .student-mini-avatar { flex-basis: 38px; width: 38px; height: 38px; font-size: 10px; }
+.gs-student-summary strong { display: block; font-size: 14px; letter-spacing: -.02em; }
+.gs-student-summary small { display: block; margin-top: 3px; color: var(--muted); font-size: 9px; }
+.gs-summary-stats { display: flex; gap: 14px; margin-left: auto; color: var(--muted); font: 9px var(--mono); text-transform: uppercase; }
+.gs-summary-stats b { color: var(--ink); font-size: 12px; }
+.gs-open-full-page { display: inline-flex; align-items: center; gap: 5px; color: var(--maroon); font-size: 10px; font-weight: 700; text-decoration: none; }
+.gs-open-full-page svg { width: 13px; }
+
+.gs-table-wrap { overflow-x: auto; border: 1px solid var(--line); background: var(--white); }
+.gradesheet-history-panel .gs-table-wrap { max-height: 340px; overflow-y: auto; overscroll-behavior: contain; }
+.gs-table { width: 100%; border-collapse: collapse; font-size: 10px; }
+.gs-table th { padding: 10px 12px; color: var(--muted); font: 700 8px var(--mono); letter-spacing: .06em; text-transform: uppercase; text-align: left; white-space: nowrap; background: var(--paper); border-bottom: 1px solid var(--line); }
+.gs-table td { padding: 10px 12px; border-bottom: 1px solid var(--line); vertical-align: middle; }
+.gs-table tbody tr:last-child td { border-bottom: 0; }
+.gs-table td small { display: block; margin-top: 2px; color: var(--muted); font-size: 9px; }
+.gs-table .gs-num { font-family: var(--mono); white-space: nowrap; }
+.gs-table .gs-year-course { color: var(--muted); font: 700 9px var(--mono); letter-spacing: .02em; white-space: nowrap; }
+.gs-table-note { padding: 18px 12px; color: var(--muted); text-align: center; }
+.gs-term-row td { padding: 8px 12px; color: var(--maroon-dark); background: var(--gold-pale); font-weight: 800; font-size: 10px; }
+.gs-term-row .gs-term-average { float: right; color: var(--muted); font: 9px var(--mono); }
+.gs-term-row .gs-term-average b { color: var(--ink); }
+tr.is-flagged td:first-child { box-shadow: inset 3px 0 0 var(--gold); }
+.gs-flag { display: inline-flex; align-items: center; padding: 2px 7px; color: #8a6a1d; background: var(--gold-pale); border: 1px solid #ead9a8; border-radius: 999px; font: 700 8px var(--mono); letter-spacing: .04em; text-transform: uppercase; vertical-align: middle; }
+.gs-remark { font: 700 8px var(--mono); letter-spacing: .04em; }
+.gs-remark.is-passed { color: #2f6b3a; }
+.gs-remark.is-failed { color: #a5342a; }
+.gs-remark.is-other { color: #8a6a1d; }
+.gs-row-actions { display: flex; justify-content: flex-end; gap: 6px; white-space: nowrap; }
+.gs-icon-button { display: inline-grid; place-items: center; width: 28px; height: 28px; padding: 0; color: var(--maroon); background: var(--white); border: 1px solid var(--line); cursor: pointer; }
+.gs-icon-button:hover:not(:disabled) { border-color: var(--gold); background: var(--gold-pale); }
+.gs-icon-button:disabled { opacity: .45; cursor: not-allowed; }
+.gs-icon-button svg { width: 13px; height: 13px; }
+.gs-view-button { display: inline-flex; align-items: center; gap: 4px; width: auto; padding: 0 7px; font: 700 9px var(--sans); }
+.gs-view-button svg { width: 12px; height: 12px; }
+
+.gs-status-pill { display: inline-flex; align-items: center; padding: 4px 10px; border-radius: 999px; font: 700 8px var(--mono); text-transform: uppercase; letter-spacing: .04em; white-space: nowrap; }
+.gs-status-pill.is-needs-review { color: #8a6a1d; background: var(--gold-pale); }
+.gs-status-pill.is-completed { color: #2f6b3a; background: #e2f2e4; }
+.gs-status-pill.is-failed { color: #a5342a; background: #f8e5e2; }
+.gs-status-pill.is-pending { color: #3a4d8a; background: #e5e9f8; }
+
+/* ---- Upload progress: one stable element, updated in place (no re-rendered icons) ---- */
+.gs-progress { display: grid; gap: 8px; margin: 2px 0 12px; padding: 12px 14px; background: var(--paper); border: 1px solid var(--line); }
+.gs-progress[hidden] { display: none; }
+.gs-progress-head { display: flex; align-items: center; gap: 10px; min-width: 0; }
+.gs-progress-head strong { flex: 1; min-width: 0; overflow: hidden; font-size: 10px; text-overflow: ellipsis; white-space: nowrap; }
+.gs-progress-percent { color: var(--maroon); font: 700 10px var(--mono); font-variant-numeric: tabular-nums; }
+.gs-spinner { flex: 0 0 14px; width: 14px; height: 14px; border: 2px solid rgba(107,29,42,.18); border-top-color: var(--maroon); border-radius: 50%; animation: gs-spin .8s linear infinite; }
+.gs-progress.is-done .gs-spinner { animation: none; border-color: #2f6b3a; }
+.gs-progress-track { height: 6px; overflow: hidden; background: #eadfdc; border-radius: 999px; }
+.gs-progress-bar { width: 100%; height: 100%; background: linear-gradient(90deg, var(--maroon), #9a3445); border-radius: inherit; transform: scaleX(0); transform-origin: left center; transition: transform .35s ease-out; will-change: transform; }
+.gs-progress-detail { min-height: 12px; color: var(--muted); font: 9px var(--mono); }
+@keyframes gs-spin { to { transform: rotate(360deg); } }
+.gs-upload-help { display: block; }
+.gs-upload-zone-busy { opacity: .7; }
+
+/* ---- Modals ---- */
+.gs-modal-backdrop { position: fixed; inset: 0; z-index: 15; display: grid; place-items: center; padding: 22px; background: rgba(42,23,26,.72); backdrop-filter: blur(4px); }
+.gs-modal-backdrop[hidden] { display: none; }
+.gs-modal-backdrop.gs-modal-top { z-index: 16; }
+.gs-modal { position: relative; display: flex; flex-direction: column; gap: 14px; width: min(100%, 620px); max-height: 90vh; padding: 26px 28px; background: var(--white); border-top: 5px solid var(--maroon); box-shadow: 0 22px 55px rgba(42,23,26,.28); overflow: auto; }
+.gs-modal.gs-modal-wide { width: min(100%, 1040px); overflow: hidden; }
+.gs-page-view-modal { height: min(90vh, 960px); }
+.gs-page-view-modal .gs-modal-header { flex: none; }
+.gs-page-view-modal .gs-page-view-status { flex: none; margin: 0; color: var(--muted); font-size: 10px; }
+.gs-page-view-body { flex: 1; min-height: 0; overflow: auto; padding: 12px; background: #eee9e6; }
+.gs-page-view-page { width: min(100%, 900px); margin: 0 auto 14px; padding: 10px; background: var(--white); border: 1px solid var(--line); }
+.gs-page-view-page-head { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 8px; margin-bottom: 8px; }
+.gs-page-view-page figcaption { color: var(--muted); font: 700 9px var(--mono); }
+.gs-page-view-controls { display: flex; flex-wrap: wrap; gap: 6px; }
+.gs-page-rotate { display: inline-flex; align-items: center; gap: 5px; width: auto; min-height: 30px; padding: 0 8px; font: 700 9px var(--sans); }
+.gs-page-rotate svg { width: 13px; height: 13px; }
+.gs-page-view-page canvas { display: block; width: 100%; height: auto; }
+.gs-modal-header { display: flex; align-items: flex-start; justify-content: space-between; gap: 10px; }
+.gs-modal-header h2 { margin: 6px 0 4px; font-size: 20px; letter-spacing: -.04em; overflow-wrap: anywhere; }
+.gs-history-actions { display: flex; flex-wrap: wrap; gap: 8px; }
+.gs-modal-scroll { flex: 1; overflow: auto; }
+.gs-filter-toggle { display: inline-flex; align-items: center; gap: 7px; font-size: 10px; font-weight: 700; white-space: nowrap; }
+.gs-filter-toggle input { accent-color: var(--maroon); }
+.gs-batch-toolbar { display: flex; flex-wrap: wrap; align-items: center; gap: 12px; }
+.gs-batch-search { flex: 1; min-width: 220px; min-height: 36px; }
+.gs-batch-search input { flex: 1; width: 100%; }
+@media (max-width: 640px) { .gs-batch-toolbar { flex-direction: column; align-items: stretch; } }
+.gs-edit-form { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; }
+.gs-edit-form label { display: grid; gap: 6px; color: var(--ink); font-size: 10px; font-weight: 700; }
+.gs-edit-form input, .gs-edit-form select { width: 100%; padding: 10px; color: var(--ink); background: var(--white); border: 1px solid var(--line); outline: 0; font: 11px var(--sans); }
+.gs-edit-form input:focus, .gs-edit-form select:focus { border-color: var(--maroon); box-shadow: 0 0 0 3px rgba(107,29,42,.1); }
+.gs-add-student-form label { display: grid; gap: 6px; color: var(--ink); font-size: 10px; font-weight: 700; }
+.gs-add-student-form input, .gs-add-student-form select { width: 100%; padding: 10px; color: var(--ink); background: var(--white); border: 1px solid var(--line); outline: 0; font: 11px var(--sans); }
+.gs-add-student-form input:focus, .gs-add-student-form select:focus { border-color: var(--maroon); box-shadow: 0 0 0 3px rgba(107,29,42,.1); }
+.gs-modal.gs-add-student-modal { width: min(100%, 820px); overflow: auto; }
+.gs-edit-form input[readonly] { color: var(--muted); background: #f4efed; }
+.gs-span-2 { grid-column: span 2; }
+.gs-form-error { margin: 0; padding: 9px 11px; color: #7a2a20; background: #f8e5e2; border: 1px solid rgba(180,60,50,.3); font-size: 10px; }
+.gs-form-error[hidden] { display: none; }
+.gs-modal-actions { display: flex; align-items: center; gap: 8px; margin-top: 4px; }
+.gs-actions-spacer { flex: 1; }
+.gs-batch-footer { flex: none; }
+.gs-pending-note { display: flex; align-items: center; gap: 7px; margin: 0; padding: 9px 11px; color: #3a4d8a; background: #e5e9f8; border: 1px solid #c9d2f2; font-size: 10px; }
+.gs-pending-note[hidden] { display: none; }
+.gs-pending-note svg { flex: none; width: 13px; height: 13px; }
+
+/* ---- Student record: one card per semester ---- */
+.gs-term-list { display: grid; max-height: 340px; gap: 14px; overflow-y: auto; overscroll-behavior: contain; }
+.gs-term-card { background: var(--white); border: 1px solid var(--line); }
+.gs-term-card .gs-table-wrap { border: 0; border-top: 1px solid var(--line); }
+.gs-term-head { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 8px 16px; padding: 12px 14px; background: var(--gold-pale); border-left: 3px solid var(--maroon); }
+.gs-term-head h4 { margin: 0; color: var(--maroon-dark); font-size: 12px; font-weight: 800; letter-spacing: -.01em; }
+.gs-term-stats { display: flex; flex-wrap: wrap; gap: 14px; color: var(--muted); font: 9px var(--mono); }
+.gs-term-stats b { color: var(--ink); font-size: 10px; }
+.gs-records-table .gs-subject-code { font-weight: 800; white-space: nowrap; }
+.gs-records-table .gs-col-num { text-align: center; }
+.gs-records-table td:nth-child(2) { width: 42%; }
+.gs-grade { font-weight: 700; }
+.gs-no-grade { color: var(--muted); font: italic 9px var(--sans); }
+
+/* ---- Upload trigger in the page header: shows reading progress while the modal is closed ---- */
+.gradesheets-main .welcome-row { align-items: center; gap: 20px; }
+.gs-upload-trigger { flex: none; min-width: 172px; justify-content: center; padding: 11px 16px; white-space: nowrap; }
+.gs-upload-trigger > span { display: inline-flex; align-items: center; gap: 7px; }
+.gs-upload-trigger .gs-trigger-busy { display: none; }
+.gs-upload-trigger.is-busy .gs-trigger-idle { display: none; }
+.gs-upload-trigger.is-busy .gs-trigger-busy { display: inline-flex; }
+.gs-upload-trigger b { font: 700 10px var(--mono); font-variant-numeric: tabular-nums; }
+.gs-spinner-light { flex-basis: 12px; width: 12px; height: 12px; border-color: rgba(255,255,255,.35); border-top-color: #fff; }
+.gradesheet-history-panel .panel-heading .ghost-button { margin-top: 4px; }
+
+/* ---- Upload modal ---- */
+body.gs-modal-open { overflow: hidden; }
+.gs-modal-backdrop:not([hidden]) .gs-modal { animation: gs-modal-in .18s ease-out; }
+@keyframes gs-modal-in { from { opacity: 0; transform: translateY(10px) scale(.985); } }
+.gs-upload-modal { width: min(100%, 640px); }
+.gs-upload-modal .gs-modal-header { padding-right: 30px; }
+.gs-upload-zone { height: auto; min-height: 200px; margin: 0; align-content: center; gap: 2px; outline: 0; }
+.gs-upload-zone:focus-visible { border-color: var(--maroon); box-shadow: 0 0 0 3px rgba(107,29,42,.12); }
+.gs-upload-zone strong u { color: var(--maroon); text-decoration-color: var(--gold); text-underline-offset: 3px; }
+.gs-upload-zone .gs-drop-active { display: none; }
+.gs-upload-zone.drag-over { border-style: solid; border-color: var(--maroon); }
+.gs-upload-zone.drag-over .gs-drop-idle { display: none; }
+.gs-upload-zone.drag-over .gs-drop-active { display: inline; }
+.gs-upload-zone.drag-over .upload-icon { transform: translateY(-3px); }
+.gs-upload-zone .upload-icon { transition: transform .15s ease; }
+.gs-upload-modal .gs-progress { margin: 0; }
+.gs-queue[hidden] { display: none; }
+.gs-queue-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 6px; }
+.gs-text-button { padding: 2px 0; color: var(--maroon); background: none; border: 0; font: 700 9px var(--sans); cursor: pointer; }
+.gs-text-button:hover { text-decoration: underline; }
+.gs-queue-list { display: grid; max-height: 210px; margin: 0; padding: 0; overflow-y: auto; list-style: none; border: 1px solid var(--line); }
+.gs-queue-item { display: flex; align-items: center; gap: 10px; padding: 9px 12px; border-bottom: 1px solid var(--line); }
+.gs-queue-item:last-child { border-bottom: 0; }
+.gs-queue-icon { display: grid; flex: 0 0 26px; place-items: center; width: 26px; height: 26px; border-radius: 50%; color: var(--muted); background: var(--paper); }
+.gs-queue-icon svg { width: 14px; height: 14px; }
+.gs-queue-text { flex: 1; min-width: 0; }
+.gs-queue-text strong, .gs-queue-text small { display: block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.gs-queue-text strong { font-size: 10px; }
+.gs-queue-text small { margin-top: 2px; color: var(--muted); font-size: 9px; }
+.gs-queue-state { color: var(--muted); font: 700 8px var(--mono); letter-spacing: .04em; text-transform: uppercase; white-space: nowrap; }
+.gs-queue-item.is-reading .gs-queue-icon { color: var(--maroon); background: #f3e3e4; }
+.gs-queue-item.is-reading .gs-queue-icon svg { animation: gs-spin 1.2s linear infinite; }
+.gs-queue-item.is-reading .gs-queue-state { color: var(--maroon); }
+.gs-queue-item.is-saved .gs-queue-icon { color: #2f6b3a; background: #e2f2e4; }
+.gs-queue-item.is-saved .gs-queue-state { color: #2f6b3a; }
+.gs-queue-item.is-empty .gs-queue-icon { color: #8a6a1d; background: var(--gold-pale); }
+.gs-queue-item.is-empty .gs-queue-state { color: #8a6a1d; }
+.gs-queue-item.is-failed .gs-queue-icon { color: #a5342a; background: #f8e5e2; }
+.gs-queue-item.is-failed .gs-queue-state { color: #a5342a; }
+.gs-upload-help { color: var(--muted); font-size: 10px; }
+.gs-upload-help summary { display: inline-flex; align-items: center; gap: 6px; color: var(--maroon); font-weight: 700; cursor: pointer; list-style: none; }
+.gs-upload-help summary::-webkit-details-marker { display: none; }
+.gs-upload-help summary svg { width: 13px; height: 13px; }
+.gs-upload-help p { margin: 8px 0 0; padding: 10px 12px; line-height: 1.55; background: var(--paper); border: 1px solid var(--line); }
+.gs-upload-footer { margin-top: 0; padding-top: 12px; border-top: 1px solid var(--line); }
+.gs-background-note { display: inline-flex; align-items: center; gap: 6px; color: var(--muted); font-size: 9px; }
+.gs-background-note[hidden] { display: none; }
+.gs-background-note svg { width: 13px; height: 13px; color: var(--gold); }
+
+@media (max-width: 760px) {
+  .gradesheets-main .welcome-row { align-items: stretch; }
+  .gs-upload-trigger { width: 100%; }
+  .gs-term-stats { gap: 10px; }
+  .gradesheets-main .panel { width: 88%; }
+  .gs-summary-stats { margin-left: 0; }
+  .gs-edit-form { grid-template-columns: 1fr; }
+  .gs-span-2 { grid-column: auto; }
+  .gs-modal-actions { flex-wrap: wrap; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .gs-progress-bar { transition: none; }
+  .gs-spinner { animation-duration: 2.4s; }
+  .gs-modal-backdrop:not([hidden]) .gs-modal { animation: none; }
+}
+
+/* Name-accuracy review aids: why a row is flagged, the directory name it most resembles, and
+   applying a corrected spelling to every record in the upload that shares the misread. */
+.gs-suggest { display: inline-flex; align-items: center; gap: 6px; margin-top: 4px; padding: 3px 8px; color: var(--maroon); background: transparent; border: 1px dashed var(--maroon); border-radius: 999px; font: 600 10px var(--sans); cursor: pointer; }
+.gs-suggest:hover, .gs-suggest:focus-visible { background: rgba(107,29,42,.08); outline: 0; }
+.gs-edit-form label.gs-check { display: flex; align-items: center; gap: 8px; font-weight: 600; }
+.gs-edit-form label.gs-check input { width: auto; margin: 0; }
+.gs-edit-form .gs-suggest-row { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; }
