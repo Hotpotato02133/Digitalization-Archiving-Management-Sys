@@ -369,24 +369,217 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   };
 
+  const fileOcrKey = (file) => file ? `${file.name || 'file'}:${file.size}:${file.lastModified || 0}` : null;
+  const pdfPreviewCache = new Map();
+
   const ensurePdfJs = async () => {
     if (!('pdfjsLib' in window)) {
-      const pdfjsModule = await import('https://cdn.jsdelivr.net/npm/pdfjs-dist@4.10.38/build/pdf.min.mjs');
-      window.pdfjsLib = pdfjsModule.default || pdfjsModule;
-      window.pdfjsLib.GlobalWorkerOptions = window.pdfjsLib.GlobalWorkerOptions || {};
-      window.pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdn.jsdelivr.net/npm/pdfjs-dist@4.10.38/build/pdf.worker.min.mjs';
+      try {
+        const pdfjsModule = await import('../lib/pdfjs/pdf.min.mjs');
+        window.pdfjsLib = pdfjsModule.default || pdfjsModule;
+        window.pdfjsLib.GlobalWorkerOptions = window.pdfjsLib.GlobalWorkerOptions || {};
+        window.pdfjsLib.GlobalWorkerOptions.workerSrc = '../lib/pdfjs/pdf.worker.mjs';
+      } catch (err) {
+        const pdfjsModule = await import('https://cdn.jsdelivr.net/npm/pdfjs-dist@4.10.38/build/pdf.min.mjs');
+        window.pdfjsLib = pdfjsModule.default || pdfjsModule;
+        window.pdfjsLib.GlobalWorkerOptions = window.pdfjsLib.GlobalWorkerOptions || {};
+        window.pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdn.jsdelivr.net/npm/pdfjs-dist@4.10.38/build/pdf.worker.min.mjs';
+      }
     }
     return window.pdfjsLib;
+  };
+
+  const detectPdfReadableRotation = async (pdfDocument) => {
+    if (!pdfDocument || pdfDocument.numPages < 1) return 0;
+    try {
+      const page = await pdfDocument.getPage(1);
+      const defaultRot = window.DatsScanFlow?.normalizeRotation
+        ? window.DatsScanFlow.normalizeRotation(page.rotate || 0)
+        : ((Math.round((page.rotate || 0) / 90) * 90 % 360) + 360) % 360;
+
+      // 1. Check embedded text transforms if available
+      try {
+        const textContent = await page.getTextContent();
+        if (textContent && Array.isArray(textContent.items) && textContent.items.length > 5) {
+          const angles = textContent.items
+            .filter((it) => (it.str || '').trim().length > 0 && Array.isArray(it.transform))
+            .map((it) => {
+              const a = it.transform[0];
+              const b = it.transform[1];
+              const deg = Math.round(Math.atan2(b, a) * (180 / Math.PI));
+              return window.DatsScanFlow ? window.DatsScanFlow.normalizeRotation(deg) : ((Math.round(deg / 90) * 90 % 360) + 360) % 360;
+            });
+          if (angles.length > 3) {
+            const counts = {};
+            angles.forEach((deg) => { counts[deg] = (counts[deg] || 0) + 1; });
+            const sorted = Object.entries(counts).sort((a, b) => b[1] - a[1]);
+            if (sorted[0] && sorted[0][1] >= angles.length * 0.4) {
+              const dominantTextAngle = Number(sorted[0][0]);
+              const neededRot = window.DatsScanFlow
+                ? window.DatsScanFlow.normalizeRotation((360 - dominantTextAngle) % 360)
+                : ((360 - dominantTextAngle) % 360 + 360) % 360;
+              return neededRot;
+            }
+          }
+        }
+      } catch (textErr) {}
+
+      // 2. Test candidate rotations using fast thumbnail rendering & OCR
+      const candidates = window.DatsScanFlow?.getOrientationCandidates
+        ? window.DatsScanFlow.getOrientationCandidates(defaultRot)
+        : [defaultRot, (defaultRot + 270) % 360, (defaultRot + 180) % 360, (defaultRot + 90) % 360];
+
+      const base = page.getViewport({ scale: 1 });
+      const scale = Math.min(1.5, Math.max(0.7, 1100 / Math.max(base.width, base.height)));
+
+      const renderThumbnailCanvas = async (rot) => {
+        const viewport = page.getViewport({ scale, rotation: rot });
+        const canvas = document.createElement('canvas');
+        canvas.width = Math.round(viewport.width);
+        canvas.height = Math.round(viewport.height);
+        const ctx = canvas.getContext('2d');
+        await page.render({ canvasContext: ctx, viewport }).promise;
+        return { canvas, ctx };
+      };
+
+      let tesseractAvailable = Boolean(window.Tesseract);
+      if (!tesseractAvailable && typeof ensureOcrLibraries === 'function') {
+        try {
+          await ensureOcrLibraries();
+          tesseractAvailable = Boolean(window.Tesseract);
+        } catch (e) {
+          tesseractAvailable = false;
+        }
+      }
+
+      if (tesseractAvailable && window.Tesseract) {
+        const scoredCandidates = [];
+        for (let i = 0; i < candidates.length; i += 1) {
+          const rot = candidates[i];
+          const { canvas } = await renderThumbnailCanvas(rot);
+          try {
+            const ocr = await window.Tesseract.recognize(canvas, 'eng');
+            const scored = window.DatsScanFlow?.scoreOcrTextForOrientation
+              ? window.DatsScanFlow.scoreOcrTextForOrientation(ocr?.data?.text || '')
+              : { score: (ocr?.data?.text || '').length, keywordMatches: 0 };
+            scoredCandidates.push({ rotation: rot, ...scored });
+            if (window.DatsScanFlow?.isDecisiveOrientationScore && window.DatsScanFlow.isDecisiveOrientationScore(scored)) {
+              return rot;
+            }
+          } catch (ocrErr) {}
+        }
+        return window.DatsScanFlow?.chooseBestOrientationCandidate
+          ? window.DatsScanFlow.chooseBestOrientationCandidate(scoredCandidates, defaultRot)
+          : (scoredCandidates.sort((a, b) => b.score - a.score)[0]?.rotation ?? defaultRot);
+      }
+
+      // 3. Fallback: projection variance analysis (no network / no Tesseract required)
+      const { canvas, ctx } = await renderThumbnailCanvas(defaultRot);
+      const imgData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+      const proj = window.DatsScanFlow?.calculateProjectionVariance
+        ? window.DatsScanFlow.calculateProjectionVariance(imgData)
+        : { isSideways: false };
+      if (proj.isSideways) {
+        return (defaultRot + 270) % 360;
+      }
+
+      return defaultRot;
+    } catch (err) {
+      console.warn('detectPdfReadableRotation error:', err);
+      return 0;
+    }
+  };
+
+  const detectImageReadableRotation = async (file) => {
+    if (!file || !file.type.startsWith('image/')) return 0;
+    try {
+      const candidates = window.DatsScanFlow?.getOrientationCandidates
+        ? window.DatsScanFlow.getOrientationCandidates(0)
+        : [0, 270, 180, 90];
+
+      const img = new Image();
+      const objectUrl = URL.createObjectURL(file);
+      await new Promise((resolve, reject) => {
+        img.onload = resolve;
+        img.onerror = reject;
+        img.src = objectUrl;
+      });
+
+      const renderImageThumb = (rot) => {
+        const isSwapped = rot % 180 !== 0;
+        const maxDim = 1100;
+        const scale = Math.min(1, maxDim / Math.max(img.naturalWidth, img.naturalHeight));
+        const w = Math.round((isSwapped ? img.naturalHeight : img.naturalWidth) * scale);
+        const h = Math.round((isSwapped ? img.naturalWidth : img.naturalHeight) * scale);
+        const canvas = document.createElement('canvas');
+        canvas.width = w;
+        canvas.height = h;
+        const ctx = canvas.getContext('2d');
+        ctx.translate(w / 2, h / 2);
+        ctx.rotate((rot * Math.PI) / 180);
+        ctx.drawImage(img, -((img.naturalWidth * scale) / 2), -((img.naturalHeight * scale) / 2), img.naturalWidth * scale, img.naturalHeight * scale);
+        return { canvas, ctx };
+      };
+
+      let tesseractAvailable = Boolean(window.Tesseract);
+      if (!tesseractAvailable && typeof ensureOcrLibraries === 'function') {
+        try {
+          await ensureOcrLibraries();
+          tesseractAvailable = Boolean(window.Tesseract);
+        } catch (e) {
+          tesseractAvailable = false;
+        }
+      }
+
+      if (tesseractAvailable && window.Tesseract) {
+        const scoredCandidates = [];
+        for (let i = 0; i < candidates.length; i += 1) {
+          const rot = candidates[i];
+          const { canvas } = renderImageThumb(rot);
+          try {
+            const ocr = await window.Tesseract.recognize(canvas, 'eng');
+            const scored = window.DatsScanFlow?.scoreOcrTextForOrientation
+              ? window.DatsScanFlow.scoreOcrTextForOrientation(ocr?.data?.text || '')
+              : { score: (ocr?.data?.text || '').length, keywordMatches: 0 };
+            scoredCandidates.push({ rotation: rot, ...scored });
+            if (window.DatsScanFlow?.isDecisiveOrientationScore && window.DatsScanFlow.isDecisiveOrientationScore(scored)) {
+              URL.revokeObjectURL(objectUrl);
+              return rot;
+            }
+          } catch (ocrErr) {}
+        }
+        URL.revokeObjectURL(objectUrl);
+        return window.DatsScanFlow?.chooseBestOrientationCandidate
+          ? window.DatsScanFlow.chooseBestOrientationCandidate(scoredCandidates, 0)
+          : (scoredCandidates.sort((a, b) => b.score - a.score)[0]?.rotation ?? 0);
+      }
+
+      const { canvas, ctx } = renderImageThumb(0);
+      const imgData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+      const proj = window.DatsScanFlow?.calculateProjectionVariance
+        ? window.DatsScanFlow.calculateProjectionVariance(imgData)
+        : { isSideways: false };
+      URL.revokeObjectURL(objectUrl);
+      if (proj.isSideways) {
+        return 270;
+      }
+      return 0;
+    } catch (err) {
+      console.warn('detectImageReadableRotation error:', err);
+      return 0;
+    }
   };
 
   const renderPdfToImage = async (file) => {
     const pdfjsLib = await ensurePdfJs();
     const arrayBuffer = await file.arrayBuffer();
     const pdfDocument = await pdfjsLib.getDocument({ data: arrayBuffer }).promise;
+    const cached = pdfPreviewCache.get(fileOcrKey(file));
+    const effectiveRotation = cached?.effectiveRotation ?? await detectPdfReadableRotation(pdfDocument);
     const pages = [];
     for (let pageNumber = 1; pageNumber <= pdfDocument.numPages; pageNumber += 1) {
       const page = await pdfDocument.getPage(pageNumber);
-      const viewport = page.getViewport({ scale: 1.5 });
+      const viewport = page.getViewport({ scale: 1.5, rotation: effectiveRotation });
       const canvas = document.createElement('canvas');
       const context = canvas.getContext('2d');
       canvas.width = viewport.width;
@@ -462,7 +655,12 @@ document.addEventListener('DOMContentLoaded', () => {
           textChunks.push(result.data.text || '');
         }
       } else {
-        const result = await window.Tesseract.recognize(file, 'eng', {
+        let imageSource = file;
+        const previewPage = previewPages.find((p) => p.key === 'file-0');
+        if (previewPage && previewPage.src && previewPage.rotation) {
+          imageSource = previewPage.src;
+        }
+        const result = await window.Tesseract.recognize(imageSource, 'eng', {
           logger: (message) => {
             if (message.status === 'recognizing text' && typeof message.progress === 'number') {
               const percent = Math.round(message.progress * 100);
@@ -518,7 +716,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (scanCategorySource) scanCategorySource.textContent = 'Document type selected manually.';
   });
 
-  const fileOcrKey = (file) => file ? `${file.name || 'file'}:${file.size}:${file.lastModified || 0}` : null;
+  // fileOcrKey declared earlier for preview cache and OCR alignment
 
   const clearOcrStudentSuggestions = () => {
     suggestedStudentFields.forEach((suggestedValue, fieldId) => {
@@ -746,7 +944,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
   let selectedFiles = [];
   let previewRenderToken = 0;
-  const pdfPreviewCache = new Map();
   const PDF_PREVIEW_PAGE_CAP = 8;
 
   const formatFileSize = (bytes) => {
@@ -765,9 +962,13 @@ document.addEventListener('DOMContentLoaded', () => {
     const arrayBuffer = await file.arrayBuffer();
     const pdfDocument = await pdfjsLib.getDocument({ data: arrayBuffer }).promise;
     const totalPages = pdfDocument.numPages;
-    const renderPage = async (pageNumber, scale, outputType = 'image/jpeg') => {
+
+    const effectiveRotation = await detectPdfReadableRotation(pdfDocument);
+
+    const renderPage = async (pageNumber, scale, outputType = 'image/jpeg', overrideRotation) => {
       const page = await pdfDocument.getPage(pageNumber);
-      const viewport = page.getViewport({ scale });
+      const rot = overrideRotation !== undefined ? overrideRotation : effectiveRotation;
+      const viewport = page.getViewport({ scale, rotation: rot });
       const canvas = document.createElement('canvas');
       canvas.width = viewport.width;
       canvas.height = viewport.height;
@@ -780,22 +981,25 @@ document.addEventListener('DOMContentLoaded', () => {
       const scale = pageNumber === 1 ? 1.8 : 0.5;
       pages.push(await renderPage(pageNumber, scale));
     }
-    const result = { totalPages, pages, renderPage };
+    const result = { totalPages, pages, renderPage, effectiveRotation };
     pdfPreviewCache.set(key, result);
     return result;
   };
 
   const rotateImageDataUrl = (src, degrees) => new Promise((resolve, reject) => {
-    if (!degrees) { resolve(src); return; }
+    const norm = window.DatsScanFlow?.normalizeRotation
+      ? window.DatsScanFlow.normalizeRotation(degrees)
+      : ((degrees % 360) + 360) % 360;
+    if (!norm) { resolve(src); return; }
     const image = new Image();
     image.onload = () => {
-      const swapped = degrees % 180 !== 0;
+      const swapped = norm % 180 !== 0;
       const canvas = document.createElement('canvas');
       canvas.width = swapped ? image.naturalHeight : image.naturalWidth;
       canvas.height = swapped ? image.naturalWidth : image.naturalHeight;
       const context = canvas.getContext('2d');
       context.translate(canvas.width / 2, canvas.height / 2);
-      context.rotate((degrees * Math.PI) / 180);
+      context.rotate((norm * Math.PI) / 180);
       context.drawImage(image, -image.naturalWidth / 2, -image.naturalHeight / 2);
       resolve(canvas.toDataURL('image/jpeg', 0.9));
     };
@@ -869,6 +1073,50 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   };
 
+  const rotateActivePreviewPage = async (deltaDegrees) => {
+    const page = previewPages.find((p) => p.key === activePreviewKey);
+    if (!page || !coverBaseSrc || !previewCover) return;
+    page.manualRotation = ((page.manualRotation || 0) + deltaDegrees + 360) % 360;
+    coverRotation = page.manualRotation;
+    try {
+      const rotatedSrc = await rotateImageDataUrl(coverBaseSrc, coverRotation);
+      const coverImg = previewCover.querySelector('img');
+      if (coverImg) coverImg.src = rotatedSrc;
+
+      if (!page.thumbBaseSrc && page.src) {
+        page.thumbBaseSrc = page.src;
+      }
+      if (page.thumbBaseSrc) {
+        page.src = await rotateImageDataUrl(page.thumbBaseSrc, coverRotation);
+        const thumbItem = previewThumbs?.querySelector(`[data-preview-key="${page.key}"]`);
+        const thumbImg = thumbItem?.querySelector('img');
+        if (thumbImg) thumbImg.src = page.src;
+      }
+    } catch (error) {
+      console.warn('Rotation update failed:', error);
+    }
+  };
+
+  const resetActivePreviewPage = () => {
+    const page = previewPages.find((p) => p.key === activePreviewKey);
+    if (page) {
+      page.manualRotation = 0;
+      if (page.thumbBaseSrc) {
+        page.src = page.thumbBaseSrc;
+        const thumbItem = previewThumbs?.querySelector(`[data-preview-key="${page.key}"]`);
+        const thumbImg = thumbItem?.querySelector('img');
+        if (thumbImg) thumbImg.src = page.src;
+      }
+    }
+    coverRotation = 0;
+    coverZoom = COVER_ZOOM_MIN;
+    applyCoverZoom();
+    if (previewCover && coverBaseSrc) {
+      const coverImg = previewCover.querySelector('img');
+      if (coverImg) coverImg.src = coverBaseSrc;
+    }
+  };
+
   const buildCoverToolbar = () => {
     const toolbar = document.createElement('div');
     toolbar.className = 'preview-toolbar';
@@ -893,18 +1141,13 @@ document.addEventListener('DOMContentLoaded', () => {
         applyCoverZoom();
       }),
       makeToolButton('rotate-left', 'rotate-ccw', 'Rotate left', () => {
-        coverRotation = (coverRotation + 270) % 360;
-        applyCoverRotation();
+        rotateActivePreviewPage(270);
       }),
       makeToolButton('rotate-right', 'rotate-cw', 'Rotate right', () => {
-        coverRotation = (coverRotation + 90) % 360;
-        applyCoverRotation();
+        rotateActivePreviewPage(90);
       }),
       makeToolButton('reset', 'refresh-cw', 'Reset view', () => {
-        coverRotation = 0;
-        coverZoom = COVER_ZOOM_MIN;
-        applyCoverRotation();
-        applyCoverZoom();
+        resetActivePreviewPage();
       }),
     );
     return toolbar;
@@ -1021,9 +1264,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
     previewCover.replaceChildren();
     previewCover.classList.remove('is-zoomed', 'is-panning');
-    coverRotation = 0;
     coverZoom = COVER_ZOOM_MIN;
-    coverBaseSrc = preview.src || null;
+    coverBaseSrc = preview.baseSrc || coverBaseSrc || preview.src || null;
+    coverRotation = preview.manualRotation || 0;
 
     if (preview.src) {
       const img = document.createElement('img');
@@ -1065,13 +1308,21 @@ document.addEventListener('DOMContentLoaded', () => {
     if (preview.renderHighQuality) {
       try {
         const src = await preview.renderHighQuality();
-        coverPreview = { ...preview, src };
+        coverPreview = { ...preview, src, baseSrc: src };
       } catch (error) {
         // Keep the thumbnail render if the high-resolution render fails.
       }
     }
     if (token !== previewCoverRenderToken) return;
     activePreviewKey = previewKey;
+    coverRotation = preview.manualRotation || 0;
+    coverBaseSrc = coverPreview.baseSrc || coverPreview.src || null;
+    if (coverRotation && coverBaseSrc) {
+      try {
+        const rotated = await rotateImageDataUrl(coverBaseSrc, coverRotation);
+        coverPreview = { ...coverPreview, src: rotated };
+      } catch (error) {}
+    }
     renderPreviewCover(coverPreview);
     updateActivePreviewThumb();
     [...(previewThumbs?.querySelectorAll('[data-preview-key]') || [])]
@@ -1097,7 +1348,7 @@ document.addEventListener('DOMContentLoaded', () => {
     previewCover.replaceChildren();
     previewThumbs.replaceChildren();
     previewThumbs.hidden = true;
-    previewCover.innerHTML = '<div class="preview-spinner"><i data-lucide="loader-circle"></i><span>Generating preview…</span></div>';
+    previewCover.innerHTML = '<div class="preview-spinner"><i data-lucide="loader-circle"></i><span>Generating preview and optimizing orientation…</span></div>';
     lucide.createIcons();
 
     let totalPages = 1;
@@ -1110,6 +1361,10 @@ document.addEventListener('DOMContentLoaded', () => {
         previewPages = result.pages.map((src, index) => ({
           key: `page-${index + 1}`,
           src,
+          baseSrc: src,
+          thumbBaseSrc: src,
+          rotation: result.effectiveRotation,
+          manualRotation: 0,
           alt: `Preview of ${primaryFile.name}, page ${index + 1}`,
           badge: `Page ${index + 1} of ${totalPages}`,
           fileName: primaryFile.name,
@@ -1120,9 +1375,21 @@ document.addEventListener('DOMContentLoaded', () => {
         previewPages = [];
       }
     } else if (primaryFile.type.startsWith('image/')) {
+      let src = URL.createObjectURL(primaryFile);
+      let detectedRot = 0;
+      try {
+        detectedRot = await detectImageReadableRotation(primaryFile);
+        if (detectedRot) {
+          src = await rotateImageDataUrl(src, detectedRot);
+        }
+      } catch (e) {}
       previewPages = [{
         key: 'file-0',
-        src: URL.createObjectURL(primaryFile),
+        src,
+        baseSrc: src,
+        thumbBaseSrc: src,
+        rotation: detectedRot,
+        manualRotation: 0,
         alt: `Preview of ${primaryFile.name}`,
         badge: primaryFile.name,
         fileName: primaryFile.name,

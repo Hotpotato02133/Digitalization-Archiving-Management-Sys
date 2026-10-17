@@ -137,7 +137,7 @@ const runSaveJob = async (job) => {
       }
     } else {
       job.status = 'done';
-      job.resultSummary = result.data;
+      job.resultSummary = (result.data && result.data.summary) ? { ...result.data.summary, ...result.data } : result.data;
       job.file = null; // free the stored blob now that the upload has succeeded
     }
   } catch (error) {
@@ -152,7 +152,7 @@ const runSaveJob = async (job) => {
 const handleEnqueue = async (job, sourceClient) => {
   await putJob(job);
   await broadcastJobUpdate(job);
-  if (job.kind === 'scan-upload') {
+  if (job.kind === 'scan-upload' || job.kind === 'gradesheet-upload' || job.kind === 'gradesheet-rescan') {
     await runSaveJob(job);
   } else {
     await dispatchOcr(job, sourceClient?.id);
@@ -201,7 +201,7 @@ const handleClientReady = async (client) => {
   if (client) client.postMessage({ type: 'JOBS_SNAPSHOT', jobs: remaining.map(toClientJob) });
   if (!client) return;
   await Promise.all(remaining
-    .filter((job) => job.kind !== 'scan-upload' && !job.result
+    .filter((job) => job.kind !== 'scan-upload' && job.kind !== 'gradesheet-upload' && job.kind !== 'gradesheet-rescan' && !job.result
       && (job.status === 'queued' || (job.status === 'ocr-running' && (!job.heartbeatAt || now - job.heartbeatAt > STALE_MS))))
     .map((job) => dispatchOcr(job, client.id)));
 };

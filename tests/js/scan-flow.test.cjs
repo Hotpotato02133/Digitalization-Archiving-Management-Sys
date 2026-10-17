@@ -257,3 +257,90 @@ test('blank academic inputs remain optional', () => {
     collegeName: '', courseName: '', majorName: '',
   }), { collegeId: '', courseId: '', majorId: '', error: '' });
 });
+
+test('normalizeRotation normalizes arbitrary degrees into 0, 90, 180, or 270', () => {
+  assert.equal(flow.normalizeRotation(0), 0);
+  assert.equal(flow.normalizeRotation(90), 90);
+  assert.equal(flow.normalizeRotation(180), 180);
+  assert.equal(flow.normalizeRotation(270), 270);
+  assert.equal(flow.normalizeRotation(360), 0);
+  assert.equal(flow.normalizeRotation(-90), 270);
+  assert.equal(flow.normalizeRotation(-180), 180);
+  assert.equal(flow.normalizeRotation(450), 90);
+  assert.equal(flow.normalizeRotation(268), 270);
+});
+
+test('getOrientationCandidates prioritizes initial rotation and 270-degree CCW correction', () => {
+  assert.deepEqual(flow.getOrientationCandidates(0), [0, 270, 180, 90]);
+  assert.deepEqual(flow.getOrientationCandidates(270), [270, 180, 90, 0]);
+  assert.deepEqual(flow.getOrientationCandidates(180), [180, 90, 0, 270]);
+});
+
+test('calculateEffectiveRotation combines base and manual rotations modulo 360', () => {
+  assert.equal(flow.calculateEffectiveRotation(180, 0), 180);
+  assert.equal(flow.calculateEffectiveRotation(180, 90), 270);
+  assert.equal(flow.calculateEffectiveRotation(180, 270), 90);
+  assert.equal(flow.calculateEffectiveRotation(270, 90), 0);
+});
+
+test('scoreOcrTextForOrientation and decisive score distinguish upright vs sideways text', () => {
+  const uprightText = 'REPORT OF RATING 1st Semester SY 2014-2015 Course No.: MATH 112 Description: CALCULUS WITH ANALYTIC GEOMETRY ZPPSU College of Science';
+  const sidewaysText = 'a. v; 4, .. \n ~ -- 1! /';
+
+  const uprightScore = flow.scoreOcrTextForOrientation(uprightText);
+  const sidewaysScore = flow.scoreOcrTextForOrientation(sidewaysText);
+
+  assert.ok(uprightScore.score >= 50, `Expected score >= 50, got ${uprightScore.score}`);
+  assert.ok(uprightScore.keywordMatches >= 5, `Expected keywords >= 5, got ${uprightScore.keywordMatches}`);
+  assert.equal(flow.isDecisiveOrientationScore(uprightScore), true);
+
+  assert.ok(sidewaysScore.score < 10, `Expected score < 10, got ${sidewaysScore.score}`);
+  assert.equal(sidewaysScore.keywordMatches, 0);
+  assert.equal(flow.isDecisiveOrientationScore(sidewaysScore), false);
+});
+
+test('chooseBestOrientationCandidate selects highest score or falls back to default', () => {
+  const candidates = [
+    { rotation: 270, score: 0 },
+    { rotation: 180, score: 185 },
+    { rotation: 90, score: 2 },
+    { rotation: 0, score: 4 },
+  ];
+  assert.equal(flow.chooseBestOrientationCandidate(candidates, 270), 180);
+  assert.equal(flow.chooseBestOrientationCandidate([], 270), 270);
+  assert.equal(flow.chooseBestOrientationCandidate([{ rotation: 0, score: 0 }], 90), 90);
+});
+
+test('calculateProjectionVariance flags vertical text lines as sideways', () => {
+  const width = 100;
+  const height = 100;
+
+  // Mock vertical lines (columns with dark pixels, others white): simulates text lines rotated 90 degrees
+  const verticalData = new Uint8ClampedArray(width * height * 4);
+  verticalData.fill(255); // white
+  for (let y = 0; y < height; y += 1) {
+    for (let x = 0; x < width; x += 10) {
+      const idx = (y * width + x) * 4;
+      verticalData[idx] = 0;
+      verticalData[idx + 1] = 0;
+      verticalData[idx + 2] = 0;
+    }
+  }
+  const vertResult = flow.calculateProjectionVariance({ width, height, data: verticalData });
+  assert.equal(vertResult.isSideways, true);
+
+  // Mock horizontal lines (rows with dark pixels): simulates normal upright horizontal text lines
+  const horizontalData = new Uint8ClampedArray(width * height * 4);
+  horizontalData.fill(255);
+  for (let y = 0; y < height; y += 10) {
+    for (let x = 0; x < width; x += 1) {
+      const idx = (y * width + x) * 4;
+      horizontalData[idx] = 0;
+      horizontalData[idx + 1] = 0;
+      horizontalData[idx + 2] = 0;
+    }
+  }
+  const horizResult = flow.calculateProjectionVariance({ width, height, data: horizontalData });
+  assert.equal(horizResult.isSideways, false);
+});
+

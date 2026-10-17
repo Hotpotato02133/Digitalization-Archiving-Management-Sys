@@ -239,3 +239,26 @@ test('the review screen shows why a row is flagged, offers the directory suggest
   assert.match(api, /dats_gradesheet_apply_roster\(\$records, dats_gradesheet_roster\(\$pdo\)\)/);
   assert.match(api, /function dats_apply_gradesheet_name_to_batch/);
 });
+
+test('gradesheet upload response and summary normalization correctly reads nested and flat summary', () => {
+  const root = path.resolve(__dirname, '../..');
+  const client = fs.readFileSync(path.join(root, 'admin/gradesheets.js'), 'utf8');
+  const sync = fs.readFileSync(path.join(root, 'data-sync.js'), 'utf8');
+  const api = fs.readFileSync(path.join(root, 'api.php'), 'utf8');
+  const sw = fs.readFileSync(path.join(root, 'sw.js'), 'utf8');
+
+  // Verify api.php returns entries and students at root alongside summary
+  assert.match(api, /'entries' => \$summary\['entries'\] \?\? 0/);
+  assert.match(api, /'students' => \$summary\['students'\] \?\? 0/);
+
+  // Verify client normalizes summary from rawSummary or job.resultSummary
+  assert.match(client, /const summary = rawSummary\?\.summary \|\| rawSummary/);
+  assert.match(client, /const summary = job\.resultSummary\?\.summary \|\| job\.resultSummary/);
+  assert.match(sync, /const summary = job\.resultSummary\?\.summary \|\| job\.resultSummary/);
+  assert.match(sw, /job\.resultSummary = \(result\.data && result\.data\.summary\)/);
+
+  // Verify animated progress ticker in client
+  assert.match(client, /startSavingProgress/);
+  assert.match(client, /stopSavingProgress/);
+});
+

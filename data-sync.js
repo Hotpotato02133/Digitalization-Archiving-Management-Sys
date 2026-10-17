@@ -60,9 +60,13 @@ window.DatsJobs = (function buildJobBridge() {
       return `Preparing to archive ${fileName}…`;
     }
     if (job.status === 'ocr-running') return `${job.progress?.label || `Reading ${fileName}`}${job.progress?.detail ? ` · ${job.progress.detail}` : ''}`;
-    if (job.status === 'saving') return `Saving grades from ${fileName}…`;
+    if (job.status === 'saving') {
+      return (job.kind === 'gradesheet-upload' || job.kind === 'gradesheet-rescan')
+        ? `Transcribing ${fileName} with Gemini AI…`
+        : `Saving grades from ${fileName}…`;
+    }
     if (job.status === 'done') {
-      const summary = job.resultSummary;
+      const summary = job.resultSummary?.summary || job.resultSummary;
       return summary?.entries ? `${fileName}: ${summary.students} students, ${summary.entries} grade records read.` : `${fileName}: no grade rows could be read.`;
     }
     if (job.status === 'failed') return job.error || `Could not read ${fileName}.`;
@@ -247,10 +251,14 @@ window.DatsJobs = (function buildJobBridge() {
       else notify({ ...job, status: 'failed', error: result.error || 'The server could not complete the request.' });
       return;
     }
-    notify({ ...job, status: 'done', resultSummary: result.data });
+    const summary = (result.data && result.data.summary) ? { ...result.data.summary, ...result.data } : result.data;
+    notify({ ...job, status: 'done', resultSummary: summary });
   };
   const runJobInline = async (job) => {
-    if (job.kind === 'scan-upload') { await runInlineSave(job); return; }
+    if (job.kind === 'scan-upload' || job.kind === 'gradesheet-upload' || job.kind === 'gradesheet-rescan') {
+      await runInlineSave(job);
+      return;
+    }
     notify({ ...job, status: 'ocr-running', progress: { value: 0, label: 'Starting OCR…', detail: '' } });
     const result = await runOcrSerialized(job.file, (pageIndex, pageCount, fraction, stage) => {
       notify({ ...job, status: 'ocr-running', progress: { value: (pageIndex + Math.min(1, Math.max(0, fraction))) / Math.max(1, pageCount), label: stage, detail: `Page ${pageIndex + 1} of ${pageCount}` } });

@@ -722,8 +722,8 @@ function parse_report_of_rating_text(string $ocrText): array
                 $context['semester'] = $semester;
                 continue;
             }
-            if (preg_match('/course\s*no/i', $line)) {
-                if (preg_match('/course\s*no\W*(.+?)(?:\s+unit|$)/i', $line, $codeMatch)) {
+            if (preg_match('/(?:course\s*no|subject\s*code|course\s*code|subject\s*no)/i', $line)) {
+                if (preg_match('/(?:course\s*no|subject\s*code|course\s*code|subject\s*no)\W*(.+?)(?:\s+unit|$)/i', $line, $codeMatch)) {
                     $code = trim(preg_replace('/^[\W_]+|[\W_]+$/u', '', $codeMatch[1]) ?? '');
                     // Drop short OCR specks around the code ("oo Computer 121", "Computer 121 oo") — never
                     // a digit group — then normalize "MATH112" and "MATH 112" to the same code. Only
@@ -746,7 +746,7 @@ function parse_report_of_rating_text(string $ocrText): array
                 $inTable = true;
                 continue;
             }
-            if (preg_match('/description\W*(.+?)(?:\s+time\b|$)/i', $line, $descriptionMatch)) {
+            if (preg_match('/(?:description|subject\s*title|descriptive\s*title)\W*(.+?)(?:\s+time\b|$)/i', $line, $descriptionMatch)) {
                 $name = trim(preg_replace('/^[\W_]+/u', '', $descriptionMatch[1]) ?? '');
                 // Strip short OCR artifacts left by blank form lines before "Time:" ("Co", "To", "TT").
                 while (preg_match('/\s+(?:co|to|tt|t|[\W_]+)$/iu', $name)) {

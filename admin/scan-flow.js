@@ -311,6 +311,132 @@
     return result;
   };
 
+  const normalizeRotation = (degrees) => {
+    const num = Number(degrees) || 0;
+    const rounded = Math.round(num / 90) * 90;
+    return ((rounded % 360) + 360) % 360;
+  };
+
+  const getOrientationCandidates = (initialRotation = 0) => {
+    const base = normalizeRotation(initialRotation);
+    return [
+      base,
+      (base + 270) % 360,
+      (base + 180) % 360,
+      (base + 90) % 360,
+    ];
+  };
+
+  const calculateEffectiveRotation = (baseRotation = 0, manualRotation = 0) => (
+    (normalizeRotation(baseRotation) + normalizeRotation(manualRotation)) % 360
+  );
+
+  const ORIENTATION_KEYWORDS = [
+    'republic', 'philippines', 'university', 'college', 'student', 'school',
+    'report', 'rating', 'grade', 'grades', 'semester', 'course', 'subject',
+    'certificate', 'registration', 'record', 'records', 'academic', 'year',
+    'department', 'office', 'registrar', 'dean', 'instructor', 'clearance',
+    'information', 'technology', 'education', 'science', 'campus', 'zppsu',
+    'name', 'date', 'gender', 'first', 'last', 'birth', 'address', 'total',
+    'final', 'units', 'passed', 'failed', 'remarks', 'official', 'signed',
+    'transcription', 'curriculum', 'faculty', 'admission', 'document', 'page'
+  ];
+
+  const isValidWord = (w) => {
+    if (!w || w.length < 2 || w.length > 15) return false;
+    if (!/[aeiouy]/i.test(w)) return false;
+    if (/(.)\1\1/i.test(w)) return false;
+    return true;
+  };
+
+  const scoreOcrTextForOrientation = (text = '') => {
+    const raw = String(text ?? '');
+    const cleanStr = raw.replace(/\s+/g, ' ').trim();
+    if (!cleanStr) return { score: 0, wordCount: 0, keywordMatches: 0, readableRatio: 0 };
+
+    const allTokens = cleanStr.match(/[A-Za-z]{2,}/g) || [];
+    const validWords = allTokens.filter(isValidWord);
+    const lower = cleanStr.toLowerCase();
+    let keywordMatches = 0;
+    for (const kw of ORIENTATION_KEYWORDS) {
+      if (lower.includes(kw)) keywordMatches += 1;
+    }
+
+    const readableChars = (raw.match(/[a-zA-Z0-9\s.,:;()'"\-\/]/g) || []).length;
+    const readableRatio = raw.length > 0 ? readableChars / raw.length : 0;
+
+    const score = Math.round((validWords.length * 2) + (keywordMatches * 20) * Math.max(0.2, readableRatio));
+    return { score, wordCount: validWords.length, keywordMatches, readableRatio };
+  };
+
+  const isDecisiveOrientationScore = (scored) => {
+    if (!scored) return false;
+    return scored.keywordMatches >= 1 && (scored.score >= 30 || scored.wordCount >= 10);
+  };
+
+  const chooseBestOrientationCandidate = (results = [], defaultRotation = 0) => {
+    if (!results || !results.length) return normalizeRotation(defaultRotation);
+    const sorted = [...results].sort((a, b) => (b.score || 0) - (a.score || 0));
+    const top = sorted[0];
+    if (top && (top.score || 0) >= 10) {
+      return normalizeRotation(top.rotation);
+    }
+    return normalizeRotation(defaultRotation);
+  };
+
+  const calculateProjectionVariance = (imageData) => {
+    const { width, height, data } = imageData || {};
+    if (!width || !height || !data) return { rowVariance: 0, colVariance: 0, isSideways: false };
+
+    const step = Math.max(1, Math.floor(Math.min(width, height) / 300));
+    let sampledRows = 0;
+    let sampledCols = 0;
+    const rowSums = [];
+    const colSums = [];
+
+    for (let y = 0; y < height; y += step) {
+      sampledRows += 1;
+      const rowOffset = y * width * 4;
+      let darkCount = 0;
+      for (let x = 0; x < width; x += step) {
+        const idx = rowOffset + x * 4;
+        const lum = data[idx] * 0.299 + data[idx + 1] * 0.587 + data[idx + 2] * 0.114;
+        if (lum < 200) darkCount += 1;
+      }
+      rowSums.push(darkCount);
+    }
+
+    for (let x = 0; x < width; x += step) {
+      sampledCols += 1;
+      let darkCount = 0;
+      for (let y = 0; y < height; y += step) {
+        const idx = (y * width + x) * 4;
+        const lum = data[idx] * 0.299 + data[idx + 1] * 0.587 + data[idx + 2] * 0.114;
+        if (lum < 200) darkCount += 1;
+      }
+      colSums.push(darkCount);
+    }
+
+    const variance = (arr, count) => {
+      if (count <= 1) return 0;
+      let sum = 0;
+      let sumSq = 0;
+      for (let i = 0; i < arr.length; i += 1) {
+        const v = arr[i];
+        sum += v;
+        sumSq += v * v;
+      }
+      const mean = sum / count;
+      return Math.max(0, (sumSq / count) - (mean * mean));
+    };
+
+    const rowVariance = variance(rowSums, sampledRows);
+    const colVariance = variance(colSums, sampledCols);
+    const isSideways = colVariance > rowVariance * 1.3 && colVariance > 5;
+
+    return { rowVariance, colVariance, isSideways };
+  };
+
   return {
     parseStudentDetails,
     normalizeSearchText,
@@ -327,5 +453,12 @@
     isCurrentOcrResult,
     mergeStudentReferences,
     resolveAcademicSelection,
+    normalizeRotation,
+    getOrientationCandidates,
+    calculateEffectiveRotation,
+    scoreOcrTextForOrientation,
+    isDecisiveOrientationScore,
+    chooseBestOrientationCandidate,
+    calculateProjectionVariance,
   };
 }));

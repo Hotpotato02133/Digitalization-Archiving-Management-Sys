@@ -574,7 +574,8 @@ document.addEventListener('DOMContentLoaded', () => {
   const uploadTrigger = $('#gsOpenUpload');
   const backgroundNote = $('#gsBackgroundNote');
 
-  const summaryMessage = (name, summary) => {
+  const summaryMessage = (name, rawSummary) => {
+    const summary = rawSummary?.summary || rawSummary;
     if (!summary || !summary.entries) return `${name}: no student grade rows could be read. Try Re-scan, or check that the file is a legible gradesheet.`;
     const check = summary.needs_review ? ` · ${summary.needs_review} to check` : '';
     return `${name}: ${summary.students} students, ${summary.entries} grade records read${check}. Review and Save in Upload history before they're searchable.`;
@@ -628,14 +629,17 @@ document.addEventListener('DOMContentLoaded', () => {
 
   const queueStateFor = (job) => {
     if (job.status === 'failed') return 'failed';
-    if (job.status === 'done') return job.resultSummary?.entries ? 'saved' : 'empty';
+    if (job.status === 'done') {
+      const summary = job.resultSummary?.summary || job.resultSummary;
+      return summary?.entries ? 'saved' : 'empty';
+    }
     if (job.status === 'queued') return 'queued';
     return 'reading'; // ocr-running / saving
   };
   const queueMessageFor = (job) => {
     if (job.status === 'failed') return job.error || 'Something went wrong.';
     if (job.status !== 'done') return undefined; // falls back to the default size/kind caption
-    const summary = job.resultSummary;
+    const summary = job.resultSummary?.summary || job.resultSummary;
     if (!summary?.entries) return 'No grade rows could be read — try Re-scan from Upload history.';
     const check = summary.needs_review ? ` · ${summary.needs_review} to check` : '';
     const truncated = job.result?.truncated;
@@ -643,6 +647,51 @@ document.addEventListener('DOMContentLoaded', () => {
   };
 
   let activeProgressJob = null;
+  let savingProgressTimer = null;
+  let savingJobStartTime = 0;
+
+  const stopSavingProgress = () => {
+    if (savingProgressTimer) {
+      clearInterval(savingProgressTimer);
+      savingProgressTimer = null;
+    }
+  };
+
+  const startSavingProgress = (name) => {
+    if (savingProgressTimer) return;
+    savingJobStartTime = Date.now();
+    updateProgress({ value: 0.12, label: `Uploading · ${name}`, detail: 'Sending document to Gemini AI…' });
+    savingProgressTimer = setInterval(() => {
+      const elapsedSec = Math.max(1, Math.floor((Date.now() - savingJobStartTime) / 1000));
+      let value = 0.12;
+      let stageDetail = '';
+
+      if (elapsedSec <= 3) {
+        value = 0.12 + (elapsedSec / 3) * 0.15; // 12% to 27%
+        stageDetail = `Sending document to Gemini AI… (${elapsedSec}s)`;
+      } else if (elapsedSec <= 12) {
+        value = 0.27 + ((elapsedSec - 3) / 9) * 0.28; // 27% to 55%
+        stageDetail = `Analyzing pages & handwriting with Gemini AI… (${elapsedSec}s)`;
+      } else if (elapsedSec <= 25) {
+        value = 0.55 + ((elapsedSec - 12) / 13) * 0.20; // 55% to 75%
+        stageDetail = `Extracting student names & grade rows… (${elapsedSec}s)`;
+      } else if (elapsedSec <= 45) {
+        value = 0.75 + ((elapsedSec - 25) / 20) * 0.16; // 75% to 91%
+        stageDetail = `Structuring records & matching directory… (${elapsedSec}s)`;
+      } else {
+        const extra = Math.min(20, elapsedSec - 45);
+        value = 0.91 + (extra / 20) * 0.04; // 91% to 95%
+        stageDetail = `Finalizing grade records… (${elapsedSec}s)`;
+      }
+
+      updateProgress({
+        value: Math.min(0.95, value),
+        label: `Transcribing with Gemini AI · ${name}`,
+        detail: stageDetail,
+      });
+    }, 500);
+  };
+
   const onGradesheetJobUpdate = (job) => {
     if (job.kind === 'scan-upload') return;
     const info = { fileName: job.payload?.fileName, fileSize: job.payload?.fileSize, kind: job.kind === 'gradesheet-rescan' ? 'rescan' : 'upload' };
@@ -653,8 +702,9 @@ document.addEventListener('DOMContentLoaded', () => {
       markPending(job.id);
       if (activeProgressJob !== job.id) { startProgress(); activeProgressJob = job.id; }
       if (job.status === 'saving') {
-        updateProgress({ value: 0.97, label: `Saving grades · ${name}`, detail: '' });
+        startSavingProgress(name);
       } else if (job.status === 'ocr-running') {
+        stopSavingProgress();
         updateProgress({
           value: Math.min(0.97, (job.progress?.value || 0) * 0.97),
           label: `${job.progress?.label || 'Starting OCR'} · ${name}`,
@@ -665,6 +715,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     if (job.status === 'done' || job.status === 'failed') {
+      stopSavingProgress();
       const message = job.status === 'done'
         ? summaryMessage(name, job.resultSummary) + (job.result?.truncated ? ` Only the first ${MAX_PAGES} pages were read.` : '')
         : `${name}: ${job.error}`;

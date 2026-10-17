@@ -16,6 +16,7 @@ require_once __DIR__ . '/lib/dashboard-analytics.php';
 require_once __DIR__ . '/lib/document-duplicate.php';
 require_once __DIR__ . '/lib/gradesheet-parser.php';
 require_once __DIR__ . '/lib/student-import.php';
+require_once __DIR__ . '/lib/ai-service.php';
 
 if (!dats_current_user()) {
     dats_json(['error' => 'Authentication required.'], 401);
@@ -2528,9 +2529,24 @@ function dats_record_gradesheet_batch(PDO $pdo, int $batchId, string $ocrText, ?
     });
 }
 
-/** OCR text the browser produced — or, if the browser couldn't, whatever server OCR can do. */
+/** OCR / Transcription text from Gemini AI — or browser OCR — or server OCR fallback. */
 function dats_resolve_gradesheet_ocr(array $input, string $absolutePath, string $mimeType): array
 {
+    if (dats_gemini_is_available()) {
+        try {
+            $aiText = dats_gemini_transcribe_gradesheet($absolutePath, $mimeType);
+            if ($aiText !== null && trim($aiText) !== '') {
+                return [
+                    'ocr_text' => $aiText,
+                    'ocr_status' => 'Completed',
+                    'ocr_error' => null,
+                ];
+            }
+        } catch (Throwable $error) {
+            error_log('Gemini transcription error: ' . $error->getMessage());
+        }
+    }
+
     $clientText = isset($input['ocr_text']) ? trim((string) $input['ocr_text']) : '';
     if (($input['ocr_status'] ?? '') === 'Completed' && $clientText !== '') {
         return ['ocr_text' => $clientText, 'ocr_status' => 'Completed', 'ocr_error' => null];
@@ -2581,7 +2597,15 @@ function upload_gradesheet_batch(PDO $pdo, array $currentUser, array $input, ?ar
     }
     $batchId = (int) $pdo->lastInsertId();
     $summary = dats_record_gradesheet_batch($pdo, $batchId, $ocr['ocr_text'], $ocr['ocr_error']);
-    return ['batch' => dats_find_gradesheet_batch($pdo, $batchId), 'summary' => $summary];
+    return [
+        'batch' => dats_find_gradesheet_batch($pdo, $batchId),
+        'summary' => $summary,
+        'entries' => $summary['entries'] ?? 0,
+        'students' => $summary['students'] ?? 0,
+        'needs_review' => $summary['needs_review'] ?? 0,
+        'linked_entries' => $summary['linked_entries'] ?? 0,
+        'status' => $summary['status'] ?? 'Pending Review',
+    ];
 }
 
 /**
@@ -2604,7 +2628,15 @@ function rescan_gradesheet_batch(PDO $pdo, array $input): array
     $update = $pdo->prepare('UPDATE gradesheet_batches SET ocr_status = :ocr_status, ocr_text = :ocr_text, ocr_error = :ocr_error WHERE id = :id');
     $update->execute([':ocr_status' => $ocr['ocr_status'], ':ocr_text' => $ocr['ocr_text'] === '' ? null : $ocr['ocr_text'], ':ocr_error' => $ocr['ocr_error'], ':id' => $batchId]);
     $summary = dats_record_gradesheet_batch($pdo, $batchId, $ocr['ocr_text'], $ocr['ocr_error']);
-    return ['batch' => dats_find_gradesheet_batch($pdo, $batchId), 'summary' => $summary];
+    return [
+        'batch' => dats_find_gradesheet_batch($pdo, $batchId),
+        'summary' => $summary,
+        'entries' => $summary['entries'] ?? 0,
+        'students' => $summary['students'] ?? 0,
+        'needs_review' => $summary['needs_review'] ?? 0,
+        'linked_entries' => $summary['linked_entries'] ?? 0,
+        'status' => $summary['status'] ?? 'Pending Review',
+    ];
 }
 
 /**
