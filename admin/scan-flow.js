@@ -5,6 +5,71 @@
 }(typeof globalThis !== 'undefined' ? globalThis : this, () => {
   const clean = (value) => String(value ?? '').trim();
 
+  // Splits a free-form "Last, First MI." or "First MI. Last" name into parts. Shared by the
+  // labeled-line parser (parseStudentDetails) and the Certificate of Enrollment prose parser
+  // (parseCertificateOfEnrollmentDetails) so name-splitting logic exists in exactly one place.
+  const splitFullName = (fullName) => {
+    const value = clean(fullName);
+    const details = {};
+    if (!value || value.length > 180 || !/^[\p{L}][\p{L} ,.'-]*$/u.test(value)) return details;
+    const nameParts = value.split(',').map((part) => clean(part)).filter(Boolean);
+    if (nameParts.length === 2) {
+      const givenParts = nameParts[1].split(/\s+/);
+      details.firstName = givenParts[0];
+      details.lastName = nameParts[0];
+      if (givenParts[1] && givenParts[1].length <= 10) details.middleInitial = givenParts[1];
+    } else if (nameParts.length === 1) {
+      const tokens = nameParts[0].split(/\s+/);
+      if (tokens.length >= 2 && tokens.length <= 5) {
+        details.firstName = tokens[0];
+        if (/^[\p{L}]\.?$/u.test(tokens[1]) && tokens.length >= 3) {
+          details.middleInitial = tokens[1];
+          details.lastName = tokens.slice(2).join(' ');
+        } else {
+          details.lastName = tokens.slice(1).join(' ');
+        }
+      }
+    }
+    return details;
+  };
+
+  const YEAR_LEVEL_LABELS = {
+    '1st year': '1st Year', 'first year': '1st Year',
+    '2nd year': '2nd Year', 'second year': '2nd Year',
+    '3rd year': '3rd Year', 'third year': '3rd Year',
+    '4th year': '4th Year', 'fourth year': '4th Year',
+    '5th year': '5th Year', 'fifth year': '5th Year',
+    'senior high school': 'Senior High School', graduate: 'Graduate',
+    'high school': 'High School', elementary: 'Elementary',
+    'pre-baccalaureate': 'Pre-Baccalaureate',
+  };
+  // Normalizes a raw year-level snippet ("3", "3rd", "3rd year", "third year", "Graduate", ...)
+  // into the exact label the #scanNewYearLevel <select> offers, or '' if it doesn't recognize it.
+  const normalizeYearLevel = (rawText) => {
+    const rawYearLevel = clean(rawText).toLowerCase().replace(/\s+/g, ' ');
+    if (!rawYearLevel) return '';
+    const numericYearLevel = rawYearLevel.match(/^([1-5])(?:st|nd|rd|th)?(?:\s+year)?$/);
+    const yearLevel = numericYearLevel
+      ? `${numericYearLevel[1]}${['th', 'st', 'nd', 'rd', 'th', 'th'][Number(numericYearLevel[1])]} year`
+      : rawYearLevel;
+    return YEAR_LEVEL_LABELS[yearLevel] || '';
+  };
+
+  // Prefers an explicit "20XX-20XX" range, then a labeled "A.Y./S.Y./academic year" mention,
+  // then any bare 20XX year found in the text. Shared by the File Scanning OCR banner message
+  // (admin/script.js) and parseCertificateOfEnrollmentDetails below. Forward-references
+  // normalizeSearchText, defined further down this module — safe, since this function body only
+  // runs once the whole module (and all its consts) has finished initializing.
+  const detectAcademicYearFromText = (text = '') => {
+    const cleaned = normalizeSearchText(text);
+    const rangeMatch = cleaned.match(/\b(20\d{2})\s*[-–—]\s*(20\d{2})\b/);
+    if (rangeMatch) return rangeMatch[1];
+    const labeledMatch = cleaned.match(/(?:a\.?\s*y\.?|s\.?\s*y\.?|academic year|school year)\D{0,6}(20\d{2})/i);
+    if (labeledMatch) return labeledMatch[1];
+    const bareMatch = cleaned.match(/\b(20\d{2})\b/);
+    return bareMatch ? bareMatch[1] : '';
+  };
+
   const parseStudentDetails = (text = '') => {
     const patterns = {
       firstName: /^(?:first\s+name|given\s+name)\s*[:=]\s*(.*?)\s*$/i,
@@ -33,27 +98,7 @@
     const details = {};
     const namePattern = /^[\p{L}][\p{L} .'-]*$/u;
 
-    const fullName = uniqueValue('fullName');
-    if (fullName && fullName.length <= 180 && /^[\p{L}][\p{L} ,.'-]*$/u.test(fullName)) {
-      const nameParts = fullName.split(',').map((part) => clean(part)).filter(Boolean);
-      if (nameParts.length === 2) {
-        const givenParts = nameParts[1].split(/\s+/);
-        details.firstName = givenParts[0];
-        details.lastName = nameParts[0];
-        if (givenParts[1] && givenParts[1].length <= 10) details.middleInitial = givenParts[1];
-      } else if (nameParts.length === 1) {
-        const tokens = nameParts[0].split(/\s+/);
-        if (tokens.length >= 2 && tokens.length <= 5) {
-          details.firstName = tokens[0];
-          if (/^[\p{L}]\.?$/u.test(tokens[1]) && tokens.length >= 3) {
-            details.middleInitial = tokens[1];
-            details.lastName = tokens.slice(2).join(' ');
-          } else {
-            details.lastName = tokens.slice(1).join(' ');
-          }
-        }
-      }
-    }
+    Object.assign(details, splitFullName(uniqueValue('fullName')));
     ['firstName', 'middleInitial', 'lastName'].forEach((key) => {
       const value = uniqueValue(key);
       if (value && value.length <= (key === 'middleInitial' ? 10 : 80) && namePattern.test(value)) details[key] = value;
@@ -97,20 +142,8 @@
       if (value && value.length <= maxLength) details[key] = value;
     });
 
-    const rawYearLevel = uniqueValue('yearLevel').toLowerCase().replace(/\s+/g, ' ').trim();
-    const numericYearLevel = rawYearLevel.match(/^([1-5])(?:st|nd|rd|th)?(?:\s+year)?$/);
-    const yearLevel = numericYearLevel ? `${numericYearLevel[1]}${['th', 'st', 'nd', 'rd', 'th', 'th'][Number(numericYearLevel[1])]} year` : rawYearLevel;
-    const yearLevels = {
-      '1st year': '1st Year', 'first year': '1st Year',
-      '2nd year': '2nd Year', 'second year': '2nd Year',
-      '3rd year': '3rd Year', 'third year': '3rd Year',
-      '4th year': '4th Year', 'fourth year': '4th Year',
-      '5th year': '5th Year', 'fifth year': '5th Year',
-      'senior high school': 'Senior High School', graduate: 'Graduate',
-      'high school': 'High School', elementary: 'Elementary',
-      'pre-baccalaureate': 'Pre-Baccalaureate',
-    };
-    if (yearLevels[yearLevel]) details.yearLevel = yearLevels[yearLevel];
+    const normalizedYearLevel = normalizeYearLevel(uniqueValue('yearLevel'));
+    if (normalizedYearLevel) details.yearLevel = normalizedYearLevel;
 
     return details;
   };
@@ -437,8 +470,103 @@
     return { rowVariance, colVariance, isSideways };
   };
 
+  // Certificates print surnames in ALL CAPS far more often than parseStudentDetails' labeled-form
+  // source ever did; title-case a value only when it's actually all-uppercase, so a name already
+  // typed/printed in mixed case (e.g. from parseStudentDetails' existing callers) is untouched.
+  const titleCaseIfAllCaps = (value) => {
+    const trimmed = clean(value);
+    if (!trimmed || !/\p{L}/u.test(trimmed) || trimmed !== trimmed.toUpperCase()) return trimmed;
+    return trimmed.toLowerCase().replace(/\p{L}+/gu, (word) => word[0].toUpperCase() + word.slice(1));
+  };
+
+  // Keeps a loosely-bounded phrase capture (course/major names) from running on into the next
+  // clause when the source has no comma separating them, e.g. "enrolled in BS IT major in Web Dev".
+  const trimAtKeyword = (value, keywords) => clean(value)
+    .replace(new RegExp(`\\s+(?:${keywords.join('|')})\\b.*$`, 'i'), '')
+    .trim();
+
+  /**
+   * Certificates of Enrollment are prose ("This is to certify that ..."), not the labeled
+   * `Field: value` lines parseStudentDetails expects, so this is a dedicated heuristic parser
+   * tuned to common certificate phrasing. Regex/heuristic by design (no AI call) — best-effort:
+   * a field that doesn't match common phrasing is simply left for the reviewer to fill in.
+   */
+  const parseCertificateOfEnrollmentDetails = (text = '') => {
+    const raw = String(text ?? '');
+    if (!clean(raw)) return {};
+    const details = {};
+
+    const studentNumberMatch = raw.match(/(?:student\s*(?:no\.?|number|id)|id\s*no\.?)\s*[:\-]?\s*([A-Za-z0-9][A-Za-z0-9-]{3,20})/i);
+    if (studentNumberMatch) {
+      details.studentNumber = studentNumberMatch[1];
+    } else {
+      const bareNumberMatch = raw.match(/\b(\d{2,4}-\d{3,6})\b/);
+      if (bareNumberMatch) details.studentNumber = bareNumberMatch[1];
+    }
+
+    const nameMatch = raw.match(/certify\s+that\s+([\p{L}][\p{L} ,.'-]+?)(?:,?\s*(?:with\s+student|id\s+no\.?|student\s+no\.?|student\s+number|is\s+(?:a|currently)|a\s+bona\s*fide))/iu)
+      || raw.match(/^\s*(?:student\s+)?name\s*[:=]\s*(.+)$/im);
+    if (nameMatch) {
+      const parts = splitFullName(nameMatch[1]);
+      ['firstName', 'middleInitial', 'lastName'].forEach((key) => {
+        if (parts[key]) details[key] = titleCaseIfAllCaps(parts[key]);
+      });
+    }
+
+    const courseMatch = raw.match(/(?:enrolled\s+in(?:\s+the)?(?:\s+degree\s+program\s+of)?|program\s+of|pursuing|taking\s+up)\s*:?\s*([\p{L}][\p{L}\s&/-]{2,120})/iu);
+    if (courseMatch) {
+      const value = trimAtKeyword(courseMatch[1], ['major', 'for', 'during', 'is']);
+      if (value) details.course = value;
+    }
+
+    const majorMatch = raw.match(/major\s+in\s*:?\s*([\p{L}][\p{L}\s&/-]{2,100})/iu);
+    if (majorMatch) {
+      const value = trimAtKeyword(majorMatch[1], ['for', 'during', 'is']);
+      if (value) details.major = value;
+    }
+
+    const yearLevelMatch = raw.match(/\b([1-5](?:st|nd|rd|th)?\s*year|first\s+year|second\s+year|third\s+year|fourth\s+year|fifth\s+year|graduate|senior\s+high\s+school|high\s+school|elementary|pre-baccalaureate)\b/i);
+    if (yearLevelMatch) {
+      const normalized = normalizeYearLevel(yearLevelMatch[1]);
+      if (normalized) details.yearLevel = normalized;
+    }
+
+    const academicYear = detectAcademicYearFromText(raw);
+    if (academicYear) details.academicYear = academicYear;
+
+    // Best-effort: some certificate templates still include a small labeled block alongside the
+    // prose. Only borrow fields the prose patterns above don't already own.
+    const labeled = parseStudentDetails(raw);
+    ['gender', 'birthdate', 'contactNumber', 'college'].forEach((key) => {
+      if (!details[key] && labeled[key]) details[key] = labeled[key];
+    });
+    const addressMatch = raw.match(/^\s*address\s*[:=]\s*(.+)$/im);
+    if (addressMatch) {
+      const value = clean(addressMatch[1]);
+      if (value && value.length <= 255) details.address = value;
+    }
+    const nationalityMatch = raw.match(/^\s*nationality\s*[:=]\s*(.+)$/im);
+    if (nationalityMatch) {
+      const value = clean(nationalityMatch[1]);
+      if (value && value.length <= 80) details.nationality = value;
+    }
+    const civilStatusMatch = raw.match(/^\s*civil\s*status\s*[:=]\s*(.+)$/im);
+    if (civilStatusMatch) {
+      const value = clean(civilStatusMatch[1]);
+      if (/^(single|married|widowed|separated|undisclosed)$/i.test(value)) {
+        details.civilStatus = value[0].toUpperCase() + value.slice(1).toLowerCase();
+      }
+    }
+
+    return details;
+  };
+
   return {
     parseStudentDetails,
+    splitFullName,
+    normalizeYearLevel,
+    detectAcademicYearFromText,
+    parseCertificateOfEnrollmentDetails,
     normalizeSearchText,
     filterStudents,
     getExistingStudentSelection,

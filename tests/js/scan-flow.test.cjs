@@ -344,3 +344,66 @@ test('calculateProjectionVariance flags vertical text lines as sideways', () => 
   assert.equal(horizResult.isSideways, false);
 });
 
+test('splitFullName splits "Last, First MI." and "First MI. Last" forms', () => {
+  assert.deepEqual(flow.splitFullName('Dela Cruz, Juan P.'), {
+    firstName: 'Juan', middleInitial: 'P.', lastName: 'Dela Cruz',
+  });
+  assert.deepEqual(flow.splitFullName('Juan Dela Cruz'), { firstName: 'Juan', lastName: 'Dela Cruz' });
+  assert.deepEqual(flow.splitFullName('Juan P. Dela Cruz'), {
+    firstName: 'Juan', middleInitial: 'P.', lastName: 'Dela Cruz',
+  });
+  assert.deepEqual(flow.splitFullName(''), {});
+  assert.deepEqual(flow.splitFullName('J0hn Cruz3'), {});
+});
+
+test('normalizeYearLevel maps numeric, ordinal, and special year-level phrases', () => {
+  assert.equal(flow.normalizeYearLevel('3'), '3rd Year');
+  assert.equal(flow.normalizeYearLevel('3rd'), '3rd Year');
+  assert.equal(flow.normalizeYearLevel('3rd year'), '3rd Year');
+  assert.equal(flow.normalizeYearLevel('third year'), '3rd Year');
+  assert.equal(flow.normalizeYearLevel('Graduate'), 'Graduate');
+  assert.equal(flow.normalizeYearLevel('6th year'), '');
+  assert.equal(flow.normalizeYearLevel(''), '');
+});
+
+test('detectAcademicYearFromText prefers a range, then a labeled year, then a bare year', () => {
+  assert.equal(flow.detectAcademicYearFromText('for school year 2025-2026'), '2025');
+  assert.equal(flow.detectAcademicYearFromText('A.Y. 2025'), '2025');
+  assert.equal(flow.detectAcademicYearFromText('issued in 2025 for reference'), '2025');
+  assert.equal(flow.detectAcademicYearFromText('no year mentioned here'), '');
+});
+
+test('parseCertificateOfEnrollmentDetails extracts fields from certify-that prose', () => {
+  const text = 'Republic of the Philippines\nZamboanga Peninsula Polytechnic State University\n'
+    + 'CERTIFICATE OF ENROLLMENT\n\n'
+    + 'This is to certify that DELA CRUZ, Juan P., with Student No. 2026-001234, '
+    + 'is currently enrolled in the degree program of BS Information Technology, major in Web and Mobile Development, '
+    + '3rd year level, for the Academic Year 2025-2026.';
+  assert.deepEqual(flow.parseCertificateOfEnrollmentDetails(text), {
+    studentNumber: '2026-001234',
+    firstName: 'Juan', middleInitial: 'P.', lastName: 'Dela Cruz',
+    course: 'BS Information Technology',
+    major: 'Web and Mobile Development',
+    yearLevel: '3rd Year',
+    academicYear: '2025',
+  });
+});
+
+test('parseCertificateOfEnrollmentDetails handles first-name-first order and a bare student number', () => {
+  const text = 'This is to certify that Ana M. Reyes is a bonafide student of this University, '
+    + 'ID No. 2024-00987, currently enrolled in BS Nursing, 1st year, S.Y. 2024-2025.';
+  const details = flow.parseCertificateOfEnrollmentDetails(text);
+  assert.equal(details.studentNumber, '2024-00987');
+  assert.equal(details.firstName, 'Ana');
+  assert.equal(details.middleInitial, 'M.');
+  assert.equal(details.lastName, 'Reyes');
+  assert.equal(details.course, 'BS Nursing');
+  assert.equal(details.yearLevel, '1st Year');
+  assert.equal(details.academicYear, '2024');
+});
+
+test('parseCertificateOfEnrollmentDetails returns an empty object for unrelated text', () => {
+  assert.deepEqual(flow.parseCertificateOfEnrollmentDetails('A document with no certificate phrasing at all.'), {});
+  assert.deepEqual(flow.parseCertificateOfEnrollmentDetails(''), {});
+});
+

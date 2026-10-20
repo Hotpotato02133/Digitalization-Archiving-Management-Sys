@@ -47,6 +47,7 @@ ensure_student_deleted_column($pdo);
 ensure_gradesheet_tables($pdo);
 ensure_gradesheet_category($pdo);
 ensure_gradesheet_batches_table($pdo);
+ensure_gemini_rate_limit_table($pdo);
 
 try {
     migrate_pending_documents_to_archive($pdo, (int) ($currentUser['id'] ?? 0));
@@ -1513,6 +1514,17 @@ function ensure_gradesheet_tables(PDO $pdo): void
     ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci");
 }
 
+/** Log of Gemini API calls, used only to enforce dats_gemini_rate_limit_check()'s RPM/RPD caps. */
+function ensure_gemini_rate_limit_table(PDO $pdo): void
+{
+    $pdo->exec("CREATE TABLE IF NOT EXISTS gemini_api_calls (
+        id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
+        created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+        PRIMARY KEY (id),
+        KEY idx_gemini_calls_created (created_at)
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci");
+}
+
 function ensure_gradesheet_category(PDO $pdo): void
 {
     $existing = $pdo->query("SELECT id FROM document_categories WHERE code = 'GRD'")->fetchColumn();
@@ -2533,17 +2545,28 @@ function dats_record_gradesheet_batch(PDO $pdo, int $batchId, string $ocrText, ?
 function dats_resolve_gradesheet_ocr(array $input, string $absolutePath, string $mimeType): array
 {
     if (dats_gemini_is_available()) {
-        try {
-            $aiText = dats_gemini_transcribe_gradesheet($absolutePath, $mimeType);
-            if ($aiText !== null && trim($aiText) !== '') {
-                return [
-                    'ocr_text' => $aiText,
-                    'ocr_status' => 'Completed',
-                    'ocr_error' => null,
-                ];
+        $pdo = dats_db();
+        // Gate every Gemini call behind a rate limit so a burst of uploads can't run past the
+        // free-tier quota and start incurring charges — see dats_gemini_rate_limit_check(). On
+        // refusal we fall straight through to the non-Gemini OCR below instead of failing the
+        // upload; the registrar still gets a result, just without AI transcription this time.
+        $rateLimit = $pdo ? dats_gemini_rate_limit_check($pdo) : ['allowed' => true, 'reason' => null];
+        if ($rateLimit['allowed']) {
+            try {
+                if ($pdo) dats_gemini_record_call($pdo);
+                $aiText = dats_gemini_transcribe_gradesheet($absolutePath, $mimeType);
+                if ($aiText !== null && trim($aiText) !== '') {
+                    return [
+                        'ocr_text' => $aiText,
+                        'ocr_status' => 'Completed',
+                        'ocr_error' => null,
+                    ];
+                }
+            } catch (Throwable $error) {
+                error_log('Gemini transcription error: ' . $error->getMessage());
             }
-        } catch (Throwable $error) {
-            error_log('Gemini transcription error: ' . $error->getMessage());
+        } else {
+            error_log("Gemini transcription skipped ({$rateLimit['reason']} reached); falling back to non-Gemini OCR.");
         }
     }
 

@@ -59,6 +59,15 @@ window.DatsJobs = (function buildJobBridge() {
       if (job.status === 'failed') return job.error || `Could not archive ${fileName}.`;
       return `Preparing to archive ${fileName}…`;
     }
+    if (job.kind === 'scan-ocr') {
+      if (job.status === 'saving') return `Reading ${fileName}…`;
+      if (job.status === 'done') {
+        if (job.result?.unavailable) return `${fileName}: switching to in-browser OCR…`;
+        if (job.result?.ocrStatus === 'Completed') return `${fileName}: text extracted for review.`;
+        return job.result?.ocrError || `${fileName}: no readable text found.`;
+      }
+      return `Queued: reading ${fileName}…`;
+    }
     if (job.status === 'ocr-running') return `${job.progress?.label || `Reading ${fileName}`}${job.progress?.detail ? ` · ${job.progress.detail}` : ''}`;
     if (job.status === 'saving') {
       return (job.kind === 'gradesheet-upload' || job.kind === 'gradesheet-rescan')
@@ -134,9 +143,14 @@ window.DatsJobs = (function buildJobBridge() {
   const trySendToSw = async (message) => {
     if (!supportsSw || !swReady) return false;
     try {
+      // Generous on purpose: this gates whether a job (an upload/OCR run) is handed to the
+      // service worker, where it survives page navigation, or run inline on this page, where it
+      // doesn't. A short race here was the actual cause of jobs occasionally "resetting" on
+      // navigation — the SW registration just hadn't resolved yet. Status pings (ACK/PROGRESS)
+      // pay the same wait, but failing those silently is harmless.
       const registration = await Promise.race([
         swReady,
-        new Promise((resolve) => setTimeout(() => resolve(null), 800)),
+        new Promise((resolve) => setTimeout(() => resolve(null), 5000)),
       ]);
       const target = registration?.active || navigator.serviceWorker.controller;
       if (!target) return false;
@@ -254,9 +268,38 @@ window.DatsJobs = (function buildJobBridge() {
     const summary = (result.data && result.data.summary) ? { ...result.data.summary, ...result.data } : result.data;
     notify({ ...job, status: 'done', resultSummary: summary });
   };
+  const runInlineScanOcr = async (job) => {
+    notify({ ...job, status: 'saving' });
+    let result;
+    try {
+      const formData = new FormData();
+      formData.append('file', job.file, job.payload?.fileName || 'document-upload');
+      const response = await fetch(`${appBase}/api.php?resource=document-ocr`, { method: 'POST', credentials: 'same-origin', body: formData });
+      const body = await response.json().catch(() => ({}));
+      const payload = body?.data;
+      if (!response.ok || !payload || (payload.ocr_status !== 'Completed' && payload.ocr_status !== 'Failed')) {
+        result = { unavailable: true };
+      } else {
+        result = {
+          ocrText: typeof payload.ocr_text === 'string' ? payload.ocr_text : '',
+          ocrStatus: payload.ocr_status === 'Completed' ? 'Completed' : 'Failed',
+          ocrError: payload.ocr_error || null,
+          aiSummary: payload.ai_summary || '',
+          aiDetectedCategory: payload.ai_detected_category || '',
+        };
+      }
+    } catch (error) {
+      result = { unavailable: true };
+    }
+    notify({ ...job, status: 'done', result });
+  };
   const runJobInline = async (job) => {
     if (job.kind === 'scan-upload' || job.kind === 'gradesheet-upload' || job.kind === 'gradesheet-rescan') {
       await runInlineSave(job);
+      return;
+    }
+    if (job.kind === 'scan-ocr') {
+      await runInlineScanOcr(job);
       return;
     }
     notify({ ...job, status: 'ocr-running', progress: { value: 0, label: 'Starting OCR…', detail: '' } });

@@ -81,20 +81,21 @@ const dispatchOcr = async (job, preferredClientId) => {
   chosen.postMessage({ type: 'RUN_OCR', jobId: job.id, engine: 'gradesheet', file: job.file, meta: job.payload });
 };
 
+const getBasePath = () => {
+  try {
+    const scopePath = new URL(self.registration?.scope || '/DATS/').pathname;
+    return scopePath.replace(/\/$/, '');
+  } catch {
+    return '/DATS';
+  }
+};
+
 const runSaveJob = async (job) => {
   job.status = 'saving';
   job.updatedAt = Date.now();
   await putJob(job);
   await broadcastJobUpdate(job);
   try {
-    const getBasePath = () => {
-      try {
-        const scopePath = new URL(self.registration?.scope || '/DATS/').pathname;
-        return scopePath.replace(/\/$/, '');
-      } catch {
-        return '/DATS';
-      }
-    };
     const basePath = getBasePath();
     let response;
     if (job.kind === 'scan-upload') {
@@ -149,11 +150,53 @@ const runSaveJob = async (job) => {
   await broadcastJobUpdate(job);
 };
 
+// File Scanning's OCR-assist step (reads a document server-side with Tesseract to prefill the
+// archive form) used to be a plain page-bound fetch, so it died the moment the user navigated
+// away — same bug this file exists to fix for scan-upload/gradesheet-upload. This runs that fetch
+// here instead, so it finishes regardless of which page is open. A result of
+// `{ unavailable: true }` means the server has no OCR engine installed (not a real failure); the
+// caller falls back to the browser's own Tesseract.js, which still needs a real page and so stays
+// outside this background path — that one pre-existing limitation is unchanged by this fix.
+const runScanOcrJob = async (job) => {
+  job.status = 'saving';
+  job.updatedAt = Date.now();
+  await putJob(job);
+  await broadcastJobUpdate(job);
+  try {
+    const basePath = getBasePath();
+    const formData = new FormData();
+    formData.append('file', job.file, job.payload?.fileName || 'document-upload');
+    const response = await fetch(`${basePath}/api.php?resource=document-ocr`, { method: 'POST', credentials: 'same-origin', body: formData });
+    const result = await response.json().catch(() => ({}));
+    const payload = result?.data;
+    if (!response.ok || !payload || (payload.ocr_status !== 'Completed' && payload.ocr_status !== 'Failed')) {
+      job.result = { unavailable: true };
+    } else {
+      job.result = {
+        ocrText: typeof payload.ocr_text === 'string' ? payload.ocr_text : '',
+        ocrStatus: payload.ocr_status === 'Completed' ? 'Completed' : 'Failed',
+        ocrError: payload.ocr_error || null,
+        aiSummary: payload.ai_summary || '',
+        aiDetectedCategory: payload.ai_detected_category || '',
+      };
+    }
+  } catch (error) {
+    job.result = { unavailable: true };
+  }
+  job.status = 'done';
+  job.file = null;
+  job.updatedAt = Date.now();
+  await putJob(job);
+  await broadcastJobUpdate(job);
+};
+
 const handleEnqueue = async (job, sourceClient) => {
   await putJob(job);
   await broadcastJobUpdate(job);
   if (job.kind === 'scan-upload' || job.kind === 'gradesheet-upload' || job.kind === 'gradesheet-rescan') {
     await runSaveJob(job);
+  } else if (job.kind === 'scan-ocr') {
+    await runScanOcrJob(job);
   } else {
     await dispatchOcr(job, sourceClient?.id);
   }
@@ -200,8 +243,12 @@ const handleClientReady = async (client) => {
   const remaining = await getAllJobs();
   if (client) client.postMessage({ type: 'JOBS_SNAPSHOT', jobs: remaining.map(toClientJob) });
   if (!client) return;
+  const directKinds = ['scan-upload', 'gradesheet-upload', 'gradesheet-rescan', 'scan-ocr'];
   await Promise.all(remaining
-    .filter((job) => job.kind !== 'scan-upload' && job.kind !== 'gradesheet-upload' && job.kind !== 'gradesheet-rescan' && !job.result
+    .filter((job) => job.kind === 'scan-ocr' && job.status === 'queued')
+    .map((job) => runScanOcrJob(job)));
+  await Promise.all(remaining
+    .filter((job) => !directKinds.includes(job.kind) && !job.result
       && (job.status === 'queued' || (job.status === 'ocr-running' && (!job.heartbeatAt || now - job.heartbeatAt > STALE_MS))))
     .map((job) => dispatchOcr(job, client.id)));
 };

@@ -18,6 +18,46 @@ function dats_gemini_is_available(): bool
     return trim(dats_gemini_api_key()) !== '';
 }
 
+function dats_gemini_rate_limit_per_minute(): int
+{
+    return max(1, (int) dats_env('DATS_GEMINI_RPM_LIMIT', '8'));
+}
+
+function dats_gemini_rate_limit_per_day(): int
+{
+    return max(1, (int) dats_env('DATS_GEMINI_RPD_LIMIT', '150'));
+}
+
+/**
+ * Conservative, configurable caps on Gemini calls so a burst of gradesheet uploads can't run
+ * past the free-tier quota and start incurring charges. Defaults are deliberately well under
+ * typical Gemini Flash free-tier limits — check your actual quota at
+ * https://ai.google.dev/gemini-api/docs/rate-limits and adjust DATS_GEMINI_RPM_LIMIT /
+ * DATS_GEMINI_RPD_LIMIT (see config/database.php's dats_env()) if it differs.
+ * Callers should fall back to non-Gemini OCR on refusal rather than failing the upload outright.
+ */
+function dats_gemini_rate_limit_check(PDO $pdo): array
+{
+    $pdo->exec('DELETE FROM gemini_api_calls WHERE created_at < (NOW() - INTERVAL 1 DAY)');
+
+    $minuteStatement = $pdo->query('SELECT COUNT(*) FROM gemini_api_calls WHERE created_at >= (NOW() - INTERVAL 1 MINUTE)');
+    if ((int) $minuteStatement->fetchColumn() >= dats_gemini_rate_limit_per_minute()) {
+        return ['allowed' => false, 'reason' => 'per-minute Gemini AI limit'];
+    }
+
+    $dayStatement = $pdo->query('SELECT COUNT(*) FROM gemini_api_calls WHERE created_at >= (NOW() - INTERVAL 1 DAY)');
+    if ((int) $dayStatement->fetchColumn() >= dats_gemini_rate_limit_per_day()) {
+        return ['allowed' => false, 'reason' => 'daily Gemini AI limit'];
+    }
+
+    return ['allowed' => true, 'reason' => null];
+}
+
+function dats_gemini_record_call(PDO $pdo): void
+{
+    $pdo->exec('INSERT INTO gemini_api_calls (created_at) VALUES (NOW())');
+}
+
 /**
  * Uploads a document to Google Gemini Files API and returns the file URI and resource name.
  * @return array{file_uri: string, name: string}|null

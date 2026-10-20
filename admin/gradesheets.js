@@ -870,7 +870,27 @@ document.addEventListener('DOMContentLoaded', () => {
     if (modal === uploadModal) closeUploadModal();
     else modal.hidden = true;
   };
-  [uploadModal, batchModal, editModal].forEach((modal) => {
+  // The upload modal's backdrop visually covers the sidebar nav while reading/uploading is in
+  // progress, so clicking a sidebar link there used to just dismiss the modal (the backdrop is
+  // what actually receives the click) instead of navigating — reading as "I can't reach other
+  // pages while this is open," even though the upload itself keeps running in the background
+  // (window.DatsJobs, see data-sync.js) regardless of whether this modal is open. Treat a click
+  // on the backdrop as a click on whatever link is underneath it, so one click both closes the
+  // modal and takes the user where they meant to go.
+  uploadModal.addEventListener('click', (event) => {
+    if (event.target === uploadModal) {
+      const link = document.elementsFromPoint(event.clientX, event.clientY)
+        .find((element) => element !== uploadModal && element.closest?.('a[href]'))
+        ?.closest('a[href]');
+      if (link) {
+        closeUploadModal();
+        window.location.href = link.href;
+        return;
+      }
+    }
+    if (event.target === uploadModal || event.target.closest('[data-close-modal]')) closeModal(uploadModal);
+  });
+  [batchModal, editModal].forEach((modal) => {
     modal.addEventListener('click', (event) => {
       if (event.target === modal || event.target.closest('[data-close-modal]')) closeModal(modal);
     });

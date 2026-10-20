@@ -339,6 +339,12 @@ document.addEventListener('DOMContentLoaded', () => {
     if (newMode) {
       if (scanStudentId) scanStudentId.value = '';
       if (scanStudentSearch) scanStudentSearch.value = '';
+      // If OCR for a Certificate of Enrollment finished while the user was still on "Existing
+      // student", the fields were never filled (they were hidden, and the generic suggester only
+      // ran for non-COE uploads) — fill them now that "New student registration" is active.
+      if (lastCoeSuggestion && lastCoeSuggestion.fileKey === fileOcrKey(selectedFiles[0])) {
+        applyNewStudentSuggestions(lastCoeSuggestion.details, COE_SUGGESTION_FIELDS);
+      }
     } else {
       scanNewStudentFields?.querySelectorAll('input').forEach((field) => { field.value = ''; });
       scanNewStudentFields?.querySelectorAll('select').forEach((field) => { field.selectedIndex = 0; });
@@ -590,40 +596,44 @@ document.addEventListener('DOMContentLoaded', () => {
     return pages;
   };
 
-  const runServerOcrOnFile = async (file) => {
-    if (!file) return null;
-    const formData = new FormData();
-    formData.append('file', file, file.name || 'document-upload');
-    try {
-      const response = await fetch('../api.php?resource=document-ocr', {
-        method: 'POST',
-        credentials: 'same-origin',
-        body: formData,
+  // Runs the server-side OCR read through the background job bridge (window.DatsJobs, see
+  // data-sync.js) instead of a plain page-bound fetch, so it finishes — and the form still gets
+  // prefilled when the user is back on this page to see it — even if they navigate away mid-read.
+  // If the user is gone when it finishes, the bridge's persistent banner still tells them so.
+  const runServerOcrOnFile = (file) => new Promise((resolve) => {
+    if (!file) { resolve(null); return; }
+    let unsubscribe = null;
+    let settled = false;
+    const finish = (value) => {
+      if (settled) return;
+      settled = true;
+      unsubscribe?.();
+      resolve(value);
+    };
+    // Safety net only: a lost/undelivered job update must not hang form prefill forever. The
+    // server itself already bounds a single read to well under this (see DATS_OCR_RASTER_TIMEOUT_SECONDS).
+    window.setTimeout(() => finish(null), 120000);
+    window.DatsJobs.enqueue('scan-ocr', { fileName: file.name, fileSize: file.size }, file).then((jobId) => {
+      if (settled) return;
+      unsubscribe = window.DatsJobs.onUpdate((job) => {
+        if (job.id !== jobId || job.status !== 'done') return;
+        window.DatsJobs.ack(job.id);
+        const payload = job.result;
+        if (!payload || payload.unavailable) { finish(null); return; }
+        const ocrText = typeof payload.ocrText === 'string' ? payload.ocrText : '';
+        finish({
+          ocrText,
+          ocrStatus: payload.ocrStatus === 'Completed' ? 'Completed' : 'Failed',
+          ocrError: payload.ocrError || (ocrText ? null : 'No readable text could be extracted from the uploaded document.'),
+          aiSummary: payload.aiSummary || summarizeDetectedText(ocrText),
+          aiDetectedCategory: payload.aiDetectedCategory || window.DatsScanFlow.inferDocumentCategory(ocrText, scanReferenceData.categories)?.name || '',
+        });
       });
-      const result = await response.json().catch(() => ({}));
-      if (!response.ok || !result?.data) {
-        return null;
-      }
-      const payload = result.data;
-      const ocrText = typeof payload.ocr_text === 'string' ? payload.ocr_text : '';
-      if (payload.ocr_status !== 'Completed' && payload.ocr_status !== 'Failed') {
-        // 'Processing'/'Pending' means the server has no OCR engine installed and never
-        // actually attempted extraction — that's "unavailable", not a real failure, so the
-        // caller should fall back to client-side Tesseract.js instead of giving up here.
-        return null;
-      }
-      return {
-        ocrText,
-        ocrStatus: payload.ocr_status === 'Completed' ? 'Completed' : 'Failed',
-        ocrError: payload.ocr_error || (ocrText ? null : 'No readable text could be extracted from the uploaded document.'),
-        aiSummary: payload.ai_summary || summarizeDetectedText(ocrText),
-        aiDetectedCategory: payload.ai_detected_category || window.DatsScanFlow.inferDocumentCategory(ocrText, scanReferenceData.categories)?.name || '',
-      };
-    } catch (error) {
+    }).catch((error) => {
       console.warn('Server OCR unavailable, falling back to browser OCR.', error);
-      return null;
-    }
-  };
+      finish(null);
+    });
+  });
 
   const runOcrOnFile = async (file) => {
     if (!file) return null;
@@ -708,6 +718,9 @@ document.addEventListener('DOMContentLoaded', () => {
   let lastOcrFileKey = null;
   let ocrRequestToken = 0;
   let activeOcrFileKey = null;
+  // Cached Certificate of Enrollment parse, re-applied if the user switches to "New student
+  // registration" after OCR has already finished (see the scanStudentMode change handler above).
+  let lastCoeSuggestion = null;
 
   scanCategory?.addEventListener('change', () => {
     categoryManuallySet = true;
@@ -728,6 +741,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   const prepareForFileReplacement = () => {
     clearOcrStudentSuggestions();
+    lastCoeSuggestion = null;
     if (scanCategory) {
       scanCategory.value = window.DatsScanFlow.categoryForReplacement(scanCategory.value, categoryDetectedFromFile);
     }
@@ -740,16 +754,6 @@ document.addEventListener('DOMContentLoaded', () => {
     activeOcrFileKey = null;
   };
 
-  const detectAcademicYearFromText = (text = '') => {
-    const cleaned = normalizeOcrText(text);
-    const rangeMatch = cleaned.match(/\b(20\d{2})\s*[-–—]\s*(20\d{2})\b/);
-    if (rangeMatch) return rangeMatch[1];
-    const labeledMatch = cleaned.match(/(?:A\.?\s*Y\.?|S\.?\s*Y\.?|academic year|school year)\D{0,6}(20\d{2})/i);
-    if (labeledMatch) return labeledMatch[1];
-    const bareMatch = cleaned.match(/\b(20\d{2})\b/);
-    return bareMatch ? bareMatch[1] : '';
-  };
-
   const setOcrBanner = (message, isError = false) => {
     if (!scanOcrBanner) return;
     if (!message) { scanOcrBanner.hidden = true; scanOcrBanner.textContent = ''; return; }
@@ -758,23 +762,35 @@ document.addEventListener('DOMContentLoaded', () => {
     scanOcrBanner.textContent = message;
   };
 
-  const applyStudentSuggestions = (text) => {
-    const detected = window.DatsScanFlow.parseStudentDetails(text);
-    const fields = [
-      ['firstName', 'scanNewFirstName', 'First name'],
-      ['middleInitial', 'scanNewMiddleInitial', 'Middle name'],
-      ['lastName', 'scanNewLastName', 'Last name'],
-      ['gender', 'scanNewGender', 'Gender'],
-      ['birthdate', 'scanNewBirthdate', 'Birthdate'],
-      ['academicYear', 'scanNewAcademicYear', 'Academic year'],
-      ['contactNumber', 'scanNewContactNumber', 'Contact number'],
-      ['college', 'scanNewCollege', 'College'],
-      ['course', 'scanNewCourse', 'Program / course'],
-      ['major', 'scanNewMajor', 'Major'],
-      ['yearLevel', 'scanNewYearLevel', 'Year level'],
-    ];
+  const GENERIC_SUGGESTION_FIELDS = [
+    ['firstName', 'scanNewFirstName', 'First name'],
+    ['middleInitial', 'scanNewMiddleInitial', 'Middle name'],
+    ['lastName', 'scanNewLastName', 'Last name'],
+    ['gender', 'scanNewGender', 'Gender'],
+    ['birthdate', 'scanNewBirthdate', 'Birthdate'],
+    ['academicYear', 'scanNewAcademicYear', 'Academic year'],
+    ['contactNumber', 'scanNewContactNumber', 'Contact number'],
+    ['college', 'scanNewCollege', 'College'],
+    ['course', 'scanNewCourse', 'Program / course'],
+    ['major', 'scanNewMajor', 'Major'],
+    ['yearLevel', 'scanNewYearLevel', 'Year level'],
+  ];
+  // Certificate of Enrollment prose covers a few fields the generic labeled-line parser never
+  // did (see parseCertificateOfEnrollmentDetails in scan-flow.js).
+  const COE_SUGGESTION_FIELDS = [
+    ['studentNumber', 'scanNewStudentNumber', 'Student number'],
+    ...GENERIC_SUGGESTION_FIELDS,
+    ['nationality', 'scanNewNationality', 'Nationality'],
+    ['address', 'scanNewAddress', 'Address'],
+    ['civilStatus', 'scanNewCivilStatus', 'Civil status'],
+  ];
+
+  // Shared by both the generic (any document type) and Certificate of Enrollment suggestion
+  // sources: fills a field only if it's still empty/placeholder, and tracks what it filled so
+  // clearOcrStudentSuggestions() can undo it if the file is replaced before the user edits it.
+  const applyNewStudentSuggestions = (detected, fieldList) => {
     const applied = [];
-    fields.forEach(([key, fieldId, label]) => {
+    fieldList.forEach(([key, fieldId, label]) => {
       const value = detected[key];
       const field = document.getElementById(fieldId);
       if (!value || !field || (field.value && field.value !== 'Undisclosed')) return;
@@ -808,12 +824,28 @@ document.addEventListener('DOMContentLoaded', () => {
         if (scanCategorySource) scanCategorySource.textContent = 'No supported type was detected. Select a document type.';
       }
     }
-    const detectedYear = detectAcademicYearFromText(ocrResult.ocrText || '');
-    const suggestedFields = ocrResult.ocrStatus === 'Completed' && ocrResult.ocrText
-      ? applyStudentSuggestions(ocrResult.ocrText)
-      : [];
+    const detectedYear = window.DatsScanFlow.detectAcademicYearFromText(ocrResult.ocrText || '');
+    const resolvedCategory = scanReferenceData.categories.find((category) => String(category.id) === String(scanCategory?.value || ''));
+    const isCertificateOfEnrollment = resolvedCategory?.code === 'COE';
+    let suggestedFields = [];
     if (ocrResult.ocrStatus === 'Completed' && ocrResult.ocrText) {
-      setOcrBanner(`${detectedCategory ? `Detected: ${detectedCategory.name}` : 'No reliable document type detected'}${detectedYear ? ` · Academic year ${detectedYear} found in text` : ''}${suggestedFields.length ? ` · Student details suggested: ${suggestedFields.join(', ')}` : ''}. Review and correct the form before archiving.`);
+      if (isCertificateOfEnrollment) {
+        const coeDetails = window.DatsScanFlow.parseCertificateOfEnrollmentDetails(ocrResult.ocrText);
+        suggestedFields = applyNewStudentSuggestions(coeDetails, COE_SUGGESTION_FIELDS);
+        lastCoeSuggestion = { fileKey: lastOcrFileKey, details: coeDetails };
+      } else {
+        const detected = window.DatsScanFlow.parseStudentDetails(ocrResult.ocrText);
+        suggestedFields = applyNewStudentSuggestions(detected, GENERIC_SUGGESTION_FIELDS);
+        lastCoeSuggestion = null;
+      }
+    }
+    if (ocrResult.ocrStatus === 'Completed' && ocrResult.ocrText) {
+      const suggestionNote = suggestedFields.length
+        ? (isCertificateOfEnrollment
+          ? ` · Registration details filled from the certificate: ${suggestedFields.join(', ')}`
+          : ` · Student details suggested: ${suggestedFields.join(', ')}`)
+        : '';
+      setOcrBanner(`${detectedCategory ? `Detected: ${detectedCategory.name}` : 'No reliable document type detected'}${detectedYear ? ` · Academic year ${detectedYear} found in text` : ''}${suggestionNote}. Review and correct the form before archiving.`);
     } else {
       setOcrBanner(ocrResult.ocrError || 'No readable text could be extracted. Verify the document details before archiving.', true);
     }
