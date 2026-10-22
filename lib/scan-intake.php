@@ -240,15 +240,11 @@ function dats_resolve_intake_student(PDO $pdo, array $input): array
 
 function dats_require_document_upload(array $input, ?array $file): void
 {
-    $mode = strtolower(trim((string) ($input['student_mode'] ?? '')));
+    // A real $_FILES upload is required unconditionally: create_document() must never archive
+    // a server-side path supplied by the client (that previously let `file_path` alone, with no
+    // uploaded file, be used to pull arbitrary files already on disk into the archive).
     $error = (int) ($file['error'] ?? UPLOAD_ERR_NO_FILE);
-    if ($error !== UPLOAD_ERR_OK && $error !== UPLOAD_ERR_NO_FILE) {
-        throw new InvalidArgumentException('Document upload failed. Please select the file again.');
-    }
-    if (in_array($mode, ['existing', 'new'], true) && $error !== UPLOAD_ERR_OK) {
-        throw new InvalidArgumentException('Upload a document before adding it to the archive.');
-    }
-    if ($mode === '' && $error === UPLOAD_ERR_NO_FILE && empty($input['file_path'])) {
+    if ($error !== UPLOAD_ERR_OK) {
         throw new InvalidArgumentException('Upload a document before adding it to the archive.');
     }
 }

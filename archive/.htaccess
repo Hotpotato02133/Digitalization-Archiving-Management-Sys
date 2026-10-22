@@ -1,0 +1,18 @@
+# Defense-in-depth for the document store: these files are already served directly by Apache
+# (the app links straight to them), so this does not restrict reading a known file path — it only
+# stops directory listing and stops anything in here from ever running as a script, even if a
+# future upload-validation bug let an executable extension through.
+Options -Indexes -ExecCGI
+php_flag engine off
+
+<IfModule mod_authz_core.c>
+    <FilesMatch "\.(php|php\d?|phtml|phar|pl|py|cgi|sh|exe|asp|aspx)$">
+        Require all denied
+    </FilesMatch>
+</IfModule>
+<IfModule !mod_authz_core.c>
+    <FilesMatch "\.(php|php\d?|phtml|phar|pl|py|cgi|sh|exe|asp|aspx)$">
+        Order allow,deny
+        Deny from all
+    </FilesMatch>
+</IfModule>

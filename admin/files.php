@@ -916,8 +916,8 @@
               <tbody>
                 ${documents.map((document) => `
                   <tr>
-                    <td><a href="student-record-view.php?student_id=${encodeURIComponent(document.student_id || '')}&document_id=${encodeURIComponent(document.id || '')}" target="_blank" rel="noopener"><strong>${document.original_filename || 'Uploaded file'}</strong></a><small>${document.category_name || 'Uncategorized'}</small></td>
-                    <td>${document.student_name || 'Unknown student'}<br /><small>${document.student_number || '—'}</small></td>
+                    <td><a href="student-record-view.php?student_id=${encodeURIComponent(document.student_id || '')}&document_id=${encodeURIComponent(document.id || '')}" target="_blank" rel="noopener"><strong>${escapeHtml(document.original_filename || 'Uploaded file')}</strong></a><small>${escapeHtml(document.category_name || 'Uncategorized')}</small></td>
+                    <td>${escapeHtml(document.student_name || 'Unknown student')}<br /><small>${escapeHtml(document.student_number || '—')}</small></td>
                     <td>${document.academic_year || '—'}</td>
                     <td>${formatDeletedAt(document.deleted_at)}</td>
                     <td>
@@ -952,19 +952,19 @@
                     <tr>
                       <td>
                         <div class="student-name-cell">
-                          <span class="student-mini-avatar">${initials}</span>
+                          <span class="student-mini-avatar">${escapeHtml(initials)}</span>
                           <div class="student-meta">
-                            <strong>${fullName}</strong>
+                            <strong>${escapeHtml(fullName)}</strong>
                             <small>Enrollment year ${student.academic_year || '—'}</small>
                           </div>
                         </div>
                       </td>
-                      <td>${student.student_number || '—'}</td>
+                      <td>${escapeHtml(student.student_number || '—')}</td>
                       <td>${formatDeletedAt(student.deleted_at)}</td>
                       <td>
                         <div class="recycle-row-actions">
                           <button class="view-files-btn" type="button" data-restore-id="${student.id || ''}"><i data-lucide="rotate-ccw"></i> Restore</button>
-                          <button class="student-row-delete" type="button" aria-label="Delete ${fullName} forever" title="Delete forever" data-purge-id="${student.id || ''}"><i data-lucide="trash-2"></i></button>
+                          <button class="student-row-delete" type="button" aria-label="Delete ${escapeHtml(fullName)} forever" title="Delete forever" data-purge-id="${student.id || ''}"><i data-lucide="trash-2"></i></button>
                         </div>
                       </td>
                     </tr>
@@ -1436,17 +1436,17 @@
             const isPdf = lowerType.includes('pdf') || lowerName.endsWith('.pdf');
 
             if (isImage && previewUrl) {
-              return `<img src="${previewUrl}" alt="${fileName}" />`;
+              return `<img src="${previewUrl}" alt="${escapeHtml(fileName)}" />`;
             }
 
             if (isPdf && previewUrl) {
-              return `<iframe src="${previewUrl}" title="${fileName}"></iframe>`;
+              return `<iframe src="${previewUrl}" title="${escapeHtml(fileName)}"></iframe>`;
             }
 
             return `
               <div class="student-preview-placeholder">
                 <i data-lucide="file-text"></i>
-                <strong>${fileName}</strong>
+                <strong>${escapeHtml(fileName)}</strong>
                 <span>Preview is not available for this file type. You can still download it.</span>
               </div>
             `;
@@ -1467,8 +1467,8 @@
             detailPanel.innerHTML = `
               <h3>Student details</h3>
               <div class="student-detail-grid">
-                <div class="student-detail-item"><span>Student name</span><strong>${studentName || 'Unknown student'}</strong></div>
-                <div class="student-detail-item"><span>Student ID</span><strong>${studentNumber || '—'}</strong></div>
+                <div class="student-detail-item"><span>Student name</span><strong>${escapeHtml(studentName || 'Unknown student')}</strong></div>
+                <div class="student-detail-item"><span>Student ID</span><strong>${escapeHtml(studentNumber || '—')}</strong></div>
                 <div class="student-detail-item"><span>Year</span><strong>${file.academic_year || (isAllYears ? 'All school years' : '—')}</strong></div>
                 <div class="student-detail-item"><span>Course</span><strong>${fileType || '—'}</strong></div>
               </div>
@@ -1486,7 +1486,7 @@
             </div>
             ${groups.map(([categoryName, categoryFiles]) => `
               <div class="student-file-group">
-                <h3>${categoryName}</h3>
+                <h3>${escapeHtml(categoryName)}</h3>
                 ${categoryFiles.map((file) => {
                   const fileName = file.original_filename || 'Uploaded file';
                   const fileType = file.mime_type || 'Unknown';
@@ -1496,16 +1496,16 @@
                   const hasFile = !!secureViewUrl;
                   const iconName = getFileTypeIcon(file.mime_type, file.original_filename);
                   return `
-                    <div class="student-file-item" data-file-name="${fileName.replace(/"/g, '&quot;')}" data-file-type="${fileType.replace(/"/g, '&quot;')}" data-file-size="${formatFileSize(file.file_size_bytes)}" data-file-uploaded="${uploadDate.replace(/"/g, '&quot;')}" data-file-year="${file.academic_year || ''}" data-preview-url="${secureViewUrl}">
-                      <div class="student-file-select"><input class="student-file-checkbox" type="checkbox" value="${file.id || ''}" aria-label="Select ${fileName}" /></div>
+                    <div class="student-file-item" data-file-name="${escapeHtml(fileName)}" data-file-type="${escapeHtml(fileType)}" data-file-size="${formatFileSize(file.file_size_bytes)}" data-file-uploaded="${escapeHtml(uploadDate)}" data-file-year="${file.academic_year || ''}" data-preview-url="${secureViewUrl}">
+                      <div class="student-file-select"><input class="student-file-checkbox" type="checkbox" value="${file.id || ''}" aria-label="Select ${escapeHtml(fileName)}" /></div>
                       <div class="student-file-icon"><i data-lucide="${iconName}"></i></div>
                       <div class="student-file-details">
-                        <strong>${fileName}</strong>
-                        <small>Type: ${fileType}<br />Size: ${formatFileSize(file.file_size_bytes)}<br />Uploaded: ${uploadDate}</small>
+                        <strong>${escapeHtml(fileName)}</strong>
+                        <small>Type: ${escapeHtml(fileType)}<br />Size: ${formatFileSize(file.file_size_bytes)}<br />Uploaded: ${escapeHtml(uploadDate)}</small>
                       </div>
                       <div class="student-file-actions">
                         <a class="${hasFile ? 'primary' : 'disabled'}" href="${hasFile ? secureViewUrl : '#'}" data-preview-url="${hasFile ? secureViewUrl : '#'}" aria-disabled="${hasFile ? 'false' : 'true'}">View</a>
-                        <a class="${hasFile ? '' : 'disabled'}" href="${hasFile ? secureDownloadUrl : '#'}" download="${hasFile ? fileName : ''}" aria-disabled="${hasFile ? 'false' : 'true'}">Download</a>
+                        <a class="${hasFile ? '' : 'disabled'}" href="${hasFile ? secureDownloadUrl : '#'}" download="${hasFile ? escapeHtml(fileName) : ''}" aria-disabled="${hasFile ? 'false' : 'true'}">Download</a>
                         <button type="button" class="outline-button student-file-delete" data-delete-document="${file.id || ''}">Delete</button>
                       </div>
                     </div>

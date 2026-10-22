@@ -1,6 +1,18 @@
 <?php
 declare(strict_types=1);
 
+// Never leak stack traces, file paths, or query text to the browser on an uncaught error —
+// log them server-side instead (still visible in Apache's error log).
+ini_set('display_errors', '0');
+ini_set('log_errors', '1');
+error_reporting(E_ALL);
+
+// Local-only secrets (API keys, etc.) that should never live in a file shared/committed with the
+// rest of the app. Optional — only loaded if present.
+if (is_file(__DIR__ . '/secrets.local.php')) {
+    require_once __DIR__ . '/secrets.local.php';
+}
+
 function dats_env(string $name, string $default = ''): string
 {
     $value = getenv($name);

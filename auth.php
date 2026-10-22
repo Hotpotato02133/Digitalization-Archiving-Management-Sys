@@ -68,7 +68,9 @@ function dats_user_initials(?array $user): string
     $name = trim((string) ($user['full_name'] ?? 'User'));
     $parts = preg_split('/\s+/', $name) ?: [];
     $initials = strtoupper(substr($parts[0] ?? 'U', 0, 1) . substr($parts[count($parts) - 1] ?? '', 0, 1));
-    return $initials ?: 'U';
+    // Echoed unescaped by every dashboard template's short-echo tag; escape here once so a
+    // display name starting with an HTML-special character can't inject markup anywhere it's used.
+    return htmlspecialchars($initials ?: 'U', ENT_QUOTES, 'UTF-8');
 }
 
 function dats_user_role_label(?array $user): string
@@ -86,6 +88,19 @@ function dats_require_login(): void
         header('Location: ../index.php');
         exit;
     }
+}
+
+function dats_require_role(string $role): void
+{
+    dats_require_login();
+    $userRole = dats_current_user()['role'] ?? null;
+    if ($userRole === 'Admin' || $userRole === $role) {
+        return;
+    }
+    http_response_code(403);
+    header('Content-Type: text/plain; charset=utf-8');
+    echo 'Forbidden';
+    exit;
 }
 
 function dats_can_access_admin_page(?array $user, string $page): bool

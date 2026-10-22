@@ -5,7 +5,7 @@ require_once __DIR__ . '/../config/database.php';
 
 function dats_gemini_api_key(): string
 {
-    return dats_env('DATS_GEMINI_API_KEY', 'AQ.Ab8RN6LB20zuDJxZBjwJzqeST2s6iEmvFiRaN90FSAL6jHqu7w');
+    return dats_env('DATS_GEMINI_API_KEY', '');
 }
 
 function dats_gemini_model(): string

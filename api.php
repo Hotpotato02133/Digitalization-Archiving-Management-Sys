@@ -122,7 +122,7 @@ try {
             'students' => match ($input['action'] ?? '') {
                 'delete' => delete_student($pdo, $input, $currentUser),
                 'restore' => restore_student($pdo, $input),
-                'purge' => purge_student($pdo, $input, $currentUser),
+                'purge' => ($currentUser['role'] ?? null) === 'Admin' ? purge_student($pdo, $input, $currentUser) : dats_json(['error' => 'Forbidden. Only administrators can permanently delete records.'], 403),
                 'update' => update_student($pdo, $input),
                 'import-preview' => preview_student_import($pdo, $_FILES['file'] ?? null, $input),
                 'import' => import_students($pdo, $currentUser, $_FILES['file'] ?? null, $input),
@@ -132,7 +132,7 @@ try {
             'documents' => match ($input['action'] ?? '') {
                 'delete' => delete_document($pdo, $input),
                 'restore' => restore_document($pdo, $input),
-                'purge' => purge_document($pdo, $input),
+                'purge' => ($currentUser['role'] ?? null) === 'Admin' ? purge_document($pdo, $input) : dats_json(['error' => 'Forbidden. Only administrators can permanently delete records.'], 403),
                 default => create_document($pdo, $input, $_FILES['file'] ?? null),
             },
             'gradesheets' => match ($input['action'] ?? '') {
@@ -162,6 +162,9 @@ try {
     dats_json(['error' => 'Method not allowed.'], 405);
 } catch (DatsDuplicateDocumentException $error) {
     dats_json(['error' => $error->getMessage(), 'duplicate' => $error->document], 409);
+} catch (PDOException $error) {
+    error_log('DATS API database error: ' . $error->getMessage());
+    dats_json(['error' => 'A database error occurred. Please try again.'], 500);
 } catch (Throwable $error) {
     dats_json(['error' => $error->getMessage()], 422);
 }
@@ -2252,9 +2255,7 @@ function run_shell_command_with_timeout(string $command, int $timeoutSeconds): a
 
 function run_tesseract_on_image(string $binary, string $imagePath): ?string
 {
-    $safeBinary = str_replace(['"', "'"], '', $binary);
-    $safeFile = str_replace(['"', "'"], '', $imagePath);
-    [$output, $code] = run_shell_command_with_timeout(sprintf('"%s" "%s" stdout --psm 6 2>&1', $safeBinary, $safeFile), DATS_OCR_PAGE_TIMEOUT_SECONDS);
+    [$output, $code] = run_shell_command_with_timeout(sprintf('%s %s stdout --psm 6 2>&1', escapeshellarg($binary), escapeshellarg($imagePath)), DATS_OCR_PAGE_TIMEOUT_SECONDS);
     $text = trim($output);
     return $code === 0 && $text !== '' ? $text : null;
 }
@@ -2274,15 +2275,13 @@ function run_server_ocr_on_pdf(string $tesseractBinary, string $pdfPath): ?strin
         return null;
     }
     try {
-        $safeGhostscript = str_replace(['"', "'"], '', $ghostscript);
-        $safePdf = str_replace(['"', "'"], '', $pdfPath);
         $outputPattern = $tempDir . DIRECTORY_SEPARATOR . 'page-%03d.png';
         $command = sprintf(
-            '"%s" -q -dSAFER -dBATCH -dNOPAUSE -sDEVICE=png16m -r300 -dLastPage=%d -sOutputFile="%s" "%s" 2>&1',
-            $safeGhostscript,
+            '%s -q -dSAFER -dBATCH -dNOPAUSE -sDEVICE=png16m -r300 -dLastPage=%d -sOutputFile=%s %s 2>&1',
+            escapeshellarg($ghostscript),
             DATS_OCR_MAX_PDF_PAGES,
-            $outputPattern,
-            $safePdf
+            escapeshellarg($outputPattern),
+            escapeshellarg($pdfPath)
         );
         [, $code] = run_shell_command_with_timeout($command, DATS_OCR_RASTER_TIMEOUT_SECONDS);
         $pages = glob($tempDir . DIRECTORY_SEPARATOR . 'page-*.png') ?: [];
