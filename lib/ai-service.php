@@ -13,6 +13,12 @@ function dats_gemini_model(): string
     return dats_env('DATS_GEMINI_MODEL', 'gemini-flash-latest');
 }
 
+/** Tried once, after the primary model's own retries are exhausted — see dats_gemini_transcribe_gradesheet(). */
+function dats_gemini_fallback_model(): string
+{
+    return dats_env('DATS_GEMINI_FALLBACK_MODEL', 'gemini-flash-lite-latest');
+}
+
 function dats_gemini_is_available(): bool
 {
     return trim(dats_gemini_api_key()) !== '';
@@ -79,7 +85,9 @@ function dats_gemini_upload_file(string $filePath, string $mimeType): ?array
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
     curl_setopt($ch, CURLOPT_POST, true);
     curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
-    curl_setopt($ch, CURLOPT_TIMEOUT, 180);
+    // A document upload (<=25MB) should never need anywhere near as long as the transcription
+    // itself; keeping this short leaves more of the request's time budget for generateContent.
+    curl_setopt($ch, CURLOPT_TIMEOUT, 45);
     curl_setopt($ch, CURLOPT_HTTPHEADER, [
         'X-Goog-Upload-Command: start, upload, finalize',
         'X-Goog-Upload-Header-Content-Length: ' . $fileSize,
@@ -108,6 +116,41 @@ function dats_gemini_upload_file(string $filePath, string $mimeType): ?array
 }
 
 /**
+ * POSTs a generateContent payload to one model, retrying up to $maxAttempts times on a transient
+ * failure (429/5xx, or httpCode 0 — curl gave up waiting; large documents have been observed to
+ * just hang rather than error, and a fresh attempt after that routinely succeeds quickly). Each
+ * attempt uses a shorter per-try timeout than one long wait, so a stuck attempt is abandoned and
+ * retried instead of eating the whole budget; a real client error (4xx other than 429) stops at
+ * once. Returns [body, httpCode] — httpCode 200 on success.
+ */
+function dats_gemini_call_generate(string $key, string $model, array $payload, int $timeoutPerAttempt, int $maxAttempts): array
+{
+    $transientStatuses = [0, 429, 500, 502, 503, 504];
+    $generateUrl = "https://generativelanguage.googleapis.com/v1beta/models/" . urlencode($model) . ":generateContent?key=" . urlencode($key);
+    $res = null;
+    $httpCode = 0;
+    for ($attempt = 1; $attempt <= $maxAttempts; $attempt++) {
+        $ch = curl_init($generateUrl);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_POST, true);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($payload));
+        curl_setopt($ch, CURLOPT_HTTPHEADER, ['Content-Type: application/json']);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+        curl_setopt($ch, CURLOPT_TIMEOUT, $timeoutPerAttempt);
+
+        $res = curl_exec($ch);
+        $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+        curl_close($ch);
+
+        if ($httpCode === 200 || !in_array($httpCode, $transientStatuses, true) || $attempt === $maxAttempts) {
+            break;
+        }
+        usleep($attempt * 1500000); // 1.5s, then 3s
+    }
+    return [$res, $httpCode];
+}
+
+/**
  * Transcribes a gradesheet PDF or image using Google Gemini Flash.
  * Returns formatted text ready for `parse_report_of_rating_text` / `dats_record_gradesheet_batch`.
  */
@@ -127,7 +170,6 @@ function dats_gemini_transcribe_gradesheet(string $filePath, string $mimeType): 
     $fileUri = $upload['file_uri'];
     $resourceName = $upload['name'];
     $model = dats_gemini_model();
-    $generateUrl = "https://generativelanguage.googleapis.com/v1beta/models/" . urlencode($model) . ":generateContent?key=" . urlencode($key);
 
     $prompt = <<<EOT
 Transcribe all student grade rows from all pages of this university Report of Rating / Gradesheet document completely.
@@ -174,17 +216,17 @@ EOT;
         ],
     ];
 
-    $ch = curl_init($generateUrl);
-    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-    curl_setopt($ch, CURLOPT_POST, true);
-    curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($payload));
-    curl_setopt($ch, CURLOPT_HTTPHEADER, ['Content-Type: application/json']);
-    curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
-    curl_setopt($ch, CURLOPT_TIMEOUT, 180);
-
-    $res = curl_exec($ch);
-    $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-    curl_close($ch);
+    // Worst case ~286s (45s upload + 2x80s primary + 1.5s backoff + 1x80s fallback), kept under
+    // both set_time_limit() in dats_resolve_gradesheet_ocr() and Apache's 300s Timeout directive.
+    [$res, $httpCode] = dats_gemini_call_generate($key, $model, $payload, 80, 2);
+    $fallbackModel = dats_gemini_fallback_model();
+    if ($httpCode !== 200 && $fallbackModel !== '' && $fallbackModel !== $model) {
+        error_log("Gemini model {$model} failed (HTTP {$httpCode}); trying fallback model {$fallbackModel}.");
+        // "Lite" models 400 on a thinkingConfig they don't support; drop it for this call only.
+        $fallbackPayload = $payload;
+        unset($fallbackPayload['generationConfig']['thinkingConfig']);
+        [$res, $httpCode] = dats_gemini_call_generate($key, $fallbackModel, $fallbackPayload, 80, 1);
+    }
 
     // Clean up uploaded file from Gemini Files API (best practice)
     $deleteUrl = "https://generativelanguage.googleapis.com/v1beta/" . $resourceName . "?key=" . urlencode($key);
@@ -197,6 +239,7 @@ EOT;
     @curl_close($delCh);
 
     if ($httpCode !== 200 || !is_string($res)) {
+        error_log(sprintf('Gemini generateContent failed after retries: HTTP %d, body: %s', $httpCode, substr((string) $res, 0, 500)));
         return null;
     }
 

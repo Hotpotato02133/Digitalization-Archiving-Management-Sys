@@ -2553,6 +2553,13 @@ function dats_resolve_gradesheet_ocr(array $input, string $absolutePath, string 
         if ($rateLimit['allowed']) {
             try {
                 if ($pdo) dats_gemini_record_call($pdo);
+                // php.ini caps a web request at 120s (max_execution_time); a large multi-page
+                // gradesheet can take longer than that for Gemini to transcribe, especially with
+                // the bounded retries in dats_gemini_transcribe_gradesheet() (worst case ~290s:
+                // 45s upload + 3 attempts x 80s + backoff). Raise the budget for this request only,
+                // staying under Apache's own 300s Timeout directive (httpd-default.conf) so Apache
+                // itself never has to be restarted for this.
+                set_time_limit(295);
                 $aiText = dats_gemini_transcribe_gradesheet($absolutePath, $mimeType);
                 if ($aiText !== null && trim($aiText) !== '') {
                     return [
