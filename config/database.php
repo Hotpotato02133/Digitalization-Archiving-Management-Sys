@@ -7,25 +7,23 @@ ini_set('display_errors', '0');
 ini_set('log_errors', '1');
 error_reporting(E_ALL);
 
-// Local-only secrets (API keys, etc.) that should never live in a file shared/committed with the
-// rest of the app. Optional — only loaded if present.
+// Load zero-dependency environment variables from root .env if present
+require_once __DIR__ . '/env.php';
+dats_load_env();
+
+// Optional local-only configuration overrides and secrets.
+// NEVER commit config.local.php or secrets.local.php to version control.
+if (is_file(__DIR__ . '/config.local.php')) {
+    require_once __DIR__ . '/config.local.php';
+}
 if (is_file(__DIR__ . '/secrets.local.php')) {
     require_once __DIR__ . '/secrets.local.php';
 }
 
-function dats_env(string $name, string $default = ''): string
+function dats_is_local_dev(): bool
 {
-    $value = getenv($name);
-    if ($value !== false && $value !== '') {
-        return $value;
-    }
-
-    $value = $_ENV[$name] ?? $_SERVER[$name] ?? null;
-    if (is_string($value) && $value !== '') {
-        return $value;
-    }
-
-    return $default;
+    $env = strtolower(dats_env('APP_ENV', dats_env('DATS_ENV', 'development')));
+    return in_array($env, ['development', 'local', 'dev', 'test'], true);
 }
 
 function dats_db(): ?PDO
@@ -39,14 +37,32 @@ function dats_db(): ?PDO
 
     $attempted = true;
 
-    $host = dats_env('DATS_DB_HOST', '127.0.0.1');
-    $name = dats_env('DATS_DB_NAME', 'dats');
-    $user = dats_env('DATS_DB_USER', 'root');
-    $password = dats_env('DATS_DB_PASSWORD', '');
+    $isLocal = dats_is_local_dev();
+
+    // Read strictly from environment variables. Safe defaults apply only when
+    // explicitly configured for local development.
+    $host = dats_env('DB_HOST', dats_env('DATS_DB_HOST', $isLocal ? '127.0.0.1' : ''));
+    $port = dats_env('DB_PORT', dats_env('DATS_DB_PORT', $isLocal ? '3306' : ''));
+    $name = dats_env('DB_NAME', dats_env('DATS_DB_NAME', $isLocal ? 'dats' : ''));
+    $user = dats_env('DB_USER', dats_env('DATS_DB_USER', $isLocal ? 'root' : ''));
+    $password = dats_env('DB_PASS', dats_env('DB_PASSWORD', dats_env('DATS_DB_PASSWORD', $isLocal ? '' : '')));
+
+    // In production, prevent connection attempts with incomplete configuration
+    if ($host === '' || $name === '' || $user === '') {
+        error_log('DATS Database configuration missing: DB_HOST, DB_NAME, or DB_USER is not configured.');
+        $pdo = null;
+        return null;
+    }
+
+    $dsn = 'mysql:host=' . $host;
+    if ($port !== '' && is_numeric($port)) {
+        $dsn .= ';port=' . (int) $port;
+    }
+    $dsn .= ';dbname=' . $name . ';charset=utf8mb4';
 
     try {
         $pdo = new PDO(
-            'mysql:host=' . $host . ';dbname=' . $name . ';charset=utf8mb4',
+            $dsn,
             $user,
             $password,
             [
@@ -56,6 +72,7 @@ function dats_db(): ?PDO
             ]
         );
     } catch (PDOException $error) {
+        error_log('DATS Database connection error: ' . $error->getMessage());
         $pdo = null;
     }
 

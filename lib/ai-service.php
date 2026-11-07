@@ -5,18 +5,18 @@ require_once __DIR__ . '/../config/database.php';
 
 function dats_gemini_api_key(): string
 {
-    return dats_env('DATS_GEMINI_API_KEY', '');
+    return dats_env('GEMINI_API_KEY', dats_env('DATS_GEMINI_API_KEY', ''));
 }
 
 function dats_gemini_model(): string
 {
-    return dats_env('DATS_GEMINI_MODEL', 'gemini-flash-latest');
+    return dats_env('GEMINI_MODEL', dats_env('DATS_GEMINI_MODEL', 'gemini-flash-latest'));
 }
 
 /** Tried once, after the primary model's own retries are exhausted — see dats_gemini_transcribe_gradesheet(). */
 function dats_gemini_fallback_model(): string
 {
-    return dats_env('DATS_GEMINI_FALLBACK_MODEL', 'gemini-flash-lite-latest');
+    return dats_env('GEMINI_FALLBACK_MODEL', dats_env('DATS_GEMINI_FALLBACK_MODEL', 'gemini-flash-lite-latest'));
 }
 
 function dats_gemini_is_available(): bool
@@ -26,12 +26,21 @@ function dats_gemini_is_available(): bool
 
 function dats_gemini_rate_limit_per_minute(): int
 {
-    return max(1, (int) dats_env('DATS_GEMINI_RPM_LIMIT', '8'));
+    return max(1, (int) dats_env('GEMINI_RPM_LIMIT', dats_env('DATS_GEMINI_RPM_LIMIT', '8')));
 }
 
 function dats_gemini_rate_limit_per_day(): int
 {
-    return max(1, (int) dats_env('DATS_GEMINI_RPD_LIMIT', '150'));
+    return max(1, (int) dats_env('GEMINI_RPD_LIMIT', dats_env('DATS_GEMINI_RPD_LIMIT', '150')));
+}
+
+function dats_gemini_ssl_verify(): bool
+{
+    $override = dats_env('CURL_SSL_VERIFY', '');
+    if ($override !== '') {
+        return $override === '1' || strtolower($override) === 'true';
+    }
+    return function_exists('dats_is_local_dev') ? !dats_is_local_dev() : true;
 }
 
 /**
@@ -84,7 +93,7 @@ function dats_gemini_upload_file(string $filePath, string $mimeType): ?array
     $ch = curl_init($uploadUrl);
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
     curl_setopt($ch, CURLOPT_POST, true);
-    curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+    curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, dats_gemini_ssl_verify());
     // A document upload (<=25MB) should never need anywhere near as long as the transcription
     // itself; keeping this short leaves more of the request's time budget for generateContent.
     curl_setopt($ch, CURLOPT_TIMEOUT, 45);
@@ -135,7 +144,7 @@ function dats_gemini_call_generate(string $key, string $model, array $payload, i
         curl_setopt($ch, CURLOPT_POST, true);
         curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($payload));
         curl_setopt($ch, CURLOPT_HTTPHEADER, ['Content-Type: application/json']);
-        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, dats_gemini_ssl_verify());
         curl_setopt($ch, CURLOPT_TIMEOUT, $timeoutPerAttempt);
 
         $res = curl_exec($ch);
@@ -233,7 +242,7 @@ EOT;
     $delCh = curl_init($deleteUrl);
     curl_setopt($delCh, CURLOPT_RETURNTRANSFER, true);
     curl_setopt($delCh, CURLOPT_CUSTOMREQUEST, 'DELETE');
-    curl_setopt($delCh, CURLOPT_SSL_VERIFYPEER, false);
+    curl_setopt($delCh, CURLOPT_SSL_VERIFYPEER, dats_gemini_ssl_verify());
     curl_setopt($delCh, CURLOPT_TIMEOUT, 10);
     @curl_exec($delCh);
     @curl_close($delCh);
