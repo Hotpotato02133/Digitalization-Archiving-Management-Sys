@@ -8,7 +8,9 @@
 }
 
 .student-table-panel > .table-wrap,
+.student-table-panel > .students-table-wrap,
 .users-panel > .table-wrap,
+.users-panel > .users-table-wrap,
 .history-table-wrap,
 .student-year-table-wrap {
   width: 100%;
@@ -21,7 +23,9 @@
 }
 
 .student-table-panel > .table-wrap::-webkit-scrollbar,
+.student-table-panel > .students-table-wrap::-webkit-scrollbar,
 .users-panel > .table-wrap::-webkit-scrollbar,
+.users-panel > .users-table-wrap::-webkit-scrollbar,
 .history-table-wrap::-webkit-scrollbar,
 .student-year-table-wrap::-webkit-scrollbar {
   width: 8px;
@@ -29,7 +33,9 @@
 }
 
 .student-table-panel > .table-wrap::-webkit-scrollbar-thumb,
+.student-table-panel > .students-table-wrap::-webkit-scrollbar-thumb,
 .users-panel > .table-wrap::-webkit-scrollbar-thumb,
+.users-panel > .users-table-wrap::-webkit-scrollbar-thumb,
 .history-table-wrap::-webkit-scrollbar-thumb,
 .student-year-table-wrap::-webkit-scrollbar-thumb {
   background: #d6d2cd;
@@ -38,7 +44,9 @@
 }
 
 .student-table-panel > .table-wrap::-webkit-scrollbar-thumb:hover,
+.student-table-panel > .students-table-wrap::-webkit-scrollbar-thumb:hover,
 .users-panel > .table-wrap::-webkit-scrollbar-thumb:hover,
+.users-panel > .users-table-wrap::-webkit-scrollbar-thumb:hover,
 .history-table-wrap::-webkit-scrollbar-thumb:hover,
 .student-year-table-wrap::-webkit-scrollbar-thumb:hover {
   background: #b8b2ac;
@@ -152,10 +160,10 @@
   box-shadow: inset 3px 0 0 var(--gold);
 }
 
-.users-table td:last-child,
-.students-table td:last-child,
-.history-table td:last-child,
-.student-year-table td:last-child {
+.users-table td:last-child:not(.table-loading):not(.history-empty),
+.students-table td:last-child:not(.table-loading):not(.history-empty),
+.history-table td:last-child:not(.table-loading):not(.history-empty),
+.student-year-table td:last-child:not(.table-loading):not(.history-empty) {
   width: 1%;
   text-align: right;
   white-space: nowrap;
@@ -188,7 +196,7 @@
 /* Sticky First & Last Columns on Wide Desktop Tables */
 @media (min-width: 761px) {
   .students-table th:first-child,
-  .students-table td:first-child {
+  .students-table td:first-child:not(.table-loading):not(.history-empty) {
     position: sticky;
     left: 0;
     z-index: 2;
@@ -198,7 +206,7 @@
   .students-table thead th:first-child { z-index: 5; }
 
   .students-table th:last-child,
-  .students-table td:last-child {
+  .students-table td:last-child:not(.table-loading):not(.history-empty) {
     position: sticky;
     right: 0;
     z-index: 2;
@@ -345,7 +353,9 @@ td.history-empty { border-bottom: 0; }
 /* Mobile Card Stacking */
 @media (max-width: 760px) {
   .student-table-panel > .table-wrap,
+  .student-table-panel > .students-table-wrap,
   .users-panel > .table-wrap,
+  .users-panel > .users-table-wrap,
   .history-table-wrap,
   .student-year-table-wrap {
     max-height: none;

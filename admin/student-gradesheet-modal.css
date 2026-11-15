@@ -317,8 +317,7 @@ body.sgm-open { overflow: hidden; }
 .sgm-skeleton-bar {
   height: 14px;
   border-radius: 6px;
-  background: linear-gradient(90deg, var(--raised), var(--border), var(--raised));
-  background-size: 200% 100%;
+  background: var(--raised);
   animation: sgmPulse 1.2s ease-in-out infinite;
 }
 .sgm-skeleton-bar.is-strip { height: 64px; border-radius: 8px; }

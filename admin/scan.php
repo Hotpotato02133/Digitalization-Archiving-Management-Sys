@@ -1,4 +1,4 @@
-﻿<?php require_once __DIR__ . '/../auth.php'; require_once __DIR__ . '/../lib/scan-intake.php'; dats_require_page_access(basename(__FILE__)); $currentUser = dats_current_user(); $displayName = htmlspecialchars($currentUser['full_name'], ENT_QUOTES, 'UTF-8'); $initials = dats_user_initials($currentUser); ?>
+<?php require_once __DIR__ . '/../auth.php'; require_once __DIR__ . '/../lib/scan-intake.php'; dats_require_page_access(basename(__FILE__)); $currentUser = dats_current_user(); $displayName = htmlspecialchars($currentUser['full_name'], ENT_QUOTES, 'UTF-8'); $initials = dats_user_initials($currentUser); ?>
 <!doctype html>
 <html lang="en">
 <head>
@@ -9,29 +9,28 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="styles.css?v=20260920b" />
+  <link rel="stylesheet" href="styles.css?v=20261115" />
   <style>
     .archive-button {
-      display: flex;
+      display: inline-flex;
       align-items: center;
       justify-content: center;
-      gap: 7px;
+      gap: 8px;
       width: fit-content;
-      margin-top: 18px;
-      padding: 10px 13px;
+      margin-top: 20px;
+      padding: 0 20px;
       color: var(--maroon-dark);
       background: var(--gold);
-      border: 0;
-      border-radius: 2px;
-      font: 700 10px var(--sans);
-      box-shadow: none;
+      border: 1px solid #c59b2c;
+      border-radius: 8px;
+      font: 700 14px/1 var(--sans);
       margin-left: auto;
     }
-    .archive-button svg { width: 15px; height: 15px; }
-    .ocr-status-banner { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; width: 88.8%; max-width: 1180px; margin: 0 auto 13px; padding: 10px 14px; border-radius: 6px; background: var(--gold-pale); border: 1px solid rgba(214,173,58,.5); font-size: 11px; color: var(--maroon-dark); }
+    .archive-button svg { width: 16px; height: 16px; }
+    .ocr-status-banner { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; width: 100%; max-width: 1240px; margin: 0 auto 16px; padding: 12px 16px; border-radius: 8px; background: var(--gold-pale); border: 1px solid #ead89c; font-size: 13px; color: var(--maroon-dark); }
     .ocr-status-banner[hidden] { display: none; }
-    .ocr-status-banner.is-error { background: #f8e5e2; border-color: rgba(180,60,50,.4); color: #7a2a20; }
-    .ocr-status-banner strong { font-weight: 800; }
+    .ocr-status-banner.is-error { background: var(--negative-bg); border-color: #fecaca; color: var(--negative); }
+    .ocr-status-banner strong { font-weight: 700; }
     .preview-thumb-item[role="button"] { cursor: pointer; outline: 0; }
     .preview-thumb-item[role="button"]:focus-visible .preview-thumb-box { outline: 2px solid var(--gold); outline-offset: 2px; }
     .preview-thumb-item.is-active .preview-thumb-box { border-color: var(--maroon); box-shadow: 0 0 0 2px rgba(107,29,42,.18); }
@@ -39,32 +38,32 @@
     .preview-cover.is-zoomed { cursor: grab; user-select: none; }
     .preview-cover.is-zoomed img { cursor: grab; }
     .preview-cover.is-panning, .preview-cover.is-panning img { cursor: grabbing; }
-    .student-mode-group { display: flex; gap: 10px; margin: 0 0 18px; padding: 0; border: 0; }
-    .student-mode-option { display: flex; align-items: center; gap: 8px; padding: 5px 0; border: 0; outline: 0; background: transparent; cursor: pointer; font-size: 10px; font-weight: 700; }
-    .student-mode-option:has(input:checked) { color: var(--maroon); }
+    .student-mode-group { display: flex; flex-wrap: wrap; gap: 10px; margin: 0 0 18px; padding: 0; border: 0; }
+    .student-mode-option { display: inline-flex; align-items: center; gap: 8px; padding: 8px 14px; border: 1px solid var(--border); border-radius: 8px; outline: 0; background: var(--raised); cursor: pointer; font-size: 13px; font-weight: 600; color: var(--muted); }
+    .student-mode-option:has(input:checked) { color: var(--maroon); background: var(--maroon-soft); border-color: var(--maroon-border); }
     .student-mode-option input { accent-color: var(--maroon); }
-    .scan-field { position: relative; display: grid; gap: 7px; color: var(--ink); font-size: 10px; font-weight: 700; }
+    .scan-field { position: relative; display: grid; gap: 6px; color: var(--text); font-size: 13px; font-weight: 600; }
     .scan-field[hidden], .details-grid label[hidden] { display: none !important; }
     .scan-combobox-wrap { position: relative; }
-    .student-suggestions { position: absolute; top: calc(100% + 4px); left: 0; right: 0; z-index: 6; max-height: 260px; overflow-y: auto; padding: 5px; background: var(--white); border: 1px solid var(--line); box-shadow: 0 14px 30px rgba(42,23,26,.16); }
+    .student-suggestions { position: absolute; top: calc(100% + 6px); left: 0; right: 0; z-index: 40; max-height: 270px; overflow-y: auto; padding: 6px; background: var(--surface); border: 1px solid var(--border); border-radius: 10px; box-shadow: 0 14px 32px rgba(28,25,23,.14); }
     .student-suggestions[hidden] { display: none; }
-    .student-suggestion { display: grid; width: 100%; gap: 3px; padding: 10px; text-align: left; color: var(--ink); background: transparent; border: 0; cursor: pointer; }
+    .student-suggestion { display: grid; width: 100%; gap: 3px; padding: 9px 10px; text-align: left; color: var(--text); background: transparent; border: 0; border-radius: 6px; cursor: pointer; }
     .student-suggestion:hover, .student-suggestion.is-active { background: var(--gold-pale); }
-    .student-suggestion strong { font-size: 10px; }
-    .student-suggestion small, .field-help { color: var(--muted); font: 8px var(--mono); font-weight: 400; }
+    .student-suggestion strong { font-size: 13px; font-weight: 600; }
+    .student-suggestion small, .field-help { color: var(--muted); font: 400 12px/1.3 var(--mono); }
     .field-help.is-detected { color: var(--maroon); font-weight: 600; }
-    .details-grid input[readonly] { background: #f4efed; color: var(--muted); cursor: not-allowed; }
-    .new-student-fields { margin-top: 16px; padding-top: 16px; border-top: 1px solid var(--line); }
+    .details-grid input[readonly] { background: var(--raised); color: var(--muted); cursor: not-allowed; }
+    .new-student-fields { margin-top: 18px; padding-top: 18px; border-top: 1px solid var(--rule); }
     .new-student-fields[hidden] { display: none; }
-    .registration-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 13px; }
-    .registration-grid label { display: grid; gap: 7px; color: var(--ink); font-size: 10px; font-weight: 700; }
-    .registration-grid input, .registration-grid select { width: 100%; padding: 12px; color: var(--ink); background: var(--white); border: 1px solid var(--line); outline: 0; font: 10px var(--sans); }
+    .registration-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 14px; }
+    .registration-grid label { display: grid; gap: 6px; color: var(--text); font-size: 13px; font-weight: 600; }
+    .registration-grid input, .registration-grid select { width: 100%; min-height: 38px; padding: 8px 12px; color: var(--text); background: var(--surface); border: 1px solid var(--control); border-radius: 8px; outline: 0; font-size: 14px; }
     .registration-grid input:focus, .registration-grid select:focus { border-color: var(--maroon); }
     .span-two { grid-column: span 2; }
-    @media (max-width: 850px) { .registration-grid { grid-template-columns: repeat(2, 1fr); } }
-    @media (max-width: 640px) { .student-mode-group { flex-direction: column; }.student-mode-option { width: 100%; }.registration-grid { grid-template-columns: 1fr; }.span-two { grid-column: auto; } }
+    @media (max-width: 960px) { .registration-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+    @media (max-width: 640px) { .student-mode-group { flex-direction: column; } .student-mode-option { width: 100%; } .registration-grid { grid-template-columns: minmax(0, 1fr); } .span-two { grid-column: auto; } }
   </style>
-  <link rel="stylesheet" href="../dashboard-buttons.css?v=20260914" />
+  <link rel="stylesheet" href="../dashboard-buttons.css?v=20261115" />
   <style>
     .scan-details > .archive-button {
       display: flex;
@@ -98,6 +97,7 @@
     </aside>
     <main class="admin-main scan-main">
       <header class="admin-header"><button class="mobile-menu" id="mobileMenu" aria-label="Open admin navigation" aria-expanded="false"><i data-lucide="menu"></i></button><div><span class="eyebrow">Administrator workspace</span><h1><span data-greeting data-user-name="<?= $displayName ?>">Good morning</span></h1></div><div class="header-actions"><button class="header-icon" aria-label="Notifications"><i data-lucide="bell"></i><span></span></button><div class="user-chip"><span class="avatar"><?= $initials ?></span><span><strong><?= $displayName ?></strong><small><?= htmlspecialchars(dats_user_role_label($currentUser), ENT_QUOTES, 'UTF-8') ?></small></span><i data-lucide="chevron-down"></i></div></div></header>
+      <div class="admin-sheet">
       <section class="welcome-row scan-welcome"><div><p class="page-kicker">Archive intake · <span data-current-datetime>Loading date and time...</span></p><h2>File Scanning</h2><p class="page-intro">Upload an existing file to add it to the archive.</p></div><span class="scanner-status"><i></i> Scanner ready</span></section>
       <section class="scan-layout single">
         <article class="panel scan-card"><div class="panel-heading"><div><span class="panel-kicker">Manual upload</span><h3>Upload document</h3></div></div><div class="document-preview" id="documentPreview" hidden aria-label="Selected document preview"><div class="preview-cover" id="previewCover"></div><div class="preview-thumbs" id="previewThumbs"></div></div><label class="upload-zone" id="uploadZone" for="fileInput"><input id="fileInput" type="file" accept="image/*,.pdf" multiple /><span class="upload-icon"><i data-lucide="upload-cloud"></i></span><strong>Drop files here or browse</strong><small>PDF, JPG, or PNG · up to 25 MB each</small></label><div class="upload-result" id="uploadResult" aria-live="polite"><i data-lucide="file-plus-2"></i><span>No files selected yet</span></div></article>
@@ -145,6 +145,7 @@
       </section>
       <section class="recent-scans"><div class="panel-heading"><div><span class="panel-kicker">Today's intake</span><h3>Recently archived</h3></div><a href="files.php">View archive <i data-lucide="arrow-up-right"></i></a></div><div class="recent-list"><div><span class="recent-file"><i data-lucide="file-check-2"></i></span><p><strong>Certificate of Graduation</strong><small>ZP-2026-004821 · just now</small></p><span class="pill success">Archived</span></div><div><span class="recent-file gold-file"><i data-lucide="file-image"></i></span><p><strong>Official Transcript</strong><small>ZP-2026-004820 · 18 minutes ago</small></p><span class="pill success">Archived</span></div></div></section>
       <footer><span>Digitalization Archiving Management System</span><span>File Scanning <b>·</b> ZPPSU Registrar</span></footer>
+      </div>
     </main>
   </div>
   <div class="admin-toast" id="adminToast" role="status">Your scan has been added to the queue.</div>

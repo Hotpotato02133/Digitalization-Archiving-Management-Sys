@@ -35,9 +35,10 @@
 }
 
 * { box-sizing: border-box; }
-html { scroll-behavior: smooth; }
+html { scroll-behavior: smooth; overflow-x: clip; }
 body {
   margin: 0;
+  overflow-x: clip;
   color: var(--text);
   background: var(--ground);
   font-family: var(--sans);
@@ -107,9 +108,10 @@ img { max-width: 100%; }
 .eyebrow,
 .panel-kicker,
 .page-kicker {
-  font: 600 11px/1.2 var(--mono);
+  font: 600 11px/1.3 var(--mono);
   letter-spacing: 0.08em;
   text-transform: uppercase;
+  overflow-wrap: anywhere;
 }
 .workspace-label {
   padding: 4px 12px 6px;
@@ -240,7 +242,9 @@ nav a.active {
 .admin-main {
   display: flex;
   flex-direction: column;
+  flex: 1 1 0%;
   width: calc(100% - 240px);
+  max-width: 100%;
   margin-left: 240px;
   min-height: 100dvh;
   padding: 0 8px 8px 0;
@@ -424,8 +428,10 @@ nav a.active {
   flex: 1 0 auto;
   display: flex;
   flex-direction: column;
+  width: 100%;
   min-width: 0;
-  padding: clamp(20px, 2.5vw, 28px) clamp(18px, 2.8vw, 32px) 0;
+  overflow-x: clip;
+  padding: clamp(20px, 2.5vw, 28px) clamp(16px, 2.8vw, 32px) 0;
   background: var(--surface);
   border: 1px solid var(--border);
   border-radius: var(--radius-sheet);
@@ -607,6 +613,7 @@ nav a.active {
 .dashboard-panel { min-width: 0; }
 .panel-heading {
   display: flex;
+  flex-wrap: wrap;
   align-items: flex-start;
   justify-content: space-between;
   gap: 12px;
@@ -685,10 +692,17 @@ nav a.active {
   grid-template-columns: repeat(8, minmax(40px, 1fr));
   align-items: end;
   gap: 10px;
-  min-height: 224px;
+  min-height: 210px;
   overflow-x: auto;
   padding-top: 4px;
-  margin-top: auto;
+  margin-top: 4px;
+}
+.throughput-chart > :not(.throughput-column) {
+  grid-column: 1 / -1;
+  align-self: start;
+  margin: 0;
+  color: var(--muted);
+  font-size: 13px;
 }
 .throughput-column {
   display: grid;
@@ -1093,11 +1107,10 @@ footer b { margin: 0 6px; color: var(--gold-ink); }
 }
 .scan-layout.single {
   grid-template-columns: minmax(0, 1fr);
-  max-width: 780px;
-  margin-left: 0;
+  max-width: 1240px;
 }
 .scan-layout .scan-card {
-  min-height: 380px;
+  min-height: 0;
   padding: 0;
   background: transparent;
   border: 0;
@@ -1385,6 +1398,7 @@ footer b { margin: 0 6px; color: var(--gold-ink); }
 .review-count strong { font-size: 14px; }
 .review-toolbar {
   display: flex;
+  flex-direction: row;
   flex-wrap: wrap;
   align-items: center;
   gap: 10px;
@@ -1513,7 +1527,9 @@ footer b { margin: 0 6px; color: var(--gold-ink); }
 }
 .structure-toolbar {
   display: flex;
+  flex-direction: row;
   flex-wrap: wrap;
+  align-items: center;
   gap: 10px;
   margin-bottom: 16px;
   padding: 14px 16px;
@@ -1616,7 +1632,9 @@ footer b { margin: 0 6px; color: var(--gold-ink); }
 }
 .student-toolbar {
   display: flex;
+  flex-direction: row;
   flex-wrap: wrap;
+  align-items: center;
   gap: 10px;
   margin-bottom: 16px;
   padding: 14px 16px;
@@ -1832,8 +1850,12 @@ footer b { margin: 0 6px; color: var(--gold-ink); }
   .users-toolbar,
   .structure-toolbar,
   .review-toolbar { flex-direction: column; align-items: stretch; }
+  .search-box,
+  .student-search-field { flex: 0 0 auto; width: 100%; }
   .structure-add-course,
   .sort-label { margin-left: 0; }
+  .category-card { grid-template-columns: 36px minmax(0, 1fr) auto; }
+  .category-card .category-edit-button { grid-column: 2 / -1; justify-self: start; }
 
   .review-card { grid-template-columns: minmax(0, 1fr); }
   .table-heading { flex-direction: column; align-items: flex-start; }
