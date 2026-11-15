@@ -26,9 +26,9 @@ $lastLogin = !empty($account['last_login_at']) ? date('F j, Y \a\t g:i A', strto
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="styles.css?v=20260914" />
-  <link rel="stylesheet" href="../settings.css?v=20260914b" />
-  <link rel="stylesheet" href="../dashboard-buttons.css?v=20260914" />
+  <link rel="stylesheet" href="styles.css?v=20261115" />
+  <link rel="stylesheet" href="../settings.css?v=20261115" />
+  <link rel="stylesheet" href="../dashboard-buttons.css?v=20261115" />
   <script src="https://unpkg.com/lucide@latest"></script>
 </head>
 <body>
@@ -58,6 +58,7 @@ $lastLogin = !empty($account['last_login_at']) ? date('F j, Y \a\t g:i A', strto
     </aside>
     <main class="admin-main">
       <header class="admin-header"><button class="mobile-menu" id="mobileMenu" aria-label="Open admin navigation" aria-expanded="false"><i data-lucide="menu"></i></button><div><span class="eyebrow">Administrator workspace</span><h1><span data-greeting data-user-name="<?= $displayName ?>">Good morning</span></h1></div><div class="header-actions"><button class="header-icon" aria-label="Notifications"><i data-lucide="bell"></i><span></span></button><div class="user-chip"><span class="avatar"><?= $initials ?></span><span><strong><?= $displayName ?></strong><small><?= htmlspecialchars(dats_user_role_label($currentUser), ENT_QUOTES, 'UTF-8') ?></small></span><i data-lucide="chevron-down"></i></div></div></header>
+      <div class="admin-sheet">
       <section class="welcome-row"><div><p class="page-kicker">Workspace · <span data-current-datetime>Loading date and time...</span></p><h2>Account settings</h2><p class="page-intro">Manage your profile, password, and account details.</p></div></section>
       <section class="settings-hero">
         <span class="avatar avatar-lg"><?= $initials ?></span>
@@ -112,6 +113,7 @@ $lastLogin = !empty($account['last_login_at']) ? date('F j, Y \a\t g:i A', strto
         </aside>
       </section>
       <footer><span>Digitalization Archiving Management System</span><span>Account settings <b>·</b> ZPPSU Registrar</span></footer>
+      </div>
     </main>
   </div>
   <div class="admin-toast" id="adminToast" role="status">Profile updated successfully.</div>

@@ -18,8 +18,8 @@ $initials = dats_user_initials($currentUser);
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="styles.css?v=20260922" />
-  <link rel="stylesheet" href="../dashboard-buttons.css?v=20260914" />
+  <link rel="stylesheet" href="styles.css?v=20261115" />
+  <link rel="stylesheet" href="../dashboard-buttons.css?v=20261115" />
   <script src="https://unpkg.com/lucide@latest"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 </head>
@@ -52,6 +52,7 @@ $initials = dats_user_initials($currentUser);
         <div><span class="eyebrow">Administrator workspace</span><h1><span data-greeting data-user-name="<?= $displayName ?>">Good morning</span></h1></div>
         <div class="header-actions"><button class="header-icon" aria-label="Notifications"><i data-lucide="bell"></i><span></span></button><div class="user-chip"><span class="avatar"><?= $initials ?></span><span><strong><?= $displayName ?></strong><small><?= htmlspecialchars(dats_user_role_label($currentUser), ENT_QUOTES, 'UTF-8') ?></small></span><i data-lucide="chevron-down"></i></div></div>
       </header>
+      <div class="admin-sheet">
 
       <section class="welcome-row">
         <div><p class="page-kicker"><span data-current-datetime>Loading date and time...</span></p><h2>Archive overview</h2><p class="page-intro">Live archive coverage, throughput, search readiness, and records requiring attention.</p></div>
@@ -129,6 +130,7 @@ $initials = dats_user_initials($currentUser);
         </div>
       </section>
       <footer><span>Digitalization Archiving Management System</span><span>Archive dashboard <b>·</b> ZPPSU Registrar</span></footer>
+      </div>
     </main>
   </div>
 

@@ -9,9 +9,9 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="styles.css?v=20260914" />
+  <link rel="stylesheet" href="styles.css?v=20261115" />
   <link rel="stylesheet" href="categories.css?v=<?= filemtime(__DIR__ . '/categories.css') ?>" />
-  <link rel="stylesheet" href="../dashboard-buttons.css?v=20260914" />
+  <link rel="stylesheet" href="../dashboard-buttons.css?v=20261115" />
   <script src="https://unpkg.com/lucide@latest"></script>
 </head>
 <body>
@@ -38,11 +38,13 @@
     </aside>
     <main class="admin-main categories-main">
       <header class="admin-header"><button class="mobile-menu" id="mobileMenu" aria-label="Open admin navigation" aria-expanded="false"><i data-lucide="menu"></i></button><div><span class="eyebrow">Administrator workspace</span><h1><span data-greeting data-user-name="<?= $displayName ?>">Good morning</span></h1></div><div class="header-actions"><button class="header-icon" aria-label="Notifications"><i data-lucide="bell"></i><span></span></button><div class="user-chip"><span class="avatar"><?= $initials ?></span><span><strong><?= $displayName ?></strong><small><?= htmlspecialchars(dats_user_role_label($currentUser), ENT_QUOTES, 'UTF-8') ?></small></span><i data-lucide="chevron-down"></i></div></div></header>
+      <div class="admin-sheet">
       <section class="welcome-row categories-welcome"><div><p class="page-kicker">Registrar's Office · <span data-current-datetime>Loading date and time...</span></p><h2>Document categories</h2><p class="page-intro">Manage the document types available throughout the digital archive.</p></div><button class="gold-button" id="addCategoryButton" type="button"><i data-lucide="folder-plus"></i> Add document category</button></section>
       <section class="category-summary" aria-label="Document category summary"><div><strong id="adminCategoryCount">0</strong><span>Active categories</span></div><div><strong data-stat="total_documents">0</strong><span>Archived documents</span></div><div><strong data-stat="completed_documents">0%</strong><span>Digitized records</span></div></section>
       <section class="category-panel panel" id="categories"><div class="panel-heading"><div><span class="panel-kicker">Registrar's Office archive</span><h3>Document categories</h3></div><span class="category-note">Use official document names</span></div><div class="category-grid" id="categoryGrid"></div></section>
       <section class="category-help"><i data-lucide="info"></i><p><strong>Keep categories consistent.</strong><span>Use an existing category when the document type is already listed.</span></p></section>
       <footer><span>Digitalization Archiving Management System</span><span>Document Categories <b>·</b> ZPPSU Registrar</span></footer>
+      </div>
     </main>
   </div>
   <div class="admin-toast" id="adminToast" role="status">Document category updated.</div>

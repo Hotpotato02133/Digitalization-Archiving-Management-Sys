@@ -93,9 +93,9 @@ $csrfToken = htmlspecialchars((string) $_SESSION['database_backup_csrf'], ENT_QU
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="styles.css?v=20260914" />
-  <link rel="stylesheet" href="database.css?v=20261002" />
-  <link rel="stylesheet" href="../dashboard-buttons.css?v=20260914" />
+  <link rel="stylesheet" href="styles.css?v=20261115" />
+  <link rel="stylesheet" href="database.css?v=20261115" />
+  <link rel="stylesheet" href="../dashboard-buttons.css?v=20261115" />
   <script src="https://unpkg.com/lucide@latest"></script>
 </head>
 <body>
@@ -122,6 +122,7 @@ $csrfToken = htmlspecialchars((string) $_SESSION['database_backup_csrf'], ENT_QU
     </aside>
     <main class="admin-main">
       <header class="admin-header"><button class="mobile-menu" id="mobileMenu" aria-label="Open admin navigation" aria-expanded="false"><i data-lucide="menu"></i></button><div><span class="eyebrow">Administrator workspace</span><h1><span data-greeting data-user-name="<?= $displayName ?>">Good morning</span></h1></div><div class="header-actions"><button class="header-icon" aria-label="Notifications"><i data-lucide="bell"></i><span></span></button><div class="user-chip"><span class="avatar"><?= $initials ?></span><span><strong><?= $displayName ?></strong><small><?= htmlspecialchars(dats_user_role_label($currentUser), ENT_QUOTES, 'UTF-8') ?></small></span><i data-lucide="chevron-down"></i></div></div></header>
+      <div class="admin-sheet">
       <section class="welcome-row database-welcome"><div><p class="page-kicker">Setup · <span data-current-datetime>Loading date and time...</span></p><h2>Database</h2><p class="page-intro">Create a downloadable database backup or restore from a supported DATS SQL backup.</p></div></section>
       <?php if ($message !== ''): ?><div class="database-message <?= $messageType === 'error' ? 'is-error' : '' ?>" role="<?= $messageType === 'error' ? 'alert' : 'status' ?>"><?= htmlspecialchars($message, ENT_QUOTES, 'UTF-8') ?></div><?php endif; ?>
       <section class="database-actions" aria-label="Database backup and restore">
@@ -150,6 +151,7 @@ $csrfToken = htmlspecialchars((string) $_SESSION['database_backup_csrf'], ENT_QU
         <div><h3 id="databaseStorageTitle">Keep a copy off the server</h3><p>Google Drive upload is not configured in this system. Save the downloaded SQL file in a restricted Google Drive backup folder manually, and verify the uploaded file is available before deleting local copies.</p></div>
       </section>
       <footer><span>Digitalization Archiving Management System</span><span>Database <b>·</b> ZPPSU Registrar</span></footer>
+      </div>
     </main>
   </div>
   <script src="../data-sync.js?v=20260914"></script>
