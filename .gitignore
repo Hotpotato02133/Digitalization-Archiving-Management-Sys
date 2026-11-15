@@ -1,45 +1,4 @@
-# =====================================================================
-# DATS Environment & Secret Files
-# =====================================================================
-.env
-.env.*
-!.env.example
-
-# Local configuration overrides and credentials
-config/config.local.php
 config/secrets.local.php
-config/*.local.php
-*.local.php
+.taste-skill/
+graphify-out/
 
-# =====================================================================
-# User Uploads & Archived Student Records (PII & Data Privacy)
-# Prevent uploaded student records from being tracked in version control
-# =====================================================================
-uploads/*
-!uploads/.htaccess
-!uploads/.gitkeep
-!uploads/colleges/
-uploads/colleges/*
-!uploads/colleges/.gitkeep
-!uploads/colleges/.htaccess
-!uploads/gradesheet-batches/
-uploads/gradesheet-batches/*
-!uploads/gradesheet-batches/.gitkeep
-!uploads/gradesheet-batches/.htaccess
-
-archive/*
-!archive/.htaccess
-!archive/.gitkeep
-!archive/**/
-!archive/**/.htaccess
-!archive/**/.gitkeep
-
-# =====================================================================
-# Temporary, Log & Cache Files
-# =====================================================================
-*.log
-*.tmp
-*.bak
-*.swp
-.DS_Store
-Thumbs.db
