@@ -9,15 +9,17 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="styles.css?v=20261115" />
-  <link rel="stylesheet" href="user-actions.css?v=20261115" />
-  <link rel="stylesheet" href="../dashboard-tables.css?v=20261115" />
-  <link rel="stylesheet" href="../dashboard-buttons.css?v=20261115" />
+  <link rel="stylesheet" href="styles.css?v=20260914" />
+  <link rel="stylesheet" href="user-actions.css?v=20260914" />
+  <link rel="stylesheet" href="../dashboard-tables.css?v=20260914" />
+  <link rel="stylesheet" href="../dashboard-buttons.css?v=20260914" />
   <script src="https://unpkg.com/lucide@latest"></script>
+  <link rel="stylesheet" href="shell.css?v=20261116c" />
 </head>
-<body>
+<body class="admin-page">
   <div class="admin-shell">
     <aside class="sidebar" id="sidebar">
+      <button class="drawer-close" type="button" aria-label="Close admin navigation" data-drawer-close><i data-lucide="x"></i></button>
       <a class="brand" href="../index.php"><img src="../img/ZPPSU.png" alt="ZPPSU seal" /><span><strong>ZPPSU REGISTRAR</strong><small>Digital Archive</small></span></a>
       <div class="workspace-label">Workspace</div>
       <nav aria-label="Admin navigation">
@@ -38,14 +40,13 @@
       </nav>
       <div class="sidebar-bottom"><a href="settings.php"><i data-lucide="settings-2"></i> Settings</a></div>
     </aside>
+    <div class="drawer-scrim" data-drawer-scrim aria-hidden="true"></div>
     <main class="admin-main users-main">
       <header class="admin-header"><button class="mobile-menu" id="mobileMenu" aria-label="Open admin navigation" aria-expanded="false"><i data-lucide="menu"></i></button><div><span class="eyebrow">Administrator workspace</span><h1><span data-greeting data-user-name="<?= $displayName ?>">Good morning</span></h1></div><div class="header-actions"><button class="header-icon" aria-label="Notifications"><i data-lucide="bell"></i><span></span></button><div class="user-chip"><span class="avatar"><?= $initials ?></span><span><strong><?= $displayName ?></strong><small><?= htmlspecialchars(dats_user_role_label($currentUser), ENT_QUOTES, 'UTF-8') ?></small></span><i data-lucide="chevron-down"></i></div></div></header>
-      <div class="admin-sheet">
       <section class="welcome-row users-welcome"><div><p class="page-kicker">Access control · <span data-current-datetime>Loading date and time...</span></p><h2>Manage users</h2><p class="page-intro">Control who can access the digital archive and what they can do.</p></div><button class="gold-button" id="addUserButton"><i data-lucide="user-round-plus"></i> Add user</button></section>
       <section class="user-summary"><div><strong>24</strong><span>All users</span></div><div><strong>22</strong><span>Active now</span></div></section>
       <section class="users-panel panel"><div class="users-toolbar"><div class="search-box"><i data-lucide="search"></i><input id="userSearch" type="search" placeholder="Search by name, ID, or email" /></div><select id="statusFilter" aria-label="Filter by status"><option value="all">All status</option><option value="Active">Active</option><option value="Inactive">Inactive</option></select></div><div class="users-table-wrap"><table class="users-table"><thead><tr><th>User</th><th>Email</th><th>Last active</th><th>Status</th><th><span class="sr-only">Actions</span></th></tr></thead><tbody id="userRows"><tr><td colspan="5" class="table-loading">Loading user accounts...</td></tr></tbody></table><p class="empty-users" id="emptyUsers" hidden>No users match your filters.</p></div></section>
       <footer><span>Digitalization Archiving Management System</span><span>User management <b>·</b> ZPPSU Registrar</span></footer>
-      </div>
     </main>
   </div>
   <div class="admin-toast" id="adminToast" role="status">User management updated.</div>
@@ -53,5 +54,6 @@
   <script src="../data-sync.js?v=20260914"></script>
   <script src="script.js?v=20260910"></script>
   <script src="../dashboard-tables.js?v=20260914"></script>
+  <script src="shell-ui.js?v=20261116c"></script>
 </body>
 </html>

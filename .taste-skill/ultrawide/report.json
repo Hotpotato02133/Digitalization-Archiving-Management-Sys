@@ -1,0 +1,1232 @@
+{
+ "url": "http://127.0.0.1:8099/index.php",
+ "at": "2026-11-15T04:13:32.526Z",
+ "allow": [],
+ "viewports": [
+  {
+   "width": 2560,
+   "height": 1600,
+   "load": "load",
+   "screens": 3,
+   "filled": [
+    0.73,
+    0.71,
+    0.73
+   ],
+   "motion": {
+    "elements": 20,
+    "css": 0,
+    "transitions": 20,
+    "scripted": 0,
+    "videos": 0,
+    "playingVideos": 0
+   },
+   "metrics": {
+    "viewport": {
+     "w": 2560,
+     "h": 1600
+    },
+    "page": {
+     "height": 4721,
+     "screens": 3,
+     "words": 550,
+     "img": 7,
+     "video": 0,
+     "canvas": 0,
+     "svg": 12,
+     "sections": 6,
+     "horizontalOverflow": 0,
+     "overflowCulprits": [],
+     "uiFragments": 3,
+     "uiAbuse": false,
+     "realPictures": 5,
+     "videoCount": 0,
+     "uiPictures": 3,
+     "pictureSamples": [
+      "wroclaw-university-library-digitizing-rare-archi",
+      "beinecke-rare-book-manuscript-library-interior-3",
+      "first-icrc-records-icrc-archives-romandeckert090",
+      "book-scanner-digitization-national-library-of-th",
+      "beinecke-rare-book-manuscript-library-interior-3"
+     ],
+     "blendText": 0,
+     "sideScrollers": 0,
+     "brokenImages": [],
+     "emoji": [],
+     "videosNoPoster": 0
+    },
+    "hero": {
+     "text": "ZPPSU records, digitally archived.",
+     "words": 4,
+     "chars": 34,
+     "lines": 2,
+     "size": 69.6,
+     "vw": 2.7,
+     "font": "Young Serif",
+     "weight": 400,
+     "tracking": -0.02,
+     "leading": 0.98,
+     "upper": false,
+     "italic": false,
+     "mono": false,
+     "align": "left",
+     "position": "left",
+     "widthRatio": 0.31,
+     "top": 546,
+     "tag": "h1",
+     "kind": "heading"
+    },
+    "h1": {
+     "text": "ZPPSU records, digitally archived.",
+     "words": 4,
+     "lines": 2,
+     "size": 69.6,
+     "font": "Young Serif"
+    },
+    "headings": [
+     {
+      "text": "ZPPSU records, digitally archived.",
+      "words": 4,
+      "chars": 34,
+      "lines": 2,
+      "size": 69.6,
+      "vw": 2.7,
+      "font": "Young Serif",
+      "weight": 400,
+      "tracking": -0.02,
+      "leading": 0.98,
+      "upper": false,
+      "italic": false,
+      "mono": false,
+      "align": "left",
+      "position": "left",
+      "widthRatio": 0.31,
+      "top": 546,
+      "tag": "h1",
+      "kind": "heading"
+     },
+     {
+      "text": "Paper ledgers to digital truth",
+      "words": 5,
+      "chars": 30,
+      "lines": 2,
+      "size": 50,
+      "vw": 2,
+      "font": "Young Serif",
+      "weight": 400,
+      "tracking": -0.02,
+      "leading": 1.05,
+      "upper": false,
+      "italic": false,
+      "mono": false,
+      "align": "left",
+      "position": "left",
+      "widthRatio": 0.25,
+      "top": 1080,
+      "tag": "h2",
+      "kind": "heading"
+     },
+     {
+      "text": "Inside the Registrar workspace",
+      "words": 4,
+      "chars": 30,
+      "lines": 2,
+      "size": 50,
+      "vw": 2,
+      "font": "Young Serif",
+      "weight": 400,
+      "tracking": -0.02,
+      "leading": 1.05,
+      "upper": false,
+      "italic": false,
+      "mono": false,
+      "align": "left",
+      "position": "left",
+      "widthRatio": 0.26,
+      "top": 2325,
+      "tag": "h2",
+      "kind": "heading"
+     },
+     {
+      "text": "Built for lasting custody",
+      "words": 4,
+      "chars": 25,
+      "lines": 1,
+      "size": 50,
+      "vw": 2,
+      "font": "Young Serif",
+      "weight": 400,
+      "tracking": -0.02,
+      "leading": 1.05,
+      "upper": false,
+      "italic": false,
+      "mono": false,
+      "align": "left",
+      "position": "left",
+      "widthRatio": 0.25,
+      "top": 3166,
+      "tag": "h2",
+      "kind": "heading"
+     },
+     {
+      "text": "Recently indexed records",
+      "words": 3,
+      "chars": 24,
+      "lines": 1,
+      "size": 50,
+      "vw": 2,
+      "font": "Young Serif",
+      "weight": 400,
+      "tracking": -0.02,
+      "leading": 1.05,
+      "upper": false,
+      "italic": false,
+      "mono": false,
+      "align": "left",
+      "position": "left",
+      "widthRatio": 0.26,
+      "top": 3947,
+      "tag": "h2",
+      "kind": "heading"
+     }
+    ],
+    "headingSummary": {
+     "count": 5,
+     "maxLines": 2,
+     "over2Lines": 0,
+     "statements": 0,
+     "centered": 0,
+     "medianWords": 4,
+     "mixedFontHeadings": 0
+    },
+    "type": {
+     "families": [
+      {
+       "family": "Source Serif 4",
+       "share": 0.96,
+       "mono": false
+      },
+      {
+       "family": "Young Serif",
+       "share": 0.04,
+       "mono": false
+      }
+     ],
+     "familyCount": 2,
+     "sizes": [
+      15,
+      19,
+      25,
+      36,
+      50,
+      70
+     ],
+     "sizeCount": 6,
+     "notLoaded": [],
+     "body": {
+      "font": "Source Serif 4",
+      "size": 19,
+      "leading": 1.55,
+      "weight": 400,
+      "tracking": 0,
+      "contrast": 8.1
+     },
+     "measureChars": 44,
+     "max": {
+      "size": 69.6,
+      "vw": 2.7,
+      "font": "Young Serif",
+      "text": "ZPPSU records,digitally archived."
+     },
+     "monoShare": 0,
+     "monoProseShare": 0,
+     "monoFamilies": [],
+     "monoSamples": [],
+     "microLabels": 0,
+     "microLabelShare": 0,
+     "microSamples": [],
+     "upperShare": 0.01,
+     "centerShare": 0.02,
+     "smallText": 0
+    },
+    "eyebrows": [],
+    "numbered": [],
+    "color": {
+     "bodyBg": "#ffffff",
+     "bodyBgHsl": {
+      "h": 0,
+      "s": 0,
+      "l": 1
+     },
+     "dark": false,
+     "sectionBgs": [
+      {
+       "color": "#2c0c12",
+       "top": 76,
+       "hsl": {
+        "h": 349,
+        "s": 0.57,
+        "l": 0.11
+       }
+      },
+      {
+       "color": "#ffffff",
+       "top": 976,
+       "hsl": {
+        "h": 0,
+        "s": 0,
+        "l": 1
+       }
+      },
+      {
+       "color": "#4a111b",
+       "top": 2217,
+       "hsl": {
+        "h": 349,
+        "s": 0.63,
+        "l": 0.18
+       }
+      },
+      {
+       "color": "#f4f4f3",
+       "top": 2879,
+       "hsl": {
+        "h": 60,
+        "s": 0.04,
+        "l": 0.95
+       }
+      }
+     ],
+     "textColors": [
+      {
+       "color": "#5a4c4f",
+       "share": 0.5
+      },
+      {
+       "color": "#1e1416",
+       "share": 0.12
+      },
+      {
+       "color": "#fafafa",
+       "share": 0.11
+      },
+      {
+       "color": "#4a111b",
+       "share": 0.1
+      },
+      {
+       "color": "#dfdbdc",
+       "share": 0.07
+      }
+     ],
+     "button": {
+      "bg": "#6b1d2a",
+      "hsl": {
+       "h": 350,
+       "s": 0.57,
+       "l": 0.27
+      },
+      "fg": "#fafafa"
+     },
+     "lowContrast": []
+    },
+    "buttons": {
+     "count": 6,
+     "inHero": 3,
+     "radius": 3,
+     "height": 43,
+     "withShadow": 0,
+     "withGradient": 0,
+     "mono": 0,
+     "upper": 0,
+     "heroLabels": [
+      "Skip to main content",
+      "Sign in",
+      "Sign in to Registrar portal"
+     ]
+    },
+    "surfaces": {
+     "shadowStatic": 0,
+     "shadowOverlay": 0,
+     "shadowSamples": [],
+     "gradients": 0,
+     "scrims": 1,
+     "gradientSamples": [],
+     "gradientText": 0,
+     "hairlines": 0,
+     "hairlineSamples": [],
+     "outlinedBoxes": 0,
+     "dashed": 0,
+     "blurred": 0,
+     "roundedBoxes": 0,
+     "boxRadius": 0,
+     "squareMedia": 2,
+     "roundedMedia": 3,
+     "mediaRadius": 3,
+     "textShadow": 0,
+     "cardRows": [
+      {
+       "count": 3,
+       "iconTopped": false,
+       "rounded": false,
+       "top": 2482
+      }
+     ]
+    },
+    "heroMedia": [
+     {
+      "type": "img",
+      "ratio": 0.56
+     },
+     {
+      "type": "img",
+      "ratio": 0.56
+     },
+     {
+      "type": "img",
+      "ratio": 0.11
+     }
+    ],
+    "nav": {
+     "links": 5,
+     "fixed": true,
+     "height": 76,
+     "floatingPill": false,
+     "blur": false
+    },
+    "fontsLoaded": [
+     "source serif 4",
+     "young serif"
+    ]
+   },
+   "layout": {
+    "viewport": {
+     "w": 2560,
+     "h": 1600
+    },
+    "pageH": 4721,
+    "margins": {
+     "left": 464,
+     "right": 464
+    },
+    "sections": [
+     {
+      "sel": "section#overview.hero",
+      "tag": "section",
+      "top": 76,
+      "height": 900,
+      "words": 79,
+      "media": 1,
+      "middle": 314,
+      "heading": {
+       "text": "ZPPSU records,",
+       "size": 70,
+       "tag": "h1"
+      },
+      "left": 464,
+      "right": 502,
+      "textLeft": 464,
+      "textRight": 502,
+      "fullBleed": true,
+      "footer": false,
+      "hero": true,
+      "continues": true,
+      "pinned": false
+     },
+     {
+      "sel": "section#capabilities.section-editorial",
+      "tag": "section",
+      "top": 976,
+      "height": 1241,
+      "words": 178,
+      "media": 2,
+      "middle": 80,
+      "heading": {
+       "text": "Paper ledgers to digital truth",
+       "size": 50,
+       "tag": "h2"
+      },
+      "left": 464,
+      "right": 464,
+      "textLeft": 464,
+      "textRight": 479,
+      "fullBleed": false,
+      "footer": false,
+      "hero": false,
+      "continues": true,
+      "pinned": false
+     },
+     {
+      "sel": "section#workspace.section-workspace",
+      "tag": "section",
+      "top": 2217,
+      "height": 662,
+      "words": 115,
+      "media": 0,
+      "middle": 76,
+      "heading": {
+       "text": "Inside the Registrar workspace",
+       "size": 50,
+       "tag": "h2"
+      },
+      "left": 464,
+      "right": 493,
+      "textLeft": 464,
+      "textRight": 493,
+      "fullBleed": false,
+      "footer": false,
+      "hero": false,
+      "continues": true,
+      "pinned": false
+     },
+     {
+      "sel": "section.section-permanence",
+      "tag": "section",
+      "top": 2879,
+      "height": 964,
+      "words": 69,
+      "media": 1,
+      "middle": 144,
+      "heading": {
+       "text": "Built for lasting custody",
+       "size": 50,
+       "tag": "h2"
+      },
+      "left": 464,
+      "right": 464,
+      "textLeft": 464,
+      "textRight": 776,
+      "fullBleed": false,
+      "footer": false,
+      "hero": false,
+      "continues": true,
+      "pinned": false
+     },
+     {
+      "sel": "section#records.section-records",
+      "tag": "section",
+      "top": 3843,
+      "height": 573,
+      "words": 73,
+      "media": 0,
+      "middle": 426,
+      "heading": {
+       "text": "Recently indexed records",
+       "size": 50,
+       "tag": "h2"
+      },
+      "left": 464,
+      "right": 464,
+      "textLeft": 464,
+      "textRight": 501,
+      "fullBleed": false,
+      "footer": false,
+      "hero": false,
+      "continues": true,
+      "pinned": false
+     },
+     {
+      "sel": "footer.site-footer",
+      "tag": "footer",
+      "top": 4416,
+      "height": 305,
+      "words": 85,
+      "media": 0,
+      "middle": 8,
+      "heading": null,
+      "left": 464,
+      "right": 464,
+      "textLeft": 464,
+      "textRight": 471,
+      "fullBleed": false,
+      "footer": true,
+      "hero": false,
+      "continues": false,
+      "pinned": false
+     }
+    ],
+    "gaps": [],
+    "h1s": [
+     {
+      "text": "ZPPSU records, digitally archived.",
+      "size": 70,
+      "top": 546,
+      "firstScreen": true
+     }
+    ],
+    "edgeText": [],
+    "edges": [
+     {
+      "x": 464,
+      "n": 10
+     },
+     {
+      "x": 1189,
+      "n": 5
+     },
+     {
+      "x": 1665,
+      "n": 4
+     },
+     {
+      "x": 1555,
+      "n": 2
+     },
+     {
+      "x": 496,
+      "n": 1
+     },
+     {
+      "x": 1383,
+      "n": 1
+     },
+     {
+      "x": 1761,
+      "n": 1
+     }
+    ],
+    "leftBlocks": 24,
+    "bodySize": 19,
+    "stage": false,
+    "explains": true,
+    "slivers": [],
+    "voidShare": 0.06,
+    "voidBox": {
+     "x": 0,
+     "y": 1067,
+     "w": 427,
+     "h": 533
+    }
+   },
+   "app": null,
+   "consoleErrors": []
+  },
+  {
+   "width": 1920,
+   "height": 1200,
+   "load": "load",
+   "screens": 4,
+   "filled": [
+    0.79,
+    0.6,
+    0.86,
+    0.65
+   ],
+   "motion": {
+    "elements": 20,
+    "css": 0,
+    "transitions": 20,
+    "scripted": 0,
+    "videos": 0,
+    "playingVideos": 0
+   },
+   "metrics": {
+    "viewport": {
+     "w": 1920,
+     "h": 1200
+    },
+    "page": {
+     "height": 4726,
+     "screens": 3.9,
+     "words": 550,
+     "img": 7,
+     "video": 0,
+     "canvas": 0,
+     "svg": 12,
+     "sections": 6,
+     "horizontalOverflow": 0,
+     "overflowCulprits": [],
+     "uiFragments": 3,
+     "uiAbuse": false,
+     "realPictures": 5,
+     "videoCount": 0,
+     "uiPictures": 3,
+     "pictureSamples": [
+      "wroclaw-university-library-digitizing-rare-archi",
+      "beinecke-rare-book-manuscript-library-interior-3",
+      "first-icrc-records-icrc-archives-romandeckert090",
+      "book-scanner-digitization-national-library-of-th",
+      "beinecke-rare-book-manuscript-library-interior-3"
+     ],
+     "blendText": 0,
+     "sideScrollers": 0,
+     "brokenImages": [],
+     "emoji": [],
+     "videosNoPoster": 0
+    },
+    "hero": {
+     "text": "ZPPSU records, digitally archived.",
+     "words": 4,
+     "chars": 34,
+     "lines": 2,
+     "size": 69.6,
+     "vw": 3.6,
+     "font": "Young Serif",
+     "weight": 400,
+     "tracking": -0.02,
+     "leading": 0.98,
+     "upper": false,
+     "italic": false,
+     "mono": false,
+     "align": "left",
+     "position": "left",
+     "widthRatio": 0.41,
+     "top": 546,
+     "tag": "h1",
+     "kind": "heading"
+    },
+    "h1": {
+     "text": "ZPPSU records, digitally archived.",
+     "words": 4,
+     "lines": 2,
+     "size": 69.6,
+     "font": "Young Serif"
+    },
+    "headings": [
+     {
+      "text": "ZPPSU records, digitally archived.",
+      "words": 4,
+      "chars": 34,
+      "lines": 2,
+      "size": 69.6,
+      "vw": 3.6,
+      "font": "Young Serif",
+      "weight": 400,
+      "tracking": -0.02,
+      "leading": 0.98,
+      "upper": false,
+      "italic": false,
+      "mono": false,
+      "align": "left",
+      "position": "left",
+      "widthRatio": 0.41,
+      "top": 546,
+      "tag": "h1",
+      "kind": "heading"
+     },
+     {
+      "text": "Paper ledgers to digital truth",
+      "words": 5,
+      "chars": 30,
+      "lines": 2,
+      "size": 50,
+      "vw": 2.6,
+      "font": "Young Serif",
+      "weight": 400,
+      "tracking": -0.02,
+      "leading": 1.05,
+      "upper": false,
+      "italic": false,
+      "mono": false,
+      "align": "left",
+      "position": "left",
+      "widthRatio": 0.34,
+      "top": 1080,
+      "tag": "h2",
+      "kind": "heading"
+     },
+     {
+      "text": "Inside the Registrar workspace",
+      "words": 4,
+      "chars": 30,
+      "lines": 2,
+      "size": 50,
+      "vw": 2.6,
+      "font": "Young Serif",
+      "weight": 400,
+      "tracking": -0.02,
+      "leading": 1.05,
+      "upper": false,
+      "italic": false,
+      "mono": false,
+      "align": "left",
+      "position": "left",
+      "widthRatio": 0.34,
+      "top": 2327,
+      "tag": "h2",
+      "kind": "heading"
+     },
+     {
+      "text": "Built for lasting custody",
+      "words": 4,
+      "chars": 25,
+      "lines": 1,
+      "size": 50,
+      "vw": 2.6,
+      "font": "Young Serif",
+      "weight": 400,
+      "tracking": -0.02,
+      "leading": 1.05,
+      "upper": false,
+      "italic": false,
+      "mono": false,
+      "align": "left",
+      "position": "left",
+      "widthRatio": 0.34,
+      "top": 3169,
+      "tag": "h2",
+      "kind": "heading"
+     },
+     {
+      "text": "Recently indexed records",
+      "words": 3,
+      "chars": 24,
+      "lines": 1,
+      "size": 50,
+      "vw": 2.6,
+      "font": "Young Serif",
+      "weight": 400,
+      "tracking": -0.02,
+      "leading": 1.05,
+      "upper": false,
+      "italic": false,
+      "mono": false,
+      "align": "left",
+      "position": "left",
+      "widthRatio": 0.35,
+      "top": 3951,
+      "tag": "h2",
+      "kind": "heading"
+     }
+    ],
+    "headingSummary": {
+     "count": 5,
+     "maxLines": 2,
+     "over2Lines": 0,
+     "statements": 0,
+     "centered": 0,
+     "medianWords": 4,
+     "mixedFontHeadings": 0
+    },
+    "type": {
+     "families": [
+      {
+       "family": "Source Serif 4",
+       "share": 0.96,
+       "mono": false
+      },
+      {
+       "family": "Young Serif",
+       "share": 0.04,
+       "mono": false
+      }
+     ],
+     "familyCount": 2,
+     "sizes": [
+      15,
+      19,
+      25,
+      36,
+      50,
+      70
+     ],
+     "sizeCount": 6,
+     "notLoaded": [],
+     "body": {
+      "font": "Source Serif 4",
+      "size": 19,
+      "leading": 1.55,
+      "weight": 400,
+      "tracking": 0,
+      "contrast": 8.1
+     },
+     "measureChars": 44,
+     "max": {
+      "size": 69.6,
+      "vw": 3.6,
+      "font": "Young Serif",
+      "text": "ZPPSU records,digitally archived."
+     },
+     "monoShare": 0,
+     "monoProseShare": 0,
+     "monoFamilies": [],
+     "monoSamples": [],
+     "microLabels": 0,
+     "microLabelShare": 0,
+     "microSamples": [],
+     "upperShare": 0.01,
+     "centerShare": 0.02,
+     "smallText": 0
+    },
+    "eyebrows": [],
+    "numbered": [],
+    "color": {
+     "bodyBg": "#ffffff",
+     "bodyBgHsl": {
+      "h": 0,
+      "s": 0,
+      "l": 1
+     },
+     "dark": false,
+     "sectionBgs": [
+      {
+       "color": "#2c0c12",
+       "top": 76,
+       "hsl": {
+        "h": 349,
+        "s": 0.57,
+        "l": 0.11
+       }
+      },
+      {
+       "color": "#ffffff",
+       "top": 976,
+       "hsl": {
+        "h": 0,
+        "s": 0,
+        "l": 1
+       }
+      },
+      {
+       "color": "#4a111b",
+       "top": 2219,
+       "hsl": {
+        "h": 349,
+        "s": 0.63,
+        "l": 0.18
+       }
+      },
+      {
+       "color": "#f4f4f3",
+       "top": 2881,
+       "hsl": {
+        "h": 60,
+        "s": 0.04,
+        "l": 0.95
+       }
+      }
+     ],
+     "textColors": [
+      {
+       "color": "#5a4c4f",
+       "share": 0.5
+      },
+      {
+       "color": "#1e1416",
+       "share": 0.12
+      },
+      {
+       "color": "#fafafa",
+       "share": 0.11
+      },
+      {
+       "color": "#4a111b",
+       "share": 0.1
+      },
+      {
+       "color": "#dfdbdc",
+       "share": 0.07
+      }
+     ],
+     "button": {
+      "bg": "#6b1d2a",
+      "hsl": {
+       "h": 350,
+       "s": 0.57,
+       "l": 0.27
+      },
+      "fg": "#fafafa"
+     },
+     "lowContrast": []
+    },
+    "buttons": {
+     "count": 6,
+     "inHero": 3,
+     "radius": 3,
+     "height": 43,
+     "withShadow": 0,
+     "withGradient": 0,
+     "mono": 0,
+     "upper": 0,
+     "heroLabels": [
+      "Skip to main content",
+      "Sign in",
+      "Sign in to Registrar portal"
+     ]
+    },
+    "surfaces": {
+     "shadowStatic": 0,
+     "shadowOverlay": 0,
+     "shadowSamples": [],
+     "gradients": 0,
+     "scrims": 1,
+     "gradientSamples": [],
+     "gradientText": 0,
+     "hairlines": 0,
+     "hairlineSamples": [],
+     "outlinedBoxes": 0,
+     "dashed": 0,
+     "blurred": 0,
+     "roundedBoxes": 0,
+     "boxRadius": 0,
+     "squareMedia": 2,
+     "roundedMedia": 3,
+     "mediaRadius": 3,
+     "textShadow": 0,
+     "cardRows": [
+      {
+       "count": 3,
+       "iconTopped": false,
+       "rounded": false,
+       "top": 2484
+      }
+     ]
+    },
+    "heroMedia": [
+     {
+      "type": "img",
+      "ratio": 0.75
+     },
+     {
+      "type": "img",
+      "ratio": 0.75
+     }
+    ],
+    "nav": {
+     "links": 5,
+     "fixed": true,
+     "height": 76,
+     "floatingPill": false,
+     "blur": false
+    },
+    "fontsLoaded": [
+     "source serif 4",
+     "young serif"
+    ]
+   },
+   "layout": {
+    "viewport": {
+     "w": 1920,
+     "h": 1200
+    },
+    "pageH": 4726,
+    "margins": {
+     "left": 141,
+     "right": 141
+    },
+    "sections": [
+     {
+      "sel": "section#overview.hero",
+      "tag": "section",
+      "top": 76,
+      "height": 900,
+      "words": 79,
+      "media": 1,
+      "middle": 317,
+      "heading": {
+       "text": "ZPPSU records,",
+       "size": 70,
+       "tag": "h1"
+      },
+      "left": 141,
+      "right": 179,
+      "textLeft": 141,
+      "textRight": 179,
+      "fullBleed": true,
+      "footer": false,
+      "hero": true,
+      "continues": true,
+      "pinned": false
+     },
+     {
+      "sel": "section#capabilities.section-editorial",
+      "tag": "section",
+      "top": 976,
+      "height": 1243,
+      "words": 178,
+      "media": 2,
+      "middle": 80,
+      "heading": {
+       "text": "Paper ledgers to digital truth",
+       "size": 50,
+       "tag": "h2"
+      },
+      "left": 141,
+      "right": 141,
+      "textLeft": 141,
+      "textRight": 158,
+      "fullBleed": false,
+      "footer": false,
+      "hero": false,
+      "continues": true,
+      "pinned": false
+     },
+     {
+      "sel": "section#workspace.section-workspace",
+      "tag": "section",
+      "top": 2219,
+      "height": 662,
+      "words": 115,
+      "media": 0,
+      "middle": 76,
+      "heading": {
+       "text": "Inside the Registrar workspace",
+       "size": 50,
+       "tag": "h2"
+      },
+      "left": 141,
+      "right": 170,
+      "textLeft": 141,
+      "textRight": 170,
+      "fullBleed": false,
+      "footer": false,
+      "hero": false,
+      "continues": true,
+      "pinned": false
+     },
+     {
+      "sel": "section.section-permanence",
+      "tag": "section",
+      "top": 2881,
+      "height": 966,
+      "words": 69,
+      "media": 1,
+      "middle": 146,
+      "heading": {
+       "text": "Built for lasting custody",
+       "size": 50,
+       "tag": "h2"
+      },
+      "left": 141,
+      "right": 141,
+      "textLeft": 141,
+      "textRight": 457,
+      "fullBleed": false,
+      "footer": false,
+      "hero": false,
+      "continues": true,
+      "pinned": false
+     },
+     {
+      "sel": "section#records.section-records",
+      "tag": "section",
+      "top": 3847,
+      "height": 573,
+      "words": 73,
+      "media": 0,
+      "middle": 429,
+      "heading": {
+       "text": "Recently indexed records",
+       "size": 50,
+       "tag": "h2"
+      },
+      "left": 141,
+      "right": 141,
+      "textLeft": 141,
+      "textRight": 180,
+      "fullBleed": false,
+      "footer": false,
+      "hero": false,
+      "continues": true,
+      "pinned": false
+     },
+     {
+      "sel": "footer.site-footer",
+      "tag": "footer",
+      "top": 4420,
+      "height": 305,
+      "words": 85,
+      "media": 0,
+      "middle": 8,
+      "heading": null,
+      "left": 141,
+      "right": 141,
+      "textLeft": 141,
+      "textRight": 153,
+      "fullBleed": false,
+      "footer": true,
+      "hero": false,
+      "continues": false,
+      "pinned": false
+     }
+    ],
+    "gaps": [],
+    "h1s": [
+     {
+      "text": "ZPPSU records, digitally archived.",
+      "size": 70,
+      "top": 546,
+      "firstScreen": true
+     }
+    ],
+    "edgeText": [],
+    "edges": [
+     {
+      "x": 141,
+      "n": 10
+     },
+     {
+      "x": 869,
+      "n": 5
+     },
+     {
+      "x": 1346,
+      "n": 4
+     },
+     {
+      "x": 1236,
+      "n": 2
+     },
+     {
+      "x": 173,
+      "n": 1
+     },
+     {
+      "x": 1063,
+      "n": 1
+     },
+     {
+      "x": 1443,
+      "n": 1
+     }
+    ],
+    "leftBlocks": 24,
+    "bodySize": 19,
+    "stage": false,
+    "explains": true,
+    "slivers": [],
+    "voidShare": 0.02,
+    "voidBox": {
+     "x": 560,
+     "y": 1040,
+     "w": 240,
+     "h": 160
+    }
+   },
+   "app": null,
+   "consoleErrors": []
+  }
+ ],
+ "findings": [
+  {
+   "level": "WARN",
+   "id": "no-footage",
+   "width": 2560,
+   "message": "No video anywhere on the page.",
+   "fix": "Look for one honest clip with scripts/assets.mjs --video (the place, the material, the process) and use it as a muted loop with a poster frame. Defend its absence only if no clip fits the subject.",
+   "alsoAt": [
+    1920
+   ]
+  }
+ ],
+ "images": [
+  {
+   "viewport": "desktop",
+   "width": 2560,
+   "fold": "C:\\Users\\windows11\\Documents\\GitHub\\Digitalization-Archiving-Management-System\\.taste-skill\\ultrawide\\desktop-2560-fold.jpg",
+   "pages": [
+    "C:\\Users\\windows11\\Documents\\GitHub\\Digitalization-Archiving-Management-System\\.taste-skill\\ultrawide\\desktop-2560-page-01.jpg"
+   ],
+   "film": []
+  },
+  {
+   "viewport": "desktop",
+   "width": 1920,
+   "fold": "C:\\Users\\windows11\\Documents\\GitHub\\Digitalization-Archiving-Management-System\\.taste-skill\\ultrawide\\desktop-1920-fold.jpg",
+   "pages": [
+    "C:\\Users\\windows11\\Documents\\GitHub\\Digitalization-Archiving-Management-System\\.taste-skill\\ultrawide\\desktop-1920-page-01.jpg"
+   ],
+   "film": []
+  }
+ ]
+}

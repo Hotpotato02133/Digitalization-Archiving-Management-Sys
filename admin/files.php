@@ -9,187 +9,203 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="styles.css?v=20261115" />
+  <link rel="stylesheet" href="styles.css?v=20260914" />
   <script src="https://unpkg.com/lucide@latest"></script>
   <style>
-    .files-filters, .files-panel { width: 100%; max-width: 1240px; margin-left: auto; margin-right: auto; }
-    .files-filters { display: flex; justify-content: flex-end; align-items: center; gap: 12px; margin-bottom: 16px; }
-    .enrollment-year-filter { display: grid; grid-template-columns: auto minmax(150px, 180px) auto; align-items: center; justify-content: end; gap: 10px; width: max-content; max-width: 100%; }
-    .enrollment-year-filter label { font-size: 13px; font-weight: 600; color: var(--muted); white-space: nowrap; }
-    .enrollment-year-filter select { width: 100%; min-width: 150px; min-height: 38px; padding: 0 12px; color: var(--text); background: var(--surface); border: 1px solid var(--control); border-radius: 8px; font-size: 14px; }
+    .files-filters, .files-panel { width: 88.8%; max-width: 1180px; margin-left: auto; margin-right: auto; }
+    .files-filters { display: flex; justify-content: flex-end; align-items: center; gap: 12px; margin-bottom: 18px; }
+    .enrollment-year-filter { display: grid; grid-template-columns: auto 150px auto; align-items: center; justify-content: end; gap: 9px; width: max-content; max-width: 100%; }
+    .enrollment-year-filter select { width: 150px; min-height: 36px; padding: 0 9px; color: var(--ink); background: var(--white); border: 1px solid var(--line); border-radius: 4px; font: 10px var(--sans); }
     .enrollment-year-filter select:focus-visible { outline: 2px solid var(--maroon); outline-offset: 2px; }
-    .enrollment-year-filter .folder-delete { width: 38px; height: 38px; border-color: var(--control); border-radius: 8px; }
-    .enrollment-year-filter .folder-delete:disabled { opacity: 0.45; cursor: not-allowed; }
-    @media (max-width: 700px) { .files-filters { justify-content: flex-start; } .enrollment-year-filter { grid-template-columns: auto minmax(0, 160px) auto; gap: 8px; } }
-    @media (max-width: 400px) { .enrollment-year-filter { grid-template-columns: minmax(0, 1fr) 38px; width: 100%; } .enrollment-year-filter label { grid-column: 1 / -1; } .enrollment-year-filter select { grid-column: 1; min-width: 0; } .enrollment-year-filter .folder-delete { grid-column: 2; } }
-    .files-panel { padding: 22px; }
+    .enrollment-year-filter .folder-delete { width: 36px; height: 36px; border-color: var(--line); border-radius: 4px; }
+    .enrollment-year-filter .folder-delete:disabled { opacity: .45; cursor: not-allowed; }
+    @media (max-width: 700px) { .enrollment-year-filter { grid-template-columns: auto minmax(0, 150px) auto; gap: 7px; }.enrollment-year-filter label { white-space: nowrap; } }
+      @media (max-width: 360px) { .enrollment-year-filter { grid-template-columns: minmax(0, 1fr) 150px 36px; width: 100%; }.enrollment-year-filter label { grid-column: 1 / -1; }.enrollment-year-filter select { grid-column: 2; }.enrollment-year-filter .folder-delete { grid-column: 3; } }
+    .files-panel { padding: 24px; }
     .files-panel + .files-panel { margin-top: 18px; }
-    .folder-icon { display: inline-flex; width: 42px; height: 42px; align-items: center; justify-content: center; border-radius: 10px; background: var(--maroon-soft); color: var(--maroon); }
-    .folder-delete { display: grid; flex: 0 0 32px; place-items: center; width: 32px; height: 32px; padding: 0; color: var(--muted); background: transparent; border: 1px solid transparent; border-radius: 8px; cursor: pointer; transition: color 0.15s ease, background 0.15s ease; }
+    .folder-icon { display: inline-flex; width: 42px; height: 42px; align-items: center; justify-content: center; border-radius: 12px; background: #f7efef; color: var(--maroon); }
+    .folder-delete { display: grid; flex: 0 0 28px; place-items: center; width: 28px; height: 28px; padding: 0; color: var(--muted); background: transparent; border: 1px solid transparent; border-radius: 50%; cursor: pointer; transition: color .16s ease, background .16s ease; }
     .folder-delete:hover { color: var(--maroon); background: var(--maroon-soft); }
     .folder-delete:focus-visible { outline: 2px solid var(--maroon); outline-offset: 2px; }
-    .folder-delete svg { width: 15px; height: 15px; }
+    .folder-delete svg { width: 14px; height: 14px; }
     .file-list { display: flex; flex-direction: column; gap: 10px; }
-    .file-item { display: flex; justify-content: space-between; align-items: center; gap: 12px; padding: 13px 16px; border: 1px solid var(--border); border-radius: 10px; background: var(--surface); }
-    .file-item strong { display: block; font-size: 14px; color: var(--text); }
-    .file-item small { color: var(--muted); font-size: 12px; }
-    .student-year-table-wrap { overflow-x: auto; border: 1px solid var(--border); border-radius: 10px; }
+    .file-item { display: flex; justify-content: space-between; align-items: center; gap: 12px; padding: 12px 14px; border: 1px solid var(--line); border-radius: 12px; background: #fff; }
+    .file-item strong { display: block; font-size: 13px; }
+    .file-item small { color: var(--muted); }
+    .student-year-table-wrap { overflow-x: auto; }
     .student-year-table { width: 100%; min-width: 680px; border-collapse: collapse; }
-    .student-year-table th, .student-year-table td { padding: 13px 16px; border-bottom: 1px solid var(--rule); text-align: left; }
-    .student-year-table th { color: var(--muted); font: 600 12px/1.25 var(--sans); letter-spacing: 0.01em; text-transform: none; }
-    .student-year-table td { color: var(--text); font-size: 13px; }
-    .student-file-row { cursor: pointer; }
-    .student-file-row:hover td { background: var(--gold-pale); }
-    .student-file-row:focus-visible { outline: 2px solid var(--maroon); outline-offset: -2px; }
+    .student-year-table th, .student-year-table td { padding: 14px 12px; border-bottom: 1px solid var(--line); text-align: left; }
+    .student-year-table th { color: var(--muted); font: 9px var(--mono); letter-spacing: .08em; text-transform: uppercase; }
+    .student-year-table td { color: var(--ink); font-size: 10px; }
+      .student-file-row { cursor: pointer; }
+      .student-file-row:hover td { background: var(--gold-pale); }
+      .student-file-row:focus-visible { outline: 2px solid var(--maroon); outline-offset: -2px; }
     .student-year-table th.sortable-th { padding: 0; }
-    .sort-th { display: inline-flex; align-items: center; gap: 5px; width: 100%; padding: 13px 16px; color: var(--muted); background: transparent; border: 0; cursor: pointer; font: 600 12px/1.25 var(--sans); text-align: left; transition: color 0.15s ease; }
+    .sort-th { display: inline-flex; align-items: center; gap: 4px; width: 100%; padding: 14px 12px; color: var(--muted); background: transparent; border: 0; cursor: pointer; font: 9px var(--mono); letter-spacing: .08em; text-transform: uppercase; transition: color .16s ease; }
     .sort-th:hover { color: var(--maroon); }
     .sort-th.active { color: var(--maroon-dark); font-weight: 700; }
-    .sort-th svg { width: 13px; height: 13px; }
+    .sort-th svg { width: 12px; height: 12px; }
     .sort-th:focus-visible { outline: 2px solid var(--maroon); outline-offset: -2px; }
-    .student-name-cell { display: flex; align-items: center; gap: 11px; }
-    .student-mini-avatar { display: grid; place-items: center; width: 34px; height: 34px; flex: 0 0 34px; color: #ffffff; background: var(--maroon); border-radius: 50%; font: 700 11px/1 var(--mono); }
-    .student-meta { display: grid; gap: 2px; }
-    .student-meta strong { font-size: 14px; font-weight: 600; color: var(--text); }
-    .student-meta small { color: var(--muted); font-size: 12px; }
-    .year-student-toolbar { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin: 0 0 16px; }
-    .year-student-toolbar .search-box { position: relative; flex: 1 1 300px; min-width: 0; min-height: 40px; width: 100%; max-width: 440px; }
-    .year-student-count { display: flex; flex: 0 0 auto; align-items: center; gap: 10px; min-height: 40px; padding: 0 14px; background: var(--raised); border: 1px solid var(--border); border-radius: 8px; white-space: nowrap; }
-    .year-student-count span { color: var(--faint); font: 600 11px/1 var(--mono); text-transform: uppercase; }
-    .year-student-count strong { color: var(--maroon); font-size: 15px; font-weight: 700; font-variant-numeric: tabular-nums; }
-    @media (max-width: 560px) { .year-student-toolbar { flex-wrap: wrap; gap: 8px; } .year-student-toolbar .search-box { flex-basis: 100%; max-width: none; } .year-student-count { margin-left: auto; } }
-    .search-suggestions { position: absolute; top: calc(100% + 6px); left: -1px; right: -1px; z-index: 40; max-height: 260px; overflow-y: auto; padding: 6px; background: var(--surface); border: 1px solid var(--border); border-radius: 10px; box-shadow: 0 14px 32px rgba(28, 25, 23, 0.14); }
+    .student-name-cell { display: flex; align-items: center; gap: 10px; }
+    .student-mini-avatar { display: grid; place-items: center; width: 30px; height: 30px; color: var(--white); background: var(--maroon); border-radius: 50%; font: 8px var(--mono); }
+    .student-meta { display: grid; gap: 3px; }
+    .student-meta strong { font-size: 10px; }
+    .student-meta small { color: var(--muted); font-size: 9px; }
+    .year-student-toolbar { display: flex; margin: 0 0 14px; }
+    .year-student-toolbar { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin: 0 0 14px; }
+    .year-student-toolbar .search-box { position: relative; flex: 1 1 300px; min-width: 0; min-height: 40px; width: 100%; max-width: 420px; }
+    .year-student-count { display: flex; flex: 0 0 auto; align-items: center; gap: 9px; min-height: 40px; padding: 0 11px; background: var(--paper); border: 1px solid var(--line); white-space: nowrap; }
+    .year-student-count span { color: var(--muted); font: 8px var(--mono); text-transform: uppercase; }
+    .year-student-count strong { color: var(--maroon); font-size: 12px; }
+    @media (max-width: 420px) { .year-student-toolbar { flex-wrap: wrap; gap: 7px; }.year-student-toolbar .search-box { flex-basis: 100%; max-width: none; }.year-student-count { gap: 6px; margin-left: auto; padding: 0 7px; }.year-student-count span { font-size: 7px; } }
+    .search-suggestions { position: absolute; top: calc(100% + 8px); left: -1px; right: -1px; z-index: 6; max-height: 248px; overflow-y: auto; padding: 6px; background: var(--white); border: 1px solid var(--line); border-radius: 12px; box-shadow: 0 16px 34px rgba(48,39,35,.14); }
     .search-suggestions[hidden] { display: none; }
-    .search-suggestion-item { display: flex; align-items: center; gap: 10px; width: 100%; padding: 9px 10px; color: var(--text); background: transparent; border: 0; border-radius: 6px; text-align: left; cursor: pointer; font: inherit; }
+    .search-suggestion-item { display: flex; align-items: center; gap: 10px; width: 100%; padding: 9px 10px; color: var(--ink); background: transparent; border: 0; border-radius: 8px; text-align: left; cursor: pointer; font: inherit; }
     .search-suggestion-item:hover, .search-suggestion-item.active { background: var(--gold-pale); }
-    .search-suggestion-item .student-mini-avatar { flex: 0 0 28px; width: 28px; height: 28px; font-size: 10px; }
-    .search-suggestion-item strong { display: block; font-size: 13px; font-weight: 600; }
-    .search-suggestion-item small { display: block; margin-top: 2px; color: var(--muted); font-size: 12px; }
-    .search-suggestion-empty { padding: 14px 12px; color: var(--muted); font-size: 13px; text-align: center; }
-    .student-row-actions { display: flex; align-items: center; justify-content: flex-end; gap: 6px; }
-    .student-row-delete { display: grid; flex: 0 0 32px; place-items: center; width: 32px; height: 32px; padding: 0; color: var(--muted); background: transparent; border: 1px solid transparent; border-radius: 8px; cursor: pointer; transition: color 0.15s ease, background 0.15s ease; }
+    .search-suggestion-item .student-mini-avatar { flex: 0 0 26px; width: 26px; height: 26px; font-size: 7px; }
+    .search-suggestion-item strong { display: block; font-size: 10px; }
+    .search-suggestion-item small { display: block; margin-top: 2px; color: var(--muted); font-size: 9px; }
+    .search-suggestion-empty { padding: 12px 10px; color: var(--muted); font-size: 10px; text-align: center; }
+    .student-row-actions { display: flex; align-items: center; gap: 6px; }
+    .student-row-delete { display: grid; flex: 0 0 28px; place-items: center; width: 28px; height: 28px; padding: 0; color: var(--muted); background: transparent; border: 1px solid transparent; border-radius: 50%; cursor: pointer; transition: color .16s ease, background .16s ease; }
     .student-row-delete:hover { color: var(--maroon); background: var(--maroon-soft); }
     .student-row-delete:focus-visible { outline: 2px solid var(--maroon); outline-offset: 2px; }
-    .student-row-delete svg { width: 15px; height: 15px; }
+    .student-row-delete svg { width: 14px; height: 14px; }
     .year-pagination { display: flex; justify-content: flex-end; align-items: center; gap: 8px; margin-top: 14px; }
-    .year-empty-state { padding: 24px; border: 1px dashed var(--control); border-radius: 10px; color: var(--muted); font-size: 14px; text-align: center; }
-    .student-files-modal { width: min(94vw, 780px); }
-    .student-files-header { display: grid; gap: 6px; margin-bottom: 18px; }
+    .year-empty-state { padding: 20px; border: 1px dashed var(--line); border-radius: 12px; color: var(--muted); text-align: center; }
+    .student-files-modal { width: min(92vw, 760px); }
+    .student-files-header { display: grid; gap: 8px; margin-bottom: 18px; }
     .student-files-meta { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; margin-bottom: 18px; }
-    .student-files-meta .meta-box { padding: 12px 14px; background: var(--raised); border: 1px solid var(--border); border-radius: 8px; }
-    .student-files-meta .meta-box span { display: block; color: var(--faint); font: 600 11px/1.2 var(--mono); text-transform: uppercase; letter-spacing: 0.05em; }
-    .student-files-meta .meta-box strong { display: block; margin-top: 5px; font-size: 14px; font-weight: 600; color: var(--text); }
+    .student-files-meta .meta-box { padding: 12px 14px; background: var(--paper); border: 1px solid var(--line); border-radius: 10px; }
+    .student-files-meta .meta-box span { display: block; color: var(--muted); font: 8px var(--mono); text-transform: uppercase; letter-spacing: .08em; }
+    .student-files-meta .meta-box strong { display: block; margin-top: 6px; font-size: 12px; }
     .student-file-list { display: grid; gap: 16px; }
     .student-file-group { display: grid; gap: 10px; }
-    .student-file-group h3 { margin: 0; color: var(--maroon); font-size: 12px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; }
-    .student-file-toolbar { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 16px; padding: 10px 14px; border: 1px solid var(--border); border-radius: 8px; background: var(--raised); }
-    .bulk-select-toggle { display: inline-flex; align-items: center; gap: 8px; color: var(--text); font: 600 13px/1.2 var(--sans); }
+    .student-file-group h3 { margin: 0; color: var(--maroon); font-size: 11px; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; }
+    .student-file-toolbar { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 16px; padding: 10px 12px; border: 1px solid var(--line); border-radius: 10px; background: var(--paper); }
+    .bulk-select-toggle { display: inline-flex; align-items: center; gap: 8px; color: var(--ink); font: 700 10px var(--sans); }
     .student-file-checkbox { width: 16px; height: 16px; accent-color: var(--maroon); }
-    .student-file-preview-panel,
-    .student-file-detail-panel,
+    .student-file-preview-panel { display: none; }
+    .student-file-detail-panel { display: none; }
     .student-file-preview { display: none; }
     .student-file-preview img,
-    .student-file-preview iframe { width: 100%; height: 100%; min-height: 260px; border: 0; border-radius: 8px; object-fit: contain; background: var(--raised); }
-    .student-file-preview.empty { color: var(--muted); font-size: 13px; text-align: center; }
-    .student-preview-placeholder { display: grid; place-items: center; gap: 8px; text-align: center; color: var(--muted); font-size: 13px; }
+    .student-file-preview iframe { width: 100%; height: 100%; min-height: 260px; border: 0; border-radius: 8px; object-fit: contain; background: #f7f4f3; }
+    .student-file-preview.empty { color: var(--muted); font-size: 11px; text-align: center; }
+    .student-preview-placeholder { display: grid; place-items: center; gap: 8px; text-align: center; color: var(--muted); }
     .student-preview-placeholder svg { width: 28px; height: 28px; color: var(--maroon); }
-    .student-detail-panel h3 { margin: 0 0 12px; font-size: 12px; letter-spacing: 0.06em; text-transform: uppercase; color: var(--maroon); }
+    .student-detail-panel h3 { margin: 0 0 12px; font-size: 11px; letter-spacing: .08em; text-transform: uppercase; color: var(--maroon); }
     .student-detail-grid { display: grid; gap: 10px; }
     .student-detail-item { display: grid; gap: 4px; }
-    .student-detail-item span { color: var(--faint); font: 600 11px/1.2 var(--mono); text-transform: uppercase; letter-spacing: 0.05em; }
-    .student-detail-item strong, .student-detail-item p { margin: 0; font-size: 13px; line-height: 1.5; word-break: break-word; }
-    .student-file-item { display: grid; grid-template-columns: 24px 44px 1fr auto; gap: 12px; align-items: center; padding: 12px 14px; background: var(--surface); border: 1px solid var(--border); border-radius: 10px; cursor: pointer; transition: border-color 0.15s ease, background 0.15s ease; }
-    .student-file-item:hover { border-color: var(--maroon-border); background: var(--raised); }
-    .student-file-item.selected { border-color: var(--gold); box-shadow: inset 0 0 0 1px rgba(214, 173, 58, 0.35); }
+    .student-detail-item span { color: var(--muted); font: 8px var(--mono); text-transform: uppercase; letter-spacing: .08em; }
+    .student-detail-item strong, .student-detail-item p { margin: 0; font-size: 11px; line-height: 1.5; word-break: break-word; }
+    .student-file-item { display: grid; grid-template-columns: 24px 48px 1fr auto; gap: 12px; align-items: center; padding: 12px 14px; background: #fff; border: 1px solid var(--line); border-radius: 10px; cursor: pointer; transition: border-color .18s ease, box-shadow .18s ease, transform .18s ease; }
+    .student-file-item:hover { transform: translateY(-1px); border-color: rgba(214,173,58,.7); }
+    .student-file-item.selected { border-color: rgba(214,173,58,.85); box-shadow: inset 0 0 0 1px rgba(214,173,58,.2); }
     .student-file-select { display: grid; place-items: center; }
-    .student-file-icon { display: grid; place-items: center; width: 42px; height: 42px; background: var(--gold-pale); color: var(--maroon); border-radius: 8px; }
-    .student-file-icon svg { width: 18px; height: 18px; }
-    .student-file-details { min-width: 0; }
+    .student-file-icon { display: grid; place-items: center; width: 42px; height: 42px; background: var(--gold-pale); color: var(--maroon); border-radius: 10px; }
+    .student-file-icon svg { width: 18px; }
     .student-file-details strong, .student-file-details small { display: block; }
-    .student-file-details strong { font-size: 14px; font-weight: 600; word-break: break-word; }
-    .student-file-details small { margin-top: 3px; color: var(--muted); font-size: 12px; line-height: 1.45; }
-    .student-file-actions { display: flex; flex-wrap: wrap; gap: 8px; }
+    .student-file-details strong { font-size: 11px; word-break: break-word; }
+    .student-file-details small { margin-top: 6px; color: var(--muted); font-size: 9px; line-height: 1.5; }
+    .student-file-actions { display: flex; gap: 8px; }
     .student-file-actions a,
     .student-file-actions button.outline-button { min-width: 90px; max-width: 150px; overflow: hidden; text-overflow: ellipsis; }
     .student-file-actions button.student-file-delete { color: var(--maroon); }
-    .student-file-actions a.disabled { pointer-events: none; opacity: 0.45; }
-    .student-files-empty { padding: 20px; background: var(--raised); border: 1px dashed var(--control); border-radius: 10px; color: var(--muted); font-size: 13px; text-align: center; }
-    .folder-modal, .delete-folder-modal { width: min(94vw, 440px); padding: 26px 28px; }
-    .folder-modal > p, .delete-folder-modal > p { margin: 0 0 18px; }
-    .folder-modal form { display: grid; gap: 16px; }
+    .student-file-actions a.disabled { pointer-events: none; opacity: .45; }
+    .student-files-empty { padding: 18px; background: var(--paper); border: 1px dashed var(--line); border-radius: 10px; color: var(--muted); text-align: center; }
+    .folder-modal, .delete-folder-modal { width: min(92vw, 430px); padding: 30px 30px 26px; }
+    .folder-modal > p, .delete-folder-modal > p { margin: 0 0 20px; }
+    .folder-modal form { display: grid; gap: 18px; }
 
+    /* Footer buttons ---------------------------------------------------
+       .login-submit ships with width/padding/margin meant for a button
+       standing alone under a field. In this footer row that margin drops it
+       below Cancel and the auto width makes the pair lopsided, so the row
+       states the shared box itself rather than relying on load order. */
     .folder-modal .modal-actions,
-    .delete-folder-modal .modal-actions { display: flex; align-items: center; justify-content: flex-end; gap: 10px; margin: 4px 0 0; padding-top: 16px; border-top: 1px solid var(--border); }
+    .delete-folder-modal .modal-actions { display: flex; align-items: center; justify-content: flex-end; gap: 10px; margin: 2px 0 0; padding-top: 18px; border-top: 1px solid var(--line); }
     .folder-modal .modal-actions > button,
-    .delete-folder-modal .modal-actions > button { flex: 0 0 auto; align-self: center; box-sizing: border-box; width: auto; min-width: 112px; height: 38px; margin: 0; padding: 0 18px; line-height: 1; }
+    .delete-folder-modal .modal-actions > button { flex: 0 0 auto; align-self: center; box-sizing: border-box; width: auto; min-width: 118px; height: 38px; margin: 0; padding: 0 18px; line-height: 1; }
 
-    .delete-folder-target { display: flex; align-items: center; gap: 13px; padding: 14px 16px; background: var(--raised); border: 1px solid var(--border); border-radius: 10px; }
+    /* Delete confirmation ----------------------------------------------- */
+    .delete-folder-target { display: flex; align-items: center; gap: 13px; padding: 13px 15px; background: var(--paper); border: 1px solid var(--line); border-radius: 12px; }
     .delete-folder-target .folder-icon { flex: 0 0 42px; }
     .delete-folder-target div { min-width: 0; }
-    .delete-folder-target strong { display: block; font-size: 20px; font-weight: 700; letter-spacing: -0.02em; color: var(--text); }
-    .delete-folder-target small { display: block; margin-top: 3px; color: var(--muted); font-size: 12px; }
-    .delete-folder-note { display: flex; align-items: flex-start; gap: 8px; margin: 14px 0 0; padding: 12px 14px; border-radius: 8px; font-size: 13px; line-height: 1.5; }
-    .delete-folder-note svg { flex: 0 0 16px; width: 16px; height: 16px; margin-top: 2px; }
-    .delete-folder-note.warning { color: var(--negative); background: var(--negative-bg); }
-    .delete-folder-note.blocked { color: var(--gold-ink); background: var(--gold-pale); }
+    .delete-folder-target strong { display: block; font-size: 22px; letter-spacing: -.04em; color: var(--ink); }
+    .delete-folder-target small { display: block; margin-top: 3px; color: var(--muted); font-size: 10px; }
+    .delete-folder-note { display: flex; align-items: flex-start; gap: 8px; margin: 14px 0 0; padding: 11px 13px; border-radius: 10px; font-size: 10px; line-height: 1.5; }
+    .delete-folder-note svg { flex: 0 0 14px; width: 14px; height: 14px; margin-top: 1px; }
+    .delete-folder-note.warning { color: var(--maroon); background: var(--maroon-soft); }
+    .delete-folder-note.blocked { color: var(--maroon-dark); background: var(--gold-pale); }
     #confirmDeleteFolderModal .panel-kicker { display: block; margin-bottom: 4px; }
-    #confirmDeleteFolderModal h2 { margin-bottom: 12px; }
-    #confirmDeleteFolderModal #confirmDeleteFolderIntro { margin-bottom: 20px; line-height: 1.55; }
+    #confirmDeleteFolderModal h2 { margin-bottom: 14px; }
+    #confirmDeleteFolderModal #confirmDeleteFolderIntro { margin-bottom: 24px; line-height: 1.55; }
     #confirmDeleteFolderModal .delete-folder-target { margin-bottom: 4px; }
-    #confirmDeleteFolderModal #confirmDeleteFolderNote { margin-top: 16px; }
+    #confirmDeleteFolderModal #confirmDeleteFolderNote { margin-top: 20px; }
 
-    .year-field { display: grid; gap: 8px; }
-    .year-field > label { color: var(--text); font: 600 13px/1.2 var(--sans); }
-    .year-stepper { display: grid; grid-template-columns: 42px 1fr 42px; align-items: center; border: 1px solid var(--control); border-radius: 10px; background: var(--surface); overflow: hidden; transition: border-color 0.15s ease, box-shadow 0.15s ease; }
-    .year-stepper:focus-within { border-color: var(--maroon); box-shadow: 0 0 0 3px rgba(107, 29, 42, 0.1); }
-    .year-stepper.invalid { border-color: var(--maroon); box-shadow: 0 0 0 3px rgba(107, 29, 42, 0.12); }
-    .year-stepper input { width: 100%; height: 44px; padding: 0; color: var(--text); background: transparent; border: 0; outline: 0; text-align: center; font: 600 19px/1 var(--mono); letter-spacing: 0.08em; font-variant-numeric: tabular-nums; }
-    .year-stepper input::placeholder { color: var(--faint); letter-spacing: 0.08em; }
+    /* Year field ------------------------------------------------------- */
+    .year-field { display: grid; gap: 9px; }
+    .year-field > label { color: var(--ink); font: 700 10px var(--sans); }
+
+    .year-stepper { display: grid; grid-template-columns: 38px 1fr 38px; align-items: center; gap: 0; border: 1px solid var(--line); border-radius: 999px; background: var(--white); overflow: hidden; transition: border-color .16s ease, box-shadow .16s ease; }
+    .year-stepper:focus-within { border-color: var(--maroon); box-shadow: 0 0 0 3px rgba(107, 29, 42, .1); }
+    .year-stepper.invalid { border-color: var(--maroon); box-shadow: 0 0 0 3px rgba(107, 29, 42, .12); }
+
+    .year-stepper input { width: 100%; height: 44px; padding: 0; color: var(--ink); background: transparent; border: 0; outline: 0; text-align: center; font: 500 19px/1 var(--mono); letter-spacing: .1em; font-variant-numeric: tabular-nums; }
+    .year-stepper input::placeholder { color: #c4b6b4; letter-spacing: .1em; }
+    /* Native spinners duplicate the stepper buttons. */
     .year-stepper input::-webkit-outer-spin-button,
     .year-stepper input::-webkit-inner-spin-button { margin: 0; -webkit-appearance: none; appearance: none; }
     .year-stepper input[type=number] { -moz-appearance: textfield; appearance: textfield; }
-    .year-step { display: grid; place-items: center; width: 42px; height: 44px; padding: 0; color: var(--muted); background: transparent; border: 0; cursor: pointer; transition: color 0.15s ease, background 0.15s ease; }
+
+    .year-step { display: grid; place-items: center; width: 38px; height: 44px; padding: 0; color: var(--muted); background: transparent; border: 0; cursor: pointer; transition: color .16s ease, background .16s ease; }
     .year-step:hover { color: var(--maroon); background: var(--gold-pale); }
     .year-step:focus-visible { outline: 2px solid var(--maroon); outline-offset: -3px; }
-    .year-step svg { width: 16px; height: 16px; }
-    .year-hint { margin: 0; color: var(--muted); font-size: 12px; }
-    .year-suggestions { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 2px; }
-    .year-chip { height: 28px; padding: 0 12px; color: var(--text); background: var(--surface); border: 1px solid var(--control); border-radius: 999px; font: 600 12px/1 var(--mono); cursor: pointer; transition: color 0.15s ease, background 0.15s ease, border-color 0.15s ease; }
-    .year-chip:hover { color: var(--maroon); background: var(--raised); border-color: var(--maroon-border); }
-    .year-chip.selected { color: var(--maroon-dark); background: var(--gold-pale); border-color: var(--gold); font-weight: 700; }
-    .year-chip:disabled { color: var(--muted); background: var(--raised); cursor: not-allowed; opacity: 0.55; }
+    .year-step svg { width: 15px; height: 15px; }
+
+    .year-hint { margin: 0; color: var(--muted); font-size: 9px; }
+
+    .year-suggestions { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 3px; }
+    .year-chip { height: 26px; padding: 0 12px; color: var(--ink); background: var(--white); border: 1px solid var(--line); border-radius: 999px; font: 500 9px/1 var(--mono); cursor: pointer; transition: color .16s ease, background .16s ease, border-color .16s ease; }
+    .year-chip:hover { color: var(--maroon); background: var(--paper); border-color: #d9c9c5; }
+    .year-chip.selected { color: var(--maroon-dark); background: var(--gold-pale); border-color: rgba(214, 173, 58, .85); font-weight: 700; }
+    .year-chip:disabled { color: var(--muted); background: var(--paper); cursor: not-allowed; opacity: .6; }
     .year-chip:focus-visible { outline: 2px solid var(--maroon); outline-offset: 2px; }
 
-    .folder-modal-message { display: flex; align-items: center; gap: 8px; margin: 0; padding: 10px 12px; color: var(--maroon); background: var(--maroon-soft); border-radius: 8px; font-size: 13px; line-height: 1.4; }
+    /* Only takes up space once there is something to say. */
+    .folder-modal-message { display: flex; align-items: center; gap: 7px; margin: 0; padding: 9px 12px; color: var(--maroon); background: var(--maroon-soft); border-radius: 8px; font-size: 10px; line-height: 1.4; }
     .folder-modal-message[hidden] { display: none; }
-    .folder-modal-message svg { width: 15px; height: 15px; flex: 0 0 15px; }
-
-    .files-welcome-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; }
+    .folder-modal-message svg { width: 14px; height: 14px; flex: 0 0 14px; }
+    /* Recycle bin --------------------------------------------------------- */
+    .files-welcome-actions { display: flex; align-items: center; gap: 10px; }
     .recycle-bin-button { position: relative; }
-    .recycle-bin-modal { width: min(94vw, 760px); }
+    .recycle-bin-modal { width: min(92vw, 760px); }
     .recycle-bin-list { display: flex; flex-direction: column; gap: 10px; }
-    .recycle-row-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; }
+    .recycle-row-actions { display: flex; align-items: center; gap: 6px; }
     .recycle-document-delete { color: var(--maroon); }
     @media (max-width: 700px) {
+      .files-filters { justify-content: flex-end; align-items: center; }
       .welcome-row.files-welcome { flex-direction: column; align-items: stretch; gap: 14px; }
       .files-welcome-actions { justify-content: stretch; }
       .files-welcome-actions > button { flex: 1 1 auto; }
-      .student-files-meta { grid-template-columns: minmax(0, 1fr); }
-      .student-file-item { grid-template-columns: 24px minmax(0, 1fr); }
-      .student-file-icon { display: none; }
-      .student-file-actions { grid-column: 1 / -1; justify-content: flex-end; }
     }
     @media (max-width: 420px) {
       .folder-modal .modal-actions > button,
       .delete-folder-modal .modal-actions > button { flex: 1 1 auto; min-width: 0; }
     }
+    @media (max-width: 640px) {
+      .files-filters, .files-panel { width: 88%; }
+    }
   </style>
-  <link rel="stylesheet" href="../dashboard-tables.css?v=20261115" />
-  <link rel="stylesheet" href="../dashboard-buttons.css?v=20261115" />
+  <link rel="stylesheet" href="../dashboard-tables.css?v=20260914" />
+  <link rel="stylesheet" href="../dashboard-buttons.css?v=20260914" />
+  <link rel="stylesheet" href="shell.css?v=20261116c" />
+  <link rel="stylesheet" href="files-ui.css?v=20261116c" />
 </head>
-<body>
+<body class="admin-page files-page">
   <div class="admin-shell">
     <aside class="sidebar" id="sidebar">
+      <button class="drawer-close" type="button" aria-label="Close admin navigation" data-drawer-close><i data-lucide="x"></i></button>
       <a class="brand" href="../index.php"><img src="../img/ZPPSU.png" alt="ZPPSU seal" /><span><strong>ZPPSU REGISTRAR</strong><small>Digital Archive</small></span></a>
       <div class="workspace-label">Workspace</div>
       <nav aria-label="Admin navigation">
@@ -209,6 +225,7 @@
       </nav>
       <?php if (dats_can_access_admin_page($currentUser, 'settings.php')): ?><div class="sidebar-bottom"><a href="settings.php"><i data-lucide="settings-2"></i> Settings</a></div><?php endif; ?>
     </aside>
+    <div class="drawer-scrim" data-drawer-scrim aria-hidden="true"></div>
 
     <main class="admin-main files-main">
       <header class="admin-header">
@@ -226,7 +243,6 @@
           </div>
         </div>
       </header>
-      <div class="admin-sheet">
 
       <section class="welcome-row files-welcome">
         <div>
@@ -275,7 +291,6 @@
         <span>Digitalization Archiving Management System</span>
         <span>Files <b>·</b> ZPPSU Registrar</span>
       </footer>
-      </div>
     </main>
   </div>
 
@@ -1864,5 +1879,6 @@
     });
   </script>
   <script src="../dashboard-tables.js?v=20260914"></script>
+  <script src="shell-ui.js?v=20261116c"></script>
 </body>
 </html>

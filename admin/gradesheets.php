@@ -9,13 +9,16 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="styles.css?v=20261115" />
+  <link rel="stylesheet" href="styles.css?v=20260920b" />
   <link rel="stylesheet" href="gradesheets.css?v=<?= filemtime(__DIR__ . '/gradesheets.css') ?>" />
   <script src="https://unpkg.com/lucide@latest"></script>
+  <link rel="stylesheet" href="shell.css?v=20261116c" />
+  <link rel="stylesheet" href="gradesheets-ui.css?v=20261116c" />
 </head>
-<body data-digit-model="assets/grade-digits.json?v=<?= filemtime(__DIR__ . '/assets/grade-digits.json') ?>">
+<body class="admin-page gradesheets-page" data-digit-model="assets/grade-digits.json?v=<?= filemtime(__DIR__ . '/assets/grade-digits.json') ?>">
   <div class="admin-shell">
     <aside class="sidebar" id="sidebar">
+      <button class="drawer-close" type="button" aria-label="Close admin navigation" data-drawer-close><i data-lucide="x"></i></button>
       <a class="brand" href="../index.php"><img src="../img/ZPPSU.png" alt="ZPPSU seal" /><span><strong>ZPPSU REGISTRAR</strong><small>Digital Archive</small></span></a>
       <div class="workspace-label">Workspace</div>
       <nav aria-label="Admin navigation">
@@ -35,9 +38,9 @@
       </nav>
       <?php if (dats_can_access_admin_page($currentUser, 'settings.php')): ?><div class="sidebar-bottom"><a href="settings.php"><i data-lucide="settings-2"></i> Settings</a></div><?php endif; ?>
     </aside>
+    <div class="drawer-scrim" data-drawer-scrim aria-hidden="true"></div>
     <main class="admin-main gradesheets-main">
       <header class="admin-header"><button class="mobile-menu" id="mobileMenu" aria-label="Open admin navigation" aria-expanded="false"><i data-lucide="menu"></i></button><div><span class="eyebrow">Administrator workspace</span><h1><span data-greeting data-user-name="<?= $displayName ?>">Good morning</span></h1></div><div class="header-actions"><button class="header-icon" aria-label="Notifications"><i data-lucide="bell"></i><span></span></button><div class="user-chip"><span class="avatar"><?= $initials ?></span><span><strong><?= $displayName ?></strong><small><?= htmlspecialchars(dats_user_role_label($currentUser), ENT_QUOTES, 'UTF-8') ?></small></span><i data-lucide="chevron-down"></i></div></div></header>
-      <div class="admin-sheet">
       <section class="welcome-row"><div><p class="page-kicker">Grade records · <span data-current-datetime>Loading date and time...</span></p><h2>Gradesheets</h2><p class="page-intro">Upload gradesheets or Reports of Rating — every student on them is read automatically. Review the records in Upload history and select Save before they appear in student search.</p></div>
         <button class="login-submit gs-primary gs-upload-trigger" id="gsOpenUpload" type="button" aria-haspopup="dialog" aria-controls="gsUploadModal">
           <span class="gs-trigger-idle"><i data-lucide="upload-cloud"></i> Upload gradesheets</span>
@@ -70,7 +73,6 @@
       </section>
 
       <footer><span>Digitalization Archiving Management System</span><span>Gradesheets <b>·</b> ZPPSU Registrar</span></footer>
-      </div>
     </main>
   </div>
 
@@ -201,5 +203,6 @@
   <script src="gradesheet-flow.js?v=<?= filemtime(__DIR__ . '/gradesheet-flow.js') ?>"></script>
   <script src="gradesheet-ocr-engine.js?v=<?= filemtime(__DIR__ . '/gradesheet-ocr-engine.js') ?>"></script>
   <script src="gradesheets.js?v=<?= filemtime(__DIR__ . '/gradesheets.js') ?>"></script>
+  <script src="shell-ui.js?v=20261116c"></script>
 </body>
 </html>

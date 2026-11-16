@@ -1,0 +1,334 @@
+/* Gradesheets page makeover (admin/gradesheets.php only).
+   Loaded after admin/styles.css, gradesheets.css and shell.css, and scoped to
+   body.gradesheets-page. The sidebar, top bar and phone drawer come from
+   shell.css. Presentation only: every id, data-* hook, class the scripts
+   toggle (is-busy, is-done, is-flagged, drag-over, gs-modal-open, ...) and the
+   markup the gradesheet scripts render are unchanged. */
+
+.gradesheets-page {
+  --d-ink: #241517;
+  --d-body: #42343a;
+  --d-muted: #6f6166;
+  --d-line: #e6dcd8;
+  --d-line-strong: #d3c4bf;
+  --d-paper: #f7f3ee;
+  --d-paper-deep: #efe8df;
+  --d-maroon: #6b1d2a;
+  --d-maroon-deep: #4a111b;
+  --d-maroon-tint: #f6e9ea;
+  --d-gold: #d6ad3a;
+  --d-gold-deep: #a9811c;
+  --d-gold-pale: #f8efd5;
+  --d-danger: #8a1f2d;
+  --d-danger-bg: #fbe4e6;
+  --d-success: #22593a;
+  --d-success-bg: #e3f1dc;
+  --d-info: #3a4d8a;
+  --d-info-bg: #e9edf9;
+  --d-radius: 14px;
+  --d-radius-sm: 10px;
+  --d-shadow: 0 1px 2px rgba(42, 23, 26, .04), 0 14px 34px -22px rgba(42, 23, 26, .24);
+  --d-shadow-hover: 0 2px 4px rgba(42, 23, 26, .05), 0 22px 44px -22px rgba(42, 23, 26, .3);
+  --d-ease: cubic-bezier(.2, .8, .2, 1);
+  --d-gap: 16px;
+  --d-field-height: 44px;
+  color: var(--d-body);
+  background: var(--d-paper);
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}
+
+.gradesheets-page h1, .gradesheets-page h2, .gradesheets-page h3, .gradesheets-page h4 { color: var(--d-ink); line-height: 1.25; }
+
+/* ---------- Focus ---------- */
+.gradesheets-page .ghost-button:focus-visible,
+.gradesheets-page .gs-primary:focus-visible,
+.gradesheets-page .gs-icon-button:focus-visible,
+.gradesheets-page .gs-text-button:focus-visible,
+.gradesheets-page .row-action:focus-visible,
+.gradesheets-page .gs-open-full-page:focus-visible,
+.gradesheets-page .gs-upload-help summary:focus-visible {
+  outline: 2px solid var(--d-gold);
+  outline-offset: 2px;
+}
+
+/* ---------- Page heading ---------- */
+.gradesheets-page .welcome-row { align-items: flex-end; gap: 24px; padding: 36px 0 24px; }
+.gradesheets-page .page-kicker { margin: 0 0 8px; color: var(--d-muted); font: 500 12px/1.4 var(--mono); letter-spacing: .04em; text-transform: none; }
+.gradesheets-page .welcome-row h2 { margin: 0 0 6px; font-size: 32px; font-weight: 700; letter-spacing: -.03em; }
+.gradesheets-page .page-intro { max-width: 68ch; color: var(--d-muted); font-size: 14px; }
+
+/* ---------- Buttons ---------- */
+.gradesheets-page .gs-primary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  height: 44px;
+  padding: 0 20px;
+  color: var(--d-maroon-deep);
+  background: var(--d-gold);
+  border: 1px solid var(--d-gold);
+  border-radius: var(--d-radius-sm);
+  font: 700 14px/1 var(--sans);
+  letter-spacing: 0;
+  box-shadow: 0 1px 2px rgba(42, 23, 26, .08);
+  cursor: pointer;
+  transition: background .15s var(--d-ease), border-color .15s var(--d-ease), box-shadow .15s var(--d-ease), transform .15s var(--d-ease);
+}
+.gradesheets-page .gs-primary svg { width: 17px; height: 17px; }
+.gradesheets-page .gs-primary:hover:not(:disabled) { background: #e0b94a; border-color: #e0b94a; box-shadow: 0 4px 12px rgba(42, 23, 26, .18); transform: translateY(-1px); }
+.gradesheets-page .gs-primary:disabled { opacity: .6; cursor: not-allowed; transform: none; box-shadow: none; }
+.gradesheets-page .gs-upload-trigger { min-width: 196px; height: 46px; padding: 0 20px; }
+.gradesheets-page .gs-upload-trigger > span { gap: 8px; }
+.gradesheets-page .gs-upload-trigger b { font: 700 13px/1 var(--mono); }
+.gradesheets-page .gs-upload-trigger.is-busy { background: var(--d-maroon); border-color: var(--d-maroon); color: #fff; }
+.gradesheets-page .gs-spinner-light { flex-basis: 14px; width: 14px; height: 14px; }
+
+.gradesheets-page .ghost-button {
+  gap: 8px;
+  height: 38px;
+  padding: 0 14px;
+  color: var(--d-maroon-deep);
+  background: #fff;
+  border: 1px solid var(--d-line-strong);
+  border-radius: var(--d-radius-sm);
+  font: 700 13px/1 var(--sans);
+  transition: background .15s var(--d-ease), border-color .15s var(--d-ease), box-shadow .15s var(--d-ease);
+}
+.gradesheets-page .ghost-button svg { width: 16px; height: 16px; }
+.gradesheets-page .ghost-button:hover:not(:disabled) { background: var(--d-paper); border-color: var(--d-gold); }
+.gradesheets-page .ghost-button.gs-danger { color: var(--d-danger); }
+.gradesheets-page .ghost-button.gs-danger:hover:not(:disabled) { background: var(--d-danger-bg); border-color: var(--d-danger-bg); }
+.gradesheets-page .gs-text-button { padding: 4px 0; font: 700 13px/1.3 var(--sans); }
+.gradesheets-page .row-action.modal-close { display: grid; place-items: center; width: 36px; height: 36px; padding: 0; color: var(--d-muted); background: var(--d-paper); border: 0; border-radius: 50%; cursor: pointer; transition: background .15s var(--d-ease), color .15s var(--d-ease); }
+.gradesheets-page .row-action.modal-close:hover { color: var(--d-ink); background: var(--d-paper-deep); }
+.gradesheets-page .row-action.modal-close svg { width: 18px; height: 18px; }
+
+/* ---------- Panels ---------- */
+.gradesheets-page .gradesheets-main .panel {
+  margin-bottom: var(--d-gap);
+  padding: 22px 24px 24px;
+  background: #fff;
+  border: 1px solid var(--d-line);
+  border-radius: var(--d-radius);
+  box-shadow: var(--d-shadow);
+}
+.gradesheets-page .panel-heading { align-items: flex-start; gap: 16px; margin-bottom: 18px; }
+.gradesheets-page .panel-kicker { color: var(--d-maroon); font-size: 11px; letter-spacing: .12em; }
+.gradesheets-page .panel-heading h3 { margin: 6px 0 0; font-size: 18px; font-weight: 700; letter-spacing: -.02em; }
+.gradesheets-page .gs-history-actions { gap: 10px; }
+.gradesheets-page .gradesheet-history-panel .panel-heading .ghost-button { margin-top: 0; }
+
+/* ---------- Search ---------- */
+.gradesheets-page .gs-search-toolbar { margin-bottom: 18px; }
+.gradesheets-page .gs-search-toolbar .search-box { min-height: var(--d-field-height); max-width: 560px; gap: 10px; padding: 0 14px; border: 1px solid var(--d-line-strong); border-radius: 12px; transition: border-color .15s var(--d-ease), box-shadow .15s var(--d-ease); }
+.gradesheets-page .search-box:hover { border-color: #bfaaa6; }
+.gradesheets-page .search-box:focus-within { border-color: var(--d-maroon); box-shadow: 0 0 0 3px rgba(107, 29, 42, .14); }
+.gradesheets-page .search-box svg { width: 18px; height: 18px; flex: 0 0 18px; }
+.gradesheets-page .search-box input { padding: 12px 0; font: 500 14px/1.3 var(--sans); }
+.gradesheets-page .search-box input::placeholder { color: #a39498; font-weight: 400; }
+.gradesheets-page .search-box input::-webkit-search-cancel-button { cursor: pointer; }
+.gradesheets-page .search-suggestions { top: calc(100% + 6px); left: 0; right: 0; padding: 6px; border-color: var(--d-line); box-shadow: var(--d-shadow-hover); }
+.gradesheets-page .search-suggestion-item { gap: 12px; padding: 10px 12px; }
+.gradesheets-page .search-suggestion-item strong { font-size: 14px; font-weight: 600; }
+.gradesheets-page .search-suggestion-item small { font-size: 12px; }
+.gradesheets-page .search-suggestion-item .gs-suggestion-meta { font-size: 12px; }
+.gradesheets-page .search-suggestion-empty { padding: 14px 12px; font-size: 13px; }
+.gradesheets-page .student-mini-avatar { flex-basis: 32px; width: 32px; height: 32px; font: 500 10px/1 var(--mono); }
+
+/* ---------- Results ---------- */
+.gradesheets-page .gs-empty { gap: 8px; padding: 44px 20px; background: var(--d-paper); border: 1.5px dashed var(--d-line-strong); border-radius: var(--d-radius); font-size: 13px; }
+.gradesheets-page .gs-empty svg { display: block; width: 52px; height: 52px; margin-bottom: 6px; padding: 13px; color: var(--d-gold-deep); background: var(--d-gold-pale); border-radius: 50%; }
+.gradesheets-page .gs-empty strong { font-size: 16px; font-weight: 700; }
+.gradesheets-page .gs-empty span { max-width: 48ch; }
+.gradesheets-page .gs-student-summary { gap: 14px; margin-bottom: var(--d-gap); padding: 16px 18px; background: var(--d-paper); border: 0; border-radius: 12px; }
+.gradesheets-page .gs-student-summary .student-mini-avatar { flex-basis: 44px; width: 44px; height: 44px; font-size: 13px; }
+.gradesheets-page .gs-student-summary strong { font-size: 16px; font-weight: 700; letter-spacing: -.01em; }
+.gradesheets-page .gs-student-summary small { margin-top: 2px; font-size: 13px; }
+.gradesheets-page .gs-summary-stats { gap: 18px; font: 500 12px/1.3 var(--mono); text-transform: none; }
+.gradesheets-page .gs-summary-stats b { font-size: 15px; font-weight: 700; }
+.gradesheets-page .gs-open-full-page { gap: 6px; padding: 6px 10px; margin: -6px -10px -6px 0; border-radius: 8px; font-size: 13px; transition: background .15s var(--d-ease); }
+.gradesheets-page .gs-open-full-page:hover { background: var(--d-maroon-tint); }
+.gradesheets-page .gs-open-full-page svg { width: 15px; height: 15px; }
+
+.gradesheets-page .gs-term-list { max-height: 520px; gap: var(--d-gap); padding-right: 4px; scrollbar-width: thin; scrollbar-color: var(--d-line-strong) transparent; }
+.gradesheets-page .gs-term-card { border-color: var(--d-line); border-radius: 12px; overflow: hidden; }
+.gradesheets-page .gs-term-head { gap: 8px 18px; padding: 12px 16px; background: var(--d-paper); border-left: 3px solid var(--d-maroon); }
+.gradesheets-page .gs-term-head h4 { font-size: 14px; font-weight: 700; }
+.gradesheets-page .gs-term-stats { gap: 16px; font: 500 12px/1.3 var(--mono); }
+.gradesheets-page .gs-term-stats b { font-size: 13px; font-weight: 700; }
+
+/* ---------- Tables ---------- */
+.gradesheets-page .gs-table-wrap { border-color: var(--d-line); border-radius: 12px; scrollbar-width: thin; scrollbar-color: var(--d-line-strong) transparent; }
+.gradesheets-page .gradesheet-history-panel .gs-table-wrap { max-height: 440px; }
+.gradesheets-page .gs-table { font-size: 13px; }
+.gradesheets-page .gs-table th { position: sticky; top: 0; z-index: 1; padding: 11px 14px; font: 600 11px/1.3 var(--mono); letter-spacing: .06em; background: var(--d-paper); border-bottom-color: var(--d-line); }
+.gradesheets-page .gs-table td { padding: 12px 14px; border-bottom-color: var(--d-line); line-height: 1.4; }
+.gradesheets-page .gs-table tbody tr { transition: background .12s var(--d-ease); }
+.gradesheets-page .gs-table tbody tr:hover > td { background: #fcfaf8; }
+.gradesheets-page .gs-table td strong { color: var(--d-ink); font-weight: 600; }
+.gradesheets-page .gs-table td small { margin-top: 3px; font-size: 12px; }
+.gradesheets-page .gs-table .gs-year-course { font: 600 12px/1.4 var(--mono); letter-spacing: 0; }
+.gradesheets-page .gs-table .gs-num { font-size: 13px; font-variant-numeric: tabular-nums; }
+.gradesheets-page .gs-table-note { padding: 28px 14px; color: var(--d-muted); font-size: 13px; }
+.gradesheets-page .gs-term-row td { padding: 9px 14px; font-size: 13px; font-weight: 700; }
+.gradesheets-page .gs-term-row .gs-term-average { font-size: 12px; }
+.gradesheets-page tr.is-flagged td:first-child { box-shadow: inset 3px 0 0 var(--d-gold); }
+.gradesheets-page .gs-flag { padding: 3px 8px; color: var(--d-gold-deep); background: var(--d-gold-pale); border-color: #ecd9a6; font: 600 10px/1.2 var(--mono); letter-spacing: .04em; }
+.gradesheets-page .gs-remark { font: 700 11px/1.3 var(--mono); letter-spacing: .03em; }
+.gradesheets-page .gs-remark.is-passed { color: var(--d-success); }
+.gradesheets-page .gs-remark.is-failed { color: var(--d-danger); }
+.gradesheets-page .gs-remark.is-other { color: var(--d-gold-deep); }
+.gradesheets-page .gs-grade { font-size: 14px; }
+.gradesheets-page .gs-no-grade { font-size: 12px; }
+.gradesheets-page .gs-status-pill { padding: 5px 10px; font: 600 11px/1.3 var(--mono); letter-spacing: .03em; text-transform: none; }
+.gradesheets-page .gs-status-pill.is-needs-review { color: var(--d-gold-deep); background: var(--d-gold-pale); }
+.gradesheets-page .gs-status-pill.is-completed { color: var(--d-success); background: var(--d-success-bg); }
+.gradesheets-page .gs-status-pill.is-failed { color: var(--d-danger); background: var(--d-danger-bg); }
+.gradesheets-page .gs-status-pill.is-pending { color: var(--d-info); background: var(--d-info-bg); }
+.gradesheets-page .gs-row-actions { gap: 8px; }
+.gradesheets-page .gs-icon-button { width: 34px; height: 34px; border-color: var(--d-line-strong); border-radius: 8px; transition: background .15s var(--d-ease), border-color .15s var(--d-ease); }
+.gradesheets-page .gs-icon-button svg { width: 15px; height: 15px; }
+.gradesheets-page .gs-view-button { width: auto; gap: 6px; padding: 0 12px; font: 700 12px/1 var(--sans); }
+.gradesheets-page .gs-view-button svg { width: 14px; height: 14px; }
+
+/* ---------- Modals ---------- */
+.gradesheets-page .gs-modal { gap: 16px; padding: 26px 28px 28px; border-top-width: 4px; border-radius: 16px; box-shadow: 0 30px 70px -20px rgba(42, 23, 26, .45); }
+.gradesheets-page .gs-modal-header { gap: 16px; }
+.gradesheets-page .gs-modal-header h2 { margin: 6px 0 6px; font-size: 22px; font-weight: 700; letter-spacing: -.03em; }
+.gradesheets-page .gs-modal-header .field-help { font-size: 13px; line-height: 1.5; }
+.gradesheets-page .field-help { color: var(--d-muted); font: 400 12px/1.45 var(--sans); }
+.gradesheets-page .gs-pending-note { gap: 10px; padding: 11px 14px; color: var(--d-info); background: var(--d-info-bg); border: 0; border-radius: var(--d-radius-sm); font-size: 13px; }
+.gradesheets-page .gs-pending-note svg { width: 16px; height: 16px; }
+.gradesheets-page .gs-batch-toolbar { gap: 12px 16px; }
+.gradesheets-page .gs-batch-search { min-height: var(--d-field-height); gap: 10px; padding: 0 14px; border: 1px solid var(--d-line-strong); border-radius: 12px; }
+.gradesheets-page .gs-filter-toggle { gap: 8px; font-size: 13px; font-weight: 600; }
+.gradesheets-page .gs-filter-toggle input { width: 16px; height: 16px; margin: 0; }
+.gradesheets-page .gs-modal-actions { gap: 10px; margin-top: 6px; }
+
+.gradesheets-page .gs-edit-form, .gradesheets-page .gs-add-student-form { gap: 16px; }
+/* Rows the script hides (apply-to-all, name suggestions, errors) must stay hidden despite display rules. */
+.gradesheets-page .gs-edit-form [hidden], .gradesheets-page .gs-add-student-form [hidden] { display: none !important; }
+.gradesheets-page .gs-edit-form label, .gradesheets-page .gs-add-student-form label { gap: 8px; font-size: 13px; font-weight: 600; line-height: 1.3; }
+.gradesheets-page .gs-edit-form input, .gradesheets-page .gs-edit-form select,
+.gradesheets-page .gs-add-student-form input, .gradesheets-page .gs-add-student-form select {
+  height: var(--d-field-height);
+  padding: 0 14px;
+  border: 1px solid var(--d-line-strong);
+  border-radius: var(--d-radius-sm);
+  font: 500 14px/1.3 var(--sans);
+  transition: border-color .15s var(--d-ease), box-shadow .15s var(--d-ease);
+}
+.gradesheets-page .gs-edit-form input::placeholder, .gradesheets-page .gs-add-student-form input::placeholder { color: #a39498; font-weight: 400; }
+.gradesheets-page .gs-edit-form input:focus, .gradesheets-page .gs-edit-form select:focus,
+.gradesheets-page .gs-add-student-form input:focus, .gradesheets-page .gs-add-student-form select:focus { border-color: var(--d-maroon); box-shadow: 0 0 0 3px rgba(107, 29, 42, .14); }
+.gradesheets-page .gs-edit-form select, .gradesheets-page .gs-add-student-form select {
+  padding-right: 40px;
+  appearance: none;
+  -webkit-appearance: none;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%236f6166' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><path d='m6 9 6 6 6-6'/></svg>");
+  background-repeat: no-repeat;
+  background-position: right 14px center;
+}
+.gradesheets-page .gs-edit-form input[readonly] { background: var(--d-paper); border-color: var(--d-line); }
+.gradesheets-page .gs-edit-form label.gs-check { font-size: 13px; }
+.gradesheets-page .gs-edit-form label.gs-check input { width: 16px; height: 16px; }
+.gradesheets-page .gs-suggest { padding: 5px 11px; font: 600 12px/1.3 var(--sans); }
+.gradesheets-page .gs-form-error { padding: 11px 14px; color: var(--d-danger); background: var(--d-danger-bg); border: 0; border-radius: var(--d-radius-sm); font-size: 13px; }
+
+/* ---------- Upload modal ---------- */
+.gradesheets-page .gs-upload-modal { width: min(100%, 660px); }
+.gradesheets-page .gs-upload-zone {
+  min-height: 224px;
+  padding: 28px 20px;
+  gap: 4px;
+  background: var(--d-paper);
+  border: 1.5px dashed var(--d-line-strong);
+  border-radius: var(--d-radius);
+  transition: border-color .15s var(--d-ease), background .15s var(--d-ease), box-shadow .15s var(--d-ease);
+}
+.gradesheets-page .gs-upload-zone:hover, .gradesheets-page .gs-upload-zone.drag-over { background: var(--d-gold-pale); border-color: var(--d-gold); }
+.gradesheets-page .gs-upload-zone.drag-over { border-style: solid; box-shadow: inset 0 0 0 3px rgba(214, 173, 58, .25); }
+.gradesheets-page .gs-upload-zone:focus-visible { border-color: var(--d-maroon); box-shadow: 0 0 0 3px rgba(107, 29, 42, .14); }
+.gradesheets-page .gs-upload-zone .upload-icon { width: 60px; height: 60px; margin-bottom: 12px; color: var(--d-maroon); background: var(--d-maroon-tint); }
+.gradesheets-page .gs-upload-zone:hover .upload-icon, .gradesheets-page .gs-upload-zone.drag-over .upload-icon { background: #fff; }
+.gradesheets-page .gs-upload-zone .upload-icon svg { width: 26px; height: 26px; }
+.gradesheets-page .gs-upload-zone strong { color: var(--d-ink); font-size: 16px; font-weight: 700; }
+.gradesheets-page .gs-upload-zone small { margin-top: 6px; color: var(--d-muted); font-size: 13px; }
+
+.gradesheets-page .gs-progress { gap: 10px; padding: 14px 16px; border: 0; border-radius: 12px; }
+.gradesheets-page .gs-progress-head { gap: 12px; }
+.gradesheets-page .gs-progress-head strong { font-size: 14px; font-weight: 600; }
+.gradesheets-page .gs-progress-percent { font-size: 13px; }
+.gradesheets-page .gs-spinner { flex-basis: 16px; width: 16px; height: 16px; }
+.gradesheets-page .gs-progress-track { height: 8px; background: var(--d-paper-deep); }
+.gradesheets-page .gs-progress-detail { min-height: 16px; font-size: 12px; }
+
+.gradesheets-page .gs-queue-head { margin-bottom: 8px; }
+.gradesheets-page .gs-queue-list { max-height: 240px; border-color: var(--d-line); border-radius: 12px; scrollbar-width: thin; scrollbar-color: var(--d-line-strong) transparent; }
+.gradesheets-page .gs-queue-item { gap: 12px; padding: 11px 14px; border-bottom-color: var(--d-line); }
+.gradesheets-page .gs-queue-icon { flex-basis: 32px; width: 32px; height: 32px; }
+.gradesheets-page .gs-queue-icon svg { width: 16px; height: 16px; }
+.gradesheets-page .gs-queue-text strong { font-size: 14px; font-weight: 600; }
+.gradesheets-page .gs-queue-text small { font-size: 12px; }
+.gradesheets-page .gs-queue-state { font: 600 11px/1.3 var(--mono); letter-spacing: .03em; }
+.gradesheets-page .gs-queue-item.is-saved .gs-queue-icon { color: var(--d-success); background: var(--d-success-bg); }
+.gradesheets-page .gs-queue-item.is-saved .gs-queue-state { color: var(--d-success); }
+.gradesheets-page .gs-queue-item.is-failed .gs-queue-icon { color: var(--d-danger); background: var(--d-danger-bg); }
+.gradesheets-page .gs-queue-item.is-failed .gs-queue-state { color: var(--d-danger); }
+
+.gradesheets-page .gs-upload-help { font-size: 13px; }
+.gradesheets-page .gs-upload-help summary { gap: 8px; padding: 4px 0; }
+.gradesheets-page .gs-upload-help summary svg { width: 16px; height: 16px; }
+.gradesheets-page .gs-upload-help p { margin-top: 10px; padding: 12px 14px; border: 0; border-radius: var(--d-radius-sm); line-height: 1.55; }
+.gradesheets-page .gs-upload-footer { padding-top: 16px; border-top-color: var(--d-line); }
+.gradesheets-page .gs-background-note { gap: 8px; font-size: 12px; }
+.gradesheets-page .gs-background-note svg { width: 15px; height: 15px; }
+
+/* ---------- Page view modal ---------- */
+.gradesheets-page .gs-page-view-status { font-size: 13px; }
+.gradesheets-page .gs-page-view-body { padding: 14px; background: var(--d-paper-deep); border-radius: 12px; }
+.gradesheets-page .gs-page-view-page { padding: 12px; border-color: var(--d-line); border-radius: 10px; }
+.gradesheets-page .gs-page-view-page figcaption { font: 600 12px/1.3 var(--mono); }
+.gradesheets-page .gs-page-rotate { gap: 6px; min-height: 34px; padding: 0 12px; font: 700 12px/1 var(--sans); }
+.gradesheets-page .gs-page-rotate svg { width: 15px; height: 15px; }
+
+/* ---------- Footer and toast ---------- */
+.gradesheets-page .admin-main > footer { margin-top: 16px; padding: 20px var(--d-gutter); color: var(--d-muted); font: 500 12px/1.5 var(--mono); letter-spacing: .02em; text-transform: none; }
+.gradesheets-page .admin-main > footer b { color: var(--d-gold-deep); }
+.gradesheets-page .admin-toast { right: 24px; bottom: 24px; max-width: min(360px, calc(100vw - 48px)); padding: 14px 18px; border-radius: 10px; font-size: 13px; line-height: 1.4; box-shadow: var(--d-shadow-hover); }
+
+/* ---------- Breakpoints ---------- */
+@media (max-width: 760px) {
+  .gradesheets-page .welcome-row { align-items: flex-start; flex-direction: column; gap: 14px; }
+  .gradesheets-page .gs-upload-trigger { width: 100%; }
+}
+
+@media (max-width: 640px) {
+  .gradesheets-page .welcome-row { padding-top: 24px; }
+  .gradesheets-page .welcome-row h2 { font-size: 26px; }
+  .gradesheets-page .page-intro { font-size: 13px; }
+  .gradesheets-page .gradesheets-main .panel { width: 90%; margin-bottom: 12px; padding: 18px; }
+  .gradesheets-page .panel-heading { flex-wrap: wrap; gap: 12px; }
+  .gradesheets-page .gs-history-actions { width: 100%; }
+  .gradesheets-page .gs-history-actions .ghost-button { flex: 1 1 0; justify-content: center; }
+  .gradesheets-page .gs-search-toolbar .search-box { max-width: none; }
+  .gradesheets-page .gs-empty { padding: 32px 16px; }
+  .gradesheets-page .gs-student-summary { align-items: flex-start; }
+  .gradesheets-page .gs-summary-stats { width: 100%; gap: 14px; }
+  .gradesheets-page .gs-table { font-size: 12px; }
+  .gradesheets-page .gs-table th, .gradesheets-page .gs-table td { padding: 10px 12px; }
+  .gradesheets-page .gs-modal { gap: 14px; padding: 20px 18px 22px; border-radius: 14px; }
+  .gradesheets-page .gs-modal-header h2 { font-size: 20px; }
+  .gradesheets-page .gs-modal-backdrop { padding: 12px; }
+  .gradesheets-page .gs-upload-zone { min-height: 190px; }
+  .gradesheets-page .gs-modal-actions .gs-primary, .gradesheets-page .gs-modal-actions .ghost-button { flex: 1 1 auto; justify-content: center; }
+  .gradesheets-page .gs-actions-spacer { display: none; }
+  .gradesheets-page .admin-main > footer { font-size: 11px; }
+  .gradesheets-page .admin-toast { right: 16px; bottom: 16px; left: 16px; max-width: none; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .gradesheets-page *, .gradesheets-page *::before, .gradesheets-page *::after { transition: none !important; }
+}

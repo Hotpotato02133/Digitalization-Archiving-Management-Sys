@@ -1,0 +1,181 @@
+{
+  "nodes": [
+    {
+      "id": "landing_page",
+      "label": "index.php (Public Landing & Login Modal)",
+      "file_type": "code",
+      "source_file": "index.php"
+    },
+    {
+      "id": "landing_css",
+      "label": "styles.css (Landing Page Styles)",
+      "file_type": "code",
+      "source_file": "styles.css"
+    },
+    {
+      "id": "landing_js",
+      "label": "script.js (Landing Modal, Nav, Live Clock)",
+      "file_type": "code",
+      "source_file": "script.js"
+    },
+    {
+      "id": "zppsu_seal",
+      "label": "img/ZPPSU.png (ZPPSU Institutional Seal)",
+      "file_type": "image",
+      "source_file": "img/ZPPSU.png"
+    },
+    {
+      "id": "login_endpoint",
+      "label": "login.php (JSON Session Auth Endpoint)",
+      "file_type": "code",
+      "source_file": "login.php"
+    },
+    {
+      "id": "admin_dashboard",
+      "label": "admin/index.php (Authenticated Dashboard)",
+      "file_type": "code",
+      "source_file": "admin/index.php"
+    },
+    {
+      "id": "admin_styles",
+      "label": "admin/styles.css (Admin Console Styles)",
+      "file_type": "code",
+      "source_file": "admin/styles.css"
+    },
+    {
+      "id": "admin_scan",
+      "label": "admin/scan.php (OCR & Document Intake)",
+      "file_type": "code",
+      "source_file": "admin/scan.php"
+    },
+    {
+      "id": "admin_files",
+      "label": "admin/files.php (Year-Folder Archive Browser)",
+      "file_type": "code",
+      "source_file": "admin/files.php"
+    },
+    {
+      "id": "admin_students",
+      "label": "admin/students.php (Student Directory)",
+      "file_type": "code",
+      "source_file": "admin/students.php"
+    },
+    {
+      "id": "vw_archive_analytics",
+      "label": "vw_archive_analytics (SQL Analytics View)",
+      "file_type": "code",
+      "source_file": "dats.sql"
+    },
+    {
+      "id": "documents_table",
+      "label": "documents (Academic Records Table)",
+      "file_type": "code",
+      "source_file": "dats.sql"
+    },
+    {
+      "id": "concept_registrar_portal",
+      "label": "ZPPSU Registrar Digital Archive Domain",
+      "file_type": "document",
+      "source_file": "README.md"
+    }
+  ],
+  "edges": [
+    {
+      "source": "landing_page",
+      "target": "landing_css",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "source_file": "index.php",
+      "weight": 1.0
+    },
+    {
+      "source": "landing_page",
+      "target": "landing_js",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "source_file": "index.php",
+      "weight": 1.0
+    },
+    {
+      "source": "landing_page",
+      "target": "zppsu_seal",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "source_file": "index.php",
+      "weight": 1.0
+    },
+    {
+      "source": "landing_page",
+      "target": "vw_archive_analytics",
+      "relation": "reads",
+      "confidence": "EXTRACTED",
+      "source_file": "index.php",
+      "weight": 1.0
+    },
+    {
+      "source": "landing_page",
+      "target": "documents_table",
+      "relation": "reads",
+      "confidence": "EXTRACTED",
+      "source_file": "index.php",
+      "weight": 1.0
+    },
+    {
+      "source": "landing_js",
+      "target": "login_endpoint",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "script.js",
+      "weight": 1.0
+    },
+    {
+      "source": "login_endpoint",
+      "target": "admin_dashboard",
+      "relation": "redirects_to",
+      "confidence": "EXTRACTED",
+      "source_file": "login.php",
+      "weight": 1.0
+    },
+    {
+      "source": "landing_css",
+      "target": "admin_styles",
+      "relation": "shares_palette_with",
+      "confidence": "INFERRED",
+      "source_file": "skill/frontend.md",
+      "weight": 0.8
+    },
+    {
+      "source": "landing_page",
+      "target": "concept_registrar_portal",
+      "relation": "implements",
+      "confidence": "EXTRACTED",
+      "source_file": "README.md",
+      "weight": 1.0
+    },
+    {
+      "source": "admin_scan",
+      "target": "documents_table",
+      "relation": "writes",
+      "confidence": "EXTRACTED",
+      "source_file": "api.php",
+      "weight": 1.0
+    },
+    {
+      "source": "admin_files",
+      "target": "documents_table",
+      "relation": "reads",
+      "confidence": "EXTRACTED",
+      "source_file": "api.php",
+      "weight": 1.0
+    },
+    {
+      "source": "admin_students",
+      "target": "documents_table",
+      "relation": "associates_with",
+      "confidence": "EXTRACTED",
+      "source_file": "dats.sql",
+      "weight": 1.0
+    }
+  ],
+  "hyperedges": []
+}

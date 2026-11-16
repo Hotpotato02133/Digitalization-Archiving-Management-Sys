@@ -1,0 +1,1983 @@
+{
+ "url": "http://127.0.0.1:8099/index.php",
+ "at": "2026-11-15T04:02:06.042Z",
+ "allow": [],
+ "viewports": [
+  {
+   "width": 1440,
+   "height": 900,
+   "load": "load",
+   "screens": 2,
+   "filled": [
+    1,
+    0.96
+   ],
+   "motion": {
+    "elements": 1,
+    "css": 1,
+    "transitions": 0,
+    "scripted": 0,
+    "videos": 0,
+    "playingVideos": 0
+   },
+   "metrics": {
+    "viewport": {
+     "w": 1440,
+     "h": 900
+    },
+    "page": {
+     "height": 1554,
+     "screens": 1.7,
+     "words": 136,
+     "img": 2,
+     "video": 0,
+     "canvas": 0,
+     "svg": 16,
+     "sections": 4,
+     "horizontalOverflow": 0,
+     "overflowCulprits": [],
+     "uiFragments": 0,
+     "uiAbuse": false,
+     "realPictures": 0,
+     "videoCount": 0,
+     "uiPictures": 0,
+     "pictureSamples": [],
+     "blendText": 0,
+     "sideScrollers": 0,
+     "brokenImages": [],
+     "emoji": [],
+     "videosNoPoster": 0
+    },
+    "hero": {
+     "text": "Records that move with you.",
+     "words": 5,
+     "chars": 27,
+     "lines": 3,
+     "size": 86,
+     "vw": 6,
+     "font": "Manrope",
+     "weight": 800,
+     "tracking": -0.05,
+     "leading": 0.98,
+     "upper": false,
+     "italic": false,
+     "mono": false,
+     "align": "left",
+     "position": "left",
+     "widthRatio": 0.37,
+     "top": 209,
+     "mixedFonts": [
+      "Manrope",
+      "Georgia italic"
+     ],
+     "tag": "h1",
+     "kind": "heading"
+    },
+    "h1": {
+     "text": "Records that move with you.",
+     "words": 5,
+     "lines": 3,
+     "size": 86,
+     "font": "Manrope"
+    },
+    "headings": [
+     {
+      "text": "Records that move with you.",
+      "words": 5,
+      "chars": 27,
+      "lines": 3,
+      "size": 86,
+      "vw": 6,
+      "font": "Manrope",
+      "weight": 800,
+      "tracking": -0.05,
+      "leading": 0.98,
+      "upper": false,
+      "italic": false,
+      "mono": false,
+      "align": "left",
+      "position": "left",
+      "widthRatio": 0.37,
+      "top": 209,
+      "mixedFonts": [
+       "Manrope",
+       "Georgia italic"
+      ],
+      "tag": "h1",
+      "kind": "heading"
+     },
+     {
+      "text": "0",
+      "words": 1,
+      "chars": 1,
+      "lines": 1,
+      "size": 35,
+      "vw": 2.4,
+      "font": "Manrope",
+      "weight": 700,
+      "tracking": -0.07,
+      "leading": 1.2,
+      "upper": false,
+      "italic": false,
+      "mono": false,
+      "align": "left",
+      "position": "right",
+      "widthRatio": 0.14,
+      "top": 389,
+      "tag": "strong",
+      "kind": "heading"
+     },
+     {
+      "text": "0%",
+      "words": 1,
+      "chars": 2,
+      "lines": 1,
+      "size": 35,
+      "vw": 2.4,
+      "font": "Manrope",
+      "weight": 700,
+      "tracking": -0.07,
+      "leading": 1.2,
+      "upper": false,
+      "italic": false,
+      "mono": false,
+      "align": "left",
+      "position": "right",
+      "widthRatio": 0.1,
+      "top": 389,
+      "tag": "strong",
+      "kind": "heading"
+     },
+     {
+      "text": "One place for every record.",
+      "words": 5,
+      "chars": 27,
+      "lines": 2,
+      "size": 30,
+      "vw": 2.1,
+      "font": "Manrope",
+      "weight": 700,
+      "tracking": -0.05,
+      "leading": 1.1,
+      "upper": false,
+      "italic": false,
+      "mono": false,
+      "align": "left",
+      "position": "left",
+      "widthRatio": 0.2,
+      "top": 876,
+      "tag": "h2",
+      "kind": "heading"
+     },
+     {
+      "text": "Recently indexed",
+      "words": 2,
+      "chars": 16,
+      "lines": 1,
+      "size": 30,
+      "vw": 2.1,
+      "font": "Manrope",
+      "weight": 700,
+      "tracking": -0.05,
+      "leading": 1.1,
+      "upper": false,
+      "italic": false,
+      "mono": false,
+      "align": "left",
+      "position": "left",
+      "widthRatio": 0.16,
+      "top": 1249,
+      "tag": "h2",
+      "kind": "heading"
+     }
+    ],
+    "headingSummary": {
+     "count": 5,
+     "maxLines": 3,
+     "over2Lines": 1,
+     "statements": 0,
+     "centered": 0,
+     "medianWords": 2,
+     "mixedFontHeadings": 1
+    },
+    "type": {
+     "families": [
+      {
+       "family": "Manrope",
+       "share": 0.68,
+       "mono": false
+      },
+      {
+       "family": "DM Mono",
+       "share": 0.31,
+       "mono": true
+      },
+      {
+       "family": "Georgia",
+       "share": 0.01,
+       "mono": false
+      }
+     ],
+     "familyCount": 3,
+     "sizes": [
+      8,
+      9,
+      10,
+      11,
+      12,
+      14,
+      15,
+      16,
+      19,
+      30,
+      35,
+      86
+     ],
+     "sizeCount": 12,
+     "notLoaded": [],
+     "body": {
+      "font": "Manrope",
+      "size": 15,
+      "leading": 1.65,
+      "weight": 400,
+      "tracking": 0,
+      "contrast": null
+     },
+     "measureChars": 54,
+     "max": {
+      "size": 86,
+      "vw": 6,
+      "font": "Manrope",
+      "text": "Records that move"
+     },
+     "monoShare": 0.31,
+     "monoProseShare": 0.31,
+     "monoFamilies": [
+      "DM Mono"
+     ],
+     "monoSamples": [
+      "Registrar's digital command center",
+      "Archive overview",
+      "0%",
+      "Sunday, November 15, 2026 at 12:02:11 PM",
+      "What you can do",
+      "01"
+     ],
+     "microLabels": 12,
+     "microLabelShare": 0.257,
+     "microSamples": [
+      "Registrar's digital command center",
+      "Archive overview",
+      "What you can do",
+      "Live archive pulse",
+      "Record ID",
+      "Document Category"
+     ],
+     "upperShare": 0.26,
+     "centerShare": 0.01,
+     "smallText": 22
+    },
+    "eyebrows": [
+     {
+      "text": "Registrar's digital command center",
+      "above": "Records that move with you.",
+      "upper": true,
+      "tracked": true,
+      "mono": true,
+      "pill": false,
+      "size": 9,
+      "top": 175
+     },
+     {
+      "text": "Total records",
+      "above": "0",
+      "upper": false,
+      "tracked": false,
+      "mono": false,
+      "pill": false,
+      "size": 10,
+      "top": 359
+     },
+     {
+      "text": "Digitized",
+      "above": "0%",
+      "upper": false,
+      "tracked": false,
+      "mono": false,
+      "pill": false,
+      "size": 10,
+      "top": 359
+     },
+     {
+      "text": "What you can do",
+      "above": "One place for every record.",
+      "upper": true,
+      "tracked": true,
+      "mono": true,
+      "pill": false,
+      "size": 9,
+      "top": 849
+     },
+     {
+      "text": "Live archive pulse",
+      "above": "Recently indexed",
+      "upper": true,
+      "tracked": true,
+      "mono": true,
+      "pill": false,
+      "size": 9,
+      "top": 1222
+     }
+    ],
+    "numbered": [
+     {
+      "text": "01",
+      "size": 10,
+      "top": 873
+     },
+     {
+      "text": "02",
+      "size": 10,
+      "top": 948
+     },
+     {
+      "text": "03",
+      "size": 10,
+      "top": 1023
+     }
+    ],
+    "color": {
+     "bodyBg": "#f8f4f1",
+     "bodyBgHsl": {
+      "h": 26,
+      "s": 0.33,
+      "l": 0.96
+     },
+     "dark": false,
+     "sectionBgs": [
+      {
+       "color": "#ffffff",
+       "top": 0,
+       "hsl": {
+        "h": 0,
+        "s": 0,
+        "l": 1
+       }
+      },
+      {
+       "color": "#6b1d2a",
+       "top": 769,
+       "hsl": {
+        "h": 350,
+        "s": 0.57,
+        "l": 0.27
+       }
+      }
+     ],
+     "textColors": [
+      {
+       "color": "#75686a",
+       "share": 0.35
+      },
+      {
+       "color": "#ffffff",
+       "share": 0.16
+      },
+      {
+       "color": "#6b1d2a",
+       "share": 0.15
+      },
+      {
+       "color": "#e4d4bf",
+       "share": 0.14
+      },
+      {
+       "color": "#d5bfc1",
+       "share": 0.08
+      }
+     ],
+     "button": {
+      "bg": "#6b1d2a",
+      "hsl": {
+       "h": 350,
+       "s": 0.57,
+       "l": 0.27
+      },
+      "fg": "#ffffff"
+     },
+     "lowContrast": []
+    },
+    "buttons": {
+     "count": 2,
+     "inHero": 2,
+     "radius": 3,
+     "height": 37,
+     "withShadow": 0,
+     "withGradient": 0,
+     "mono": 0,
+     "upper": 0,
+     "heroLabels": [
+      "Login",
+      "Explore the archive"
+     ]
+    },
+    "surfaces": {
+     "shadowStatic": 1,
+     "shadowOverlay": 0,
+     "shadowSamples": [
+      "div.dashboard-card → rgb(214, 173, 58) 24px 24px 0px 0px"
+     ],
+     "gradients": 1,
+     "scrims": 0,
+     "gradientSamples": [
+      "section#overview.hero → linear-gradient(135deg, rgba(30, 107, 79, 0.035) 25%, rgba(0, 0, 0, 0) 25%), linear-gradient(315deg, rgba(30, "
+     ],
+     "gradientText": 0,
+     "hairlines": 6,
+     "hairlineSamples": [
+      "header.topbar 1440px",
+      "div.service-list 692px",
+      "a.service-item 692px",
+      "a.service-item 692px",
+      "a.service-item 692px"
+     ],
+     "outlinedBoxes": 2,
+     "dashed": 0,
+     "blurred": 0,
+     "roundedBoxes": 0,
+     "boxRadius": 0,
+     "squareMedia": 0,
+     "roundedMedia": 0,
+     "mediaRadius": 0,
+     "textShadow": 0,
+     "cardRows": []
+    },
+    "heroMedia": [],
+    "nav": {
+     "links": 4,
+     "fixed": false,
+     "height": 89,
+     "floatingPill": false,
+     "blur": false
+    },
+    "fontsLoaded": [
+     "dm mono",
+     "manrope"
+    ]
+   },
+   "layout": {
+    "viewport": {
+     "w": 1440,
+     "h": 900
+    },
+    "pageH": 1554,
+    "margins": {
+     "left": 146,
+     "right": 106
+    },
+    "sections": [
+     {
+      "sel": "section#overview.hero",
+      "tag": "section",
+      "top": 89,
+      "height": 680,
+      "words": 64,
+      "media": 0,
+      "middle": 164,
+      "heading": {
+       "text": "Records that move",
+       "size": 86,
+       "tag": "h1"
+      },
+      "left": 173,
+      "right": 167,
+      "textLeft": 173,
+      "textRight": 167,
+      "fullBleed": false,
+      "footer": false,
+      "hero": true,
+      "continues": false,
+      "pinned": false
+     },
+     {
+      "sel": "section#services.service-strip",
+      "tag": "section",
+      "top": 769,
+      "height": 370,
+      "words": 32,
+      "media": 0,
+      "middle": 231,
+      "heading": {
+       "text": "One place for",
+       "size": 30,
+       "tag": "h2"
+      },
+      "left": 173,
+      "right": 640,
+      "textLeft": 173,
+      "textRight": 640,
+      "fullBleed": false,
+      "footer": false,
+      "hero": false,
+      "continues": false,
+      "pinned": false
+     },
+     {
+      "sel": "section#records.records-section",
+      "tag": "section",
+      "top": 1139,
+      "height": 360,
+      "words": 23,
+      "media": 0,
+      "middle": 214,
+      "heading": {
+       "text": "Recently indexed",
+       "size": 30,
+       "tag": "h2"
+      },
+      "left": 173,
+      "right": 196,
+      "textLeft": 173,
+      "textRight": 196,
+      "fullBleed": false,
+      "footer": true,
+      "hero": false,
+      "continues": false,
+      "pinned": false
+     }
+    ],
+    "gaps": [],
+    "h1s": [
+     {
+      "text": "Records that move with you.",
+      "size": 86,
+      "top": 209,
+      "firstScreen": true
+     }
+    ],
+    "edgeText": [],
+    "edges": [
+     {
+      "x": 173,
+      "n": 6
+     },
+     {
+      "x": 832,
+      "n": 1
+     }
+    ],
+    "leftBlocks": 7,
+    "bodySize": 15,
+    "stage": false,
+    "explains": false,
+    "slivers": [],
+    "voidShare": 0.19,
+    "voidBox": {
+     "x": 420,
+     "y": 600,
+     "w": 1020,
+     "h": 240
+    }
+   },
+   "app": null,
+   "consoleErrors": []
+  },
+  {
+   "width": 768,
+   "height": 1024,
+   "load": "load",
+   "screens": 3,
+   "filled": [
+    1,
+    0.94,
+    0.9
+   ],
+   "motion": {
+    "elements": 1,
+    "css": 1,
+    "transitions": 0,
+    "scripted": 0,
+    "videos": 0,
+    "playingVideos": 0
+   },
+   "metrics": {
+    "viewport": {
+     "w": 768,
+     "h": 1024
+    },
+    "page": {
+     "height": 2082,
+     "screens": 2,
+     "words": 132,
+     "img": 2,
+     "video": 0,
+     "canvas": 0,
+     "svg": 16,
+     "sections": 4,
+     "horizontalOverflow": 0,
+     "overflowCulprits": [],
+     "uiFragments": 0,
+     "uiAbuse": false,
+     "realPictures": 0,
+     "videoCount": 0,
+     "uiPictures": 0,
+     "pictureSamples": [],
+     "blendText": 0,
+     "sideScrollers": 0,
+     "brokenImages": [],
+     "emoji": [],
+     "videosNoPoster": 0
+    },
+    "hero": {
+     "text": "Records that move with you.",
+     "words": 5,
+     "chars": 27,
+     "lines": 2,
+     "size": 57,
+     "vw": 7.4,
+     "font": "Manrope",
+     "weight": 800,
+     "tracking": -0.05,
+     "leading": 0.98,
+     "upper": false,
+     "italic": false,
+     "mono": false,
+     "align": "left",
+     "position": "center",
+     "widthRatio": 0.78,
+     "top": 175,
+     "mixedFonts": [
+      "Manrope",
+      "Georgia italic"
+     ],
+     "tag": "h1",
+     "kind": "heading"
+    },
+    "h1": {
+     "text": "Records that move with you.",
+     "words": 5,
+     "lines": 2,
+     "size": 57,
+     "font": "Manrope"
+    },
+    "headings": [
+     {
+      "text": "Records that move with you.",
+      "words": 5,
+      "chars": 27,
+      "lines": 2,
+      "size": 57,
+      "vw": 7.4,
+      "font": "Manrope",
+      "weight": 800,
+      "tracking": -0.05,
+      "leading": 0.98,
+      "upper": false,
+      "italic": false,
+      "mono": false,
+      "align": "left",
+      "position": "center",
+      "widthRatio": 0.78,
+      "top": 175,
+      "mixedFonts": [
+       "Manrope",
+       "Georgia italic"
+      ],
+      "tag": "h1",
+      "kind": "heading"
+     },
+     {
+      "text": "0",
+      "words": 1,
+      "chars": 1,
+      "lines": 1,
+      "size": 35,
+      "vw": 4.6,
+      "font": "Manrope",
+      "weight": 700,
+      "tracking": -0.07,
+      "leading": 1.2,
+      "upper": false,
+      "italic": false,
+      "mono": false,
+      "align": "left",
+      "position": "left",
+      "widthRatio": 0.37,
+      "top": 729,
+      "tag": "strong",
+      "kind": "heading"
+     },
+     {
+      "text": "0%",
+      "words": 1,
+      "chars": 2,
+      "lines": 1,
+      "size": 35,
+      "vw": 4.6,
+      "font": "Manrope",
+      "weight": 700,
+      "tracking": -0.07,
+      "leading": 1.2,
+      "upper": false,
+      "italic": false,
+      "mono": false,
+      "align": "left",
+      "position": "right",
+      "widthRatio": 0.26,
+      "top": 729,
+      "tag": "strong",
+      "kind": "heading"
+     },
+     {
+      "text": "One place for every record.",
+      "words": 5,
+      "chars": 27,
+      "lines": 2,
+      "size": 30,
+      "vw": 3.9,
+      "font": "Manrope",
+      "weight": 700,
+      "tracking": -0.05,
+      "leading": 1.1,
+      "upper": false,
+      "italic": false,
+      "mono": false,
+      "align": "left",
+      "position": "center",
+      "widthRatio": 0.84,
+      "top": 1135,
+      "tag": "h2",
+      "kind": "heading"
+     },
+     {
+      "text": "Recently indexed",
+      "words": 2,
+      "chars": 16,
+      "lines": 1,
+      "size": 30,
+      "vw": 3.9,
+      "font": "Manrope",
+      "weight": 700,
+      "tracking": -0.05,
+      "leading": 1.1,
+      "upper": false,
+      "italic": false,
+      "mono": false,
+      "align": "left",
+      "position": "left",
+      "widthRatio": 0.3,
+      "top": 1611,
+      "tag": "h2",
+      "kind": "heading"
+     }
+    ],
+    "headingSummary": {
+     "count": 5,
+     "maxLines": 2,
+     "over2Lines": 0,
+     "statements": 0,
+     "centered": 0,
+     "medianWords": 2,
+     "mixedFontHeadings": 1
+    },
+    "type": {
+     "families": [
+      {
+       "family": "Manrope",
+       "share": 0.67,
+       "mono": false
+      },
+      {
+       "family": "DM Mono",
+       "share": 0.32,
+       "mono": true
+      },
+      {
+       "family": "Georgia",
+       "share": 0.01,
+       "mono": false
+      }
+     ],
+     "familyCount": 3,
+     "sizes": [
+      8,
+      9,
+      10,
+      11,
+      12,
+      14,
+      15,
+      16,
+      19,
+      30,
+      35,
+      57
+     ],
+     "sizeCount": 12,
+     "notLoaded": [],
+     "body": {
+      "font": "Manrope",
+      "size": 15,
+      "leading": 1.65,
+      "weight": 400,
+      "tracking": 0,
+      "contrast": null
+     },
+     "measureChars": 54,
+     "max": {
+      "size": 57,
+      "vw": 7.4,
+      "font": "Manrope",
+      "text": "Records that move"
+     },
+     "monoShare": 0.32,
+     "monoProseShare": 0.32,
+     "monoFamilies": [
+      "DM Mono"
+     ],
+     "monoSamples": [
+      "Registrar's digital command center",
+      "Archive overview",
+      "0%",
+      "Sunday, November 15, 2026 at 12:02:18 PM",
+      "What you can do",
+      "01"
+     ],
+     "microLabels": 12,
+     "microLabelShare": 0.266,
+     "microSamples": [
+      "Registrar's digital command center",
+      "Archive overview",
+      "What you can do",
+      "Live archive pulse",
+      "Record ID",
+      "Document Category"
+     ],
+     "upperShare": 0.27,
+     "centerShare": 0,
+     "smallText": 22
+    },
+    "eyebrows": [
+     {
+      "text": "Registrar's digital command center",
+      "above": "Records that move with you.",
+      "upper": true,
+      "tracked": true,
+      "mono": true,
+      "pill": false,
+      "size": 9,
+      "top": 141
+     },
+     {
+      "text": "Total records",
+      "above": "0",
+      "upper": false,
+      "tracked": false,
+      "mono": false,
+      "pill": false,
+      "size": 10,
+      "top": 699
+     },
+     {
+      "text": "Digitized",
+      "above": "0%",
+      "upper": false,
+      "tracked": false,
+      "mono": false,
+      "pill": false,
+      "size": 10,
+      "top": 699
+     },
+     {
+      "text": "What you can do",
+      "above": "One place for every record.",
+      "upper": true,
+      "tracked": true,
+      "mono": true,
+      "pill": false,
+      "size": 9,
+      "top": 1108
+     },
+     {
+      "text": "Live archive pulse",
+      "above": "Recently indexed",
+      "upper": true,
+      "tracked": true,
+      "mono": true,
+      "pill": false,
+      "size": 9,
+      "top": 1584
+     }
+    ],
+    "numbered": [
+     {
+      "text": "01",
+      "size": 10,
+      "top": 1268
+     },
+     {
+      "text": "02",
+      "size": 10,
+      "top": 1343
+     },
+     {
+      "text": "03",
+      "size": 10,
+      "top": 1418
+     }
+    ],
+    "color": {
+     "bodyBg": "#f8f4f1",
+     "bodyBgHsl": {
+      "h": 26,
+      "s": 0.33,
+      "l": 0.96
+     },
+     "dark": false,
+     "sectionBgs": [
+      {
+       "color": "#ffffff",
+       "top": 0,
+       "hsl": {
+        "h": 0,
+        "s": 0,
+        "l": 1
+       }
+      },
+      {
+       "color": "#4a111b",
+       "top": 560,
+       "hsl": {
+        "h": 349,
+        "s": 0.63,
+        "l": 0.18
+       }
+      },
+      {
+       "color": "#6b1d2a",
+       "top": 1044,
+       "hsl": {
+        "h": 350,
+        "s": 0.57,
+        "l": 0.27
+       }
+      }
+     ],
+     "textColors": [
+      {
+       "color": "#75686a",
+       "share": 0.34
+      },
+      {
+       "color": "#ffffff",
+       "share": 0.16
+      },
+      {
+       "color": "#e4d4bf",
+       "share": 0.14
+      },
+      {
+       "color": "#6b1d2a",
+       "share": 0.14
+      },
+      {
+       "color": "#d5bfc1",
+       "share": 0.09
+      }
+     ],
+     "button": {
+      "bg": "#6b1d2a",
+      "hsl": {
+       "h": 350,
+       "s": 0.57,
+       "l": 0.27
+      },
+      "fg": "#ffffff"
+     },
+     "lowContrast": []
+    },
+    "buttons": {
+     "count": 1,
+     "inHero": 1,
+     "radius": 3,
+     "height": 45,
+     "withShadow": 0,
+     "withGradient": 0,
+     "mono": 0,
+     "upper": 0,
+     "heroLabels": [
+      "Explore the archive"
+     ]
+    },
+    "surfaces": {
+     "shadowStatic": 1,
+     "shadowOverlay": 0,
+     "shadowSamples": [
+      "div.dashboard-card → rgb(214, 173, 58) 12px 12px 0px 0px"
+     ],
+     "gradients": 1,
+     "scrims": 0,
+     "gradientSamples": [
+      "section#overview.hero → linear-gradient(135deg, rgba(30, 107, 79, 0.035) 25%, rgba(0, 0, 0, 0) 25%), linear-gradient(315deg, rgba(30, "
+     ],
+     "gradientText": 0,
+     "hairlines": 6,
+     "hairlineSamples": [
+      "header.topbar 768px",
+      "div.service-list 645px",
+      "a.service-item 645px",
+      "a.service-item 645px",
+      "a.service-item 645px"
+     ],
+     "outlinedBoxes": 2,
+     "dashed": 0,
+     "blurred": 0,
+     "roundedBoxes": 0,
+     "boxRadius": 0,
+     "squareMedia": 0,
+     "roundedMedia": 0,
+     "mediaRadius": 0,
+     "textShadow": 0,
+     "cardRows": []
+    },
+    "heroMedia": [],
+    "nav": {
+     "links": 1,
+     "fixed": false,
+     "height": 79,
+     "floatingPill": false,
+     "blur": false
+    },
+    "fontsLoaded": [
+     "dm mono",
+     "manrope"
+    ]
+   },
+   "layout": {
+    "viewport": {
+     "w": 768,
+     "h": 1024
+    },
+    "pageH": 2082,
+    "margins": {
+     "left": 61,
+     "right": 91
+    },
+    "sections": [
+     {
+      "sel": "section#overview.hero",
+      "tag": "section",
+      "top": 79,
+      "height": 965,
+      "words": 64,
+      "media": 0,
+      "middle": 0,
+      "heading": {
+       "text": "Records that move",
+       "size": 57,
+       "tag": "h1"
+      },
+      "left": 61,
+      "right": 91,
+      "textLeft": 61,
+      "textRight": 91,
+      "fullBleed": false,
+      "footer": false,
+      "hero": true,
+      "continues": false,
+      "pinned": false
+     },
+     {
+      "sel": "section#services.service-strip",
+      "tag": "section",
+      "top": 1044,
+      "height": 474,
+      "words": 32,
+      "media": 0,
+      "middle": 0,
+      "heading": {
+       "text": "One place for",
+       "size": 30,
+       "tag": "h2"
+      },
+      "left": 61,
+      "right": 482,
+      "textLeft": 61,
+      "textRight": 482,
+      "fullBleed": false,
+      "footer": false,
+      "hero": false,
+      "continues": false,
+      "pinned": false
+     },
+     {
+      "sel": "section#records.records-section",
+      "tag": "section",
+      "top": 1518,
+      "height": 482,
+      "words": 23,
+      "media": 0,
+      "middle": 168,
+      "heading": {
+       "text": "Recently indexed",
+       "size": 30,
+       "tag": "h2"
+      },
+      "left": 61,
+      "right": 95,
+      "textLeft": 61,
+      "textRight": 95,
+      "fullBleed": false,
+      "footer": true,
+      "hero": false,
+      "continues": false,
+      "pinned": false
+     }
+    ],
+    "gaps": [],
+    "h1s": [
+     {
+      "text": "Records that move with you.",
+      "size": 57,
+      "top": 175,
+      "firstScreen": true
+     }
+    ],
+    "edgeText": [],
+    "edges": [
+     {
+      "x": 61,
+      "n": 6
+     },
+     {
+      "x": 91,
+      "n": 1
+     }
+    ],
+    "leftBlocks": 7,
+    "bodySize": 15,
+    "stage": false,
+    "explains": false,
+    "slivers": [],
+    "voidShare": 0,
+    "voidBox": null
+   },
+   "app": null,
+   "consoleErrors": []
+  },
+  {
+   "width": 390,
+   "height": 844,
+   "load": "load",
+   "screens": 3,
+   "filled": [
+    1,
+    1,
+    0.91
+   ],
+   "motion": {
+    "elements": 1,
+    "css": 1,
+    "transitions": 0,
+    "scripted": 0,
+    "videos": 0,
+    "playingVideos": 0
+   },
+   "metrics": {
+    "viewport": {
+     "w": 390,
+     "h": 844
+    },
+    "page": {
+     "height": 2179,
+     "screens": 2.6,
+     "words": 132,
+     "img": 2,
+     "video": 0,
+     "canvas": 0,
+     "svg": 16,
+     "sections": 4,
+     "horizontalOverflow": 0,
+     "overflowCulprits": [],
+     "uiFragments": 0,
+     "uiAbuse": false,
+     "realPictures": 0,
+     "videoCount": 0,
+     "uiPictures": 0,
+     "pictureSamples": [],
+     "blendText": 0,
+     "sideScrollers": 1,
+     "brokenImages": [],
+     "emoji": [],
+     "videosNoPoster": 0
+    },
+    "hero": {
+     "text": "Records that move with you.",
+     "words": 5,
+     "chars": 27,
+     "lines": 3,
+     "size": 57,
+     "vw": 14.6,
+     "font": "Manrope",
+     "weight": 800,
+     "tracking": -0.05,
+     "leading": 0.98,
+     "upper": false,
+     "italic": false,
+     "mono": false,
+     "align": "left",
+     "position": "center",
+     "widthRatio": 0.84,
+     "top": 175,
+     "mixedFonts": [
+      "Manrope",
+      "Georgia italic"
+     ],
+     "tag": "h1",
+     "kind": "heading"
+    },
+    "h1": {
+     "text": "Records that move with you.",
+     "words": 5,
+     "lines": 3,
+     "size": 57,
+     "font": "Manrope"
+    },
+    "headings": [
+     {
+      "text": "Records that move with you.",
+      "words": 5,
+      "chars": 27,
+      "lines": 3,
+      "size": 57,
+      "vw": 14.6,
+      "font": "Manrope",
+      "weight": 800,
+      "tracking": -0.05,
+      "leading": 0.98,
+      "upper": false,
+      "italic": false,
+      "mono": false,
+      "align": "left",
+      "position": "center",
+      "widthRatio": 0.84,
+      "top": 175,
+      "mixedFonts": [
+       "Manrope",
+       "Georgia italic"
+      ],
+      "tag": "h1",
+      "kind": "heading"
+     },
+     {
+      "text": "0",
+      "words": 1,
+      "chars": 1,
+      "lines": 1,
+      "size": 35,
+      "vw": 9,
+      "font": "Manrope",
+      "weight": 700,
+      "tracking": -0.07,
+      "leading": 1.2,
+      "upper": false,
+      "italic": false,
+      "mono": false,
+      "align": "left",
+      "position": "left",
+      "widthRatio": 0.27,
+      "top": 810,
+      "tag": "strong",
+      "kind": "heading"
+     },
+     {
+      "text": "0%",
+      "words": 1,
+      "chars": 2,
+      "lines": 1,
+      "size": 35,
+      "vw": 9,
+      "font": "Manrope",
+      "weight": 700,
+      "tracking": -0.07,
+      "leading": 1.2,
+      "upper": false,
+      "italic": false,
+      "mono": false,
+      "align": "left",
+      "position": "right",
+      "widthRatio": 0.17,
+      "top": 810,
+      "tag": "strong",
+      "kind": "heading"
+     },
+     {
+      "text": "One place for every record.",
+      "words": 5,
+      "chars": 27,
+      "lines": 2,
+      "size": 30,
+      "vw": 7.7,
+      "font": "Manrope",
+      "weight": 700,
+      "tracking": -0.05,
+      "leading": 1.1,
+      "upper": false,
+      "italic": false,
+      "mono": false,
+      "align": "left",
+      "position": "center",
+      "widthRatio": 0.84,
+      "top": 1232,
+      "tag": "h2",
+      "kind": "heading"
+     },
+     {
+      "text": "Recently indexed",
+      "words": 2,
+      "chars": 16,
+      "lines": 1,
+      "size": 30,
+      "vw": 7.7,
+      "font": "Manrope",
+      "weight": 700,
+      "tracking": -0.05,
+      "leading": 1.1,
+      "upper": false,
+      "italic": false,
+      "mono": false,
+      "align": "left",
+      "position": "left",
+      "widthRatio": 0.58,
+      "top": 1708,
+      "tag": "h2",
+      "kind": "heading"
+     }
+    ],
+    "headingSummary": {
+     "count": 5,
+     "maxLines": 3,
+     "over2Lines": 1,
+     "statements": 0,
+     "centered": 0,
+     "medianWords": 2,
+     "mixedFontHeadings": 1
+    },
+    "type": {
+     "families": [
+      {
+       "family": "Manrope",
+       "share": 0.67,
+       "mono": false
+      },
+      {
+       "family": "DM Mono",
+       "share": 0.32,
+       "mono": true
+      },
+      {
+       "family": "Georgia",
+       "share": 0.01,
+       "mono": false
+      }
+     ],
+     "familyCount": 3,
+     "sizes": [
+      8,
+      9,
+      10,
+      11,
+      12,
+      14,
+      15,
+      16,
+      19,
+      30,
+      35,
+      57
+     ],
+     "sizeCount": 12,
+     "notLoaded": [],
+     "body": {
+      "font": "Manrope",
+      "size": 15,
+      "leading": 1.65,
+      "weight": 400,
+      "tracking": 0,
+      "contrast": null
+     },
+     "measureChars": 44,
+     "max": {
+      "size": 57,
+      "vw": 14.6,
+      "font": "Manrope",
+      "text": "Records that move"
+     },
+     "monoShare": 0.32,
+     "monoProseShare": 0.32,
+     "monoFamilies": [
+      "DM Mono"
+     ],
+     "monoSamples": [
+      "Registrar's digital command center",
+      "Archive overview",
+      "0%",
+      "Sunday, November 15, 2026 at 12:02:25 PM",
+      "What you can do",
+      "01"
+     ],
+     "microLabels": 12,
+     "microLabelShare": 0.266,
+     "microSamples": [
+      "Registrar's digital command center",
+      "Archive overview",
+      "What you can do",
+      "Live archive pulse",
+      "Record ID",
+      "Document Category"
+     ],
+     "upperShare": 0.27,
+     "centerShare": 0,
+     "smallText": 22
+    },
+    "eyebrows": [
+     {
+      "text": "Registrar's digital command center",
+      "above": "Records that move with you.",
+      "upper": true,
+      "tracked": true,
+      "mono": true,
+      "pill": false,
+      "size": 9,
+      "top": 141
+     },
+     {
+      "text": "Total records",
+      "above": "0",
+      "upper": false,
+      "tracked": false,
+      "mono": false,
+      "pill": false,
+      "size": 10,
+      "top": 780
+     },
+     {
+      "text": "Digitized",
+      "above": "0%",
+      "upper": false,
+      "tracked": false,
+      "mono": false,
+      "pill": false,
+      "size": 10,
+      "top": 780
+     },
+     {
+      "text": "What you can do",
+      "above": "One place for every record.",
+      "upper": true,
+      "tracked": true,
+      "mono": true,
+      "pill": false,
+      "size": 9,
+      "top": 1205
+     },
+     {
+      "text": "Live archive pulse",
+      "above": "Recently indexed",
+      "upper": true,
+      "tracked": true,
+      "mono": true,
+      "pill": false,
+      "size": 9,
+      "top": 1681
+     }
+    ],
+    "numbered": [
+     {
+      "text": "01",
+      "size": 10,
+      "top": 1364
+     },
+     {
+      "text": "02",
+      "size": 10,
+      "top": 1439
+     },
+     {
+      "text": "03",
+      "size": 10,
+      "top": 1514
+     }
+    ],
+    "color": {
+     "bodyBg": "#f8f4f1",
+     "bodyBgHsl": {
+      "h": 26,
+      "s": 0.33,
+      "l": 0.96
+     },
+     "dark": false,
+     "sectionBgs": [
+      {
+       "color": "#ffffff",
+       "top": 0,
+       "hsl": {
+        "h": 0,
+        "s": 0,
+        "l": 1
+       }
+      },
+      {
+       "color": "#4a111b",
+       "top": 641,
+       "hsl": {
+        "h": 349,
+        "s": 0.63,
+        "l": 0.18
+       }
+      },
+      {
+       "color": "#6b1d2a",
+       "top": 1141,
+       "hsl": {
+        "h": 350,
+        "s": 0.57,
+        "l": 0.27
+       }
+      }
+     ],
+     "textColors": [
+      {
+       "color": "#75686a",
+       "share": 0.34
+      },
+      {
+       "color": "#ffffff",
+       "share": 0.16
+      },
+      {
+       "color": "#e4d4bf",
+       "share": 0.14
+      },
+      {
+       "color": "#6b1d2a",
+       "share": 0.14
+      },
+      {
+       "color": "#d5bfc1",
+       "share": 0.09
+      }
+     ],
+     "button": {
+      "bg": "#6b1d2a",
+      "hsl": {
+       "h": 350,
+       "s": 0.57,
+       "l": 0.27
+      },
+      "fg": "#ffffff"
+     },
+     "lowContrast": []
+    },
+    "buttons": {
+     "count": 1,
+     "inHero": 1,
+     "radius": 3,
+     "height": 45,
+     "withShadow": 0,
+     "withGradient": 0,
+     "mono": 0,
+     "upper": 0,
+     "heroLabels": [
+      "Explore the archive"
+     ]
+    },
+    "surfaces": {
+     "shadowStatic": 1,
+     "shadowOverlay": 0,
+     "shadowSamples": [
+      "div.dashboard-card → rgb(214, 173, 58) 12px 12px 0px 0px"
+     ],
+     "gradients": 1,
+     "scrims": 0,
+     "gradientSamples": [
+      "section#overview.hero → linear-gradient(135deg, rgba(30, 107, 79, 0.035) 25%, rgba(0, 0, 0, 0) 25%), linear-gradient(315deg, rgba(30, "
+     ],
+     "gradientText": 0,
+     "hairlines": 6,
+     "hairlineSamples": [
+      "header.topbar 390px",
+      "div.service-list 328px",
+      "a.service-item 328px",
+      "a.service-item 328px",
+      "a.service-item 328px"
+     ],
+     "outlinedBoxes": 0,
+     "dashed": 0,
+     "blurred": 0,
+     "roundedBoxes": 0,
+     "boxRadius": 0,
+     "squareMedia": 0,
+     "roundedMedia": 0,
+     "mediaRadius": 0,
+     "textShadow": 0,
+     "cardRows": []
+    },
+    "heroMedia": [],
+    "nav": {
+     "links": 1,
+     "fixed": false,
+     "height": 79,
+     "floatingPill": false,
+     "blur": false
+    },
+    "fontsLoaded": [
+     "dm mono",
+     "manrope"
+    ]
+   },
+   "layout": {
+    "viewport": {
+     "w": 390,
+     "h": 844
+    },
+    "pageH": 2179,
+    "margins": {
+     "left": 31,
+     "right": 40
+    },
+    "sections": [
+     {
+      "sel": "section#overview.hero",
+      "tag": "section",
+      "top": 79,
+      "height": 1062,
+      "words": 64,
+      "media": 0,
+      "middle": 0,
+      "heading": {
+       "text": "Records that move",
+       "size": 57,
+       "tag": "h1"
+      },
+      "left": 31,
+      "right": 40,
+      "textLeft": 31,
+      "textRight": 40,
+      "fullBleed": false,
+      "footer": false,
+      "hero": true,
+      "continues": false,
+      "pinned": false
+     },
+     {
+      "sel": "section#services.service-strip",
+      "tag": "section",
+      "top": 1141,
+      "height": 474,
+      "words": 32,
+      "media": 0,
+      "middle": 0,
+      "heading": {
+       "text": "One place for",
+       "size": 30,
+       "tag": "h2"
+      },
+      "left": 31,
+      "right": 134,
+      "textLeft": 31,
+      "textRight": 134,
+      "fullBleed": false,
+      "footer": false,
+      "hero": false,
+      "continues": false,
+      "pinned": false
+     },
+     {
+      "sel": "section#records.records-section",
+      "tag": "section",
+      "top": 1615,
+      "height": 482,
+      "words": 21,
+      "media": 0,
+      "middle": 0,
+      "heading": {
+       "text": "Recently indexed",
+       "size": 30,
+       "tag": "h2"
+      },
+      "left": 31,
+      "right": 81,
+      "textLeft": 31,
+      "textRight": 81,
+      "fullBleed": false,
+      "footer": true,
+      "hero": false,
+      "continues": false,
+      "pinned": false
+     }
+    ],
+    "gaps": [],
+    "h1s": [
+     {
+      "text": "Records that move with you.",
+      "size": 57,
+      "top": 175,
+      "firstScreen": true
+     }
+    ],
+    "edgeText": [],
+    "edges": [
+     {
+      "x": 31,
+      "n": 6
+     },
+     {
+      "x": 61,
+      "n": 1
+     }
+    ],
+    "leftBlocks": 7,
+    "bodySize": 15,
+    "stage": false,
+    "explains": false,
+    "slivers": [],
+    "voidShare": 0,
+    "voidBox": null
+   },
+   "app": null,
+   "consoleErrors": []
+  }
+ ],
+ "findings": [
+  {
+   "level": "FAIL",
+   "id": "headline-lines",
+   "width": 1440,
+   "message": "1 headline(s) wrap past two lines at 1440px: \"Records that move with you.\" → 3 lines (5 words, 86px)",
+   "fix": "Cut words first (a headline is a title, not a sentence). Then give it a wider measure. Lower the size only as a last resort and never below the scale you chose. A real statement paragraph belongs in a <p> or <blockquote> at 36px or less."
+  },
+  {
+   "level": "WARN",
+   "id": "mixed-font-headline",
+   "width": 1440,
+   "message": "1 headline(s) switch typeface or to italic mid-line (the \"one italic serif word\" move).",
+   "fix": "Set the whole headline in one face. Emphasis comes from the words.",
+   "alsoAt": [
+    768,
+    390
+   ]
+  },
+  {
+   "level": "FAIL",
+   "id": "eyebrow",
+   "width": 1440,
+   "message": "5 eyebrow/kicker label(s) above headings: \"Registrar's digital command center\" above \"Records that move with you.\"; \"Total records\" above \"0\"; \"Digitized\" above \"0%\"; \"What you can do\" above \"One place for every record.\"; \"Live archive pulse\" above \"Recently indexed\"",
+   "fix": "Delete them. If the label carried real information, fold it into the headline or the supporting sentence.",
+   "alsoAt": [
+    768,
+    390
+   ]
+  },
+  {
+   "level": "FAIL",
+   "id": "mono",
+   "width": 1440,
+   "message": "Monospace type outside code: DM Mono — e.g. \"Registrar's digital command center\", \"Archive overview\", \"0%\", \"Sunday, November 15, 2026 at 12:02:11 PM\"",
+   "fix": "Set it in the text face. Monospace is for literal code inside <pre>/<code> only.",
+   "alsoAt": [
+    768,
+    390
+   ]
+  },
+  {
+   "level": "FAIL",
+   "id": "numbering",
+   "width": 1440,
+   "message": "Decorative index numbers: \"01\", \"02\", \"03\"",
+   "fix": "Remove them. If order truly matters, write it into the words (\"First, …\") or use a real <ol>.",
+   "alsoAt": [
+    768,
+    390
+   ]
+  },
+  {
+   "level": "FAIL",
+   "id": "micro-label",
+   "width": 1440,
+   "message": "12 tiny uppercase letter-spaced labels (e.g. \"Registrar's digital command center\", \"Archive overview\", \"What you can do\", \"Live archive pulse\").",
+   "fix": "Use sentence-case text at a readable size, or delete the label.",
+   "alsoAt": [
+    768,
+    390
+   ]
+  },
+  {
+   "level": "FAIL",
+   "id": "gradient",
+   "width": 1440,
+   "message": "1 gradient fill(s): section#overview.hero → linear-gradient(135deg, rgba(30, 107, 79, 0.035) 25%, rgba(0, 0, 0, 0) 25%), linear-gradient(315deg, rgba(30, ",
+   "fix": "Use a flat colour or a real image. The only gradient allowed by default is a neutral scrim over a photo for legibility.",
+   "alsoAt": [
+    768,
+    390
+   ]
+  },
+  {
+   "level": "FAIL",
+   "id": "shadow",
+   "width": 1440,
+   "message": "1 box-shadow(s) on elements at rest: div.dashboard-card → rgb(214, 173, 58) 24px 24px 0px 0px",
+   "fix": "Remove. Separate surfaces with a tone step or space. Shadows are for things that really float (menus, dialogs, sticky bars).",
+   "alsoAt": [
+    768,
+    390
+   ]
+  },
+  {
+   "level": "FAIL",
+   "id": "hairline",
+   "width": 1440,
+   "message": "6 thin rule(s)/divider line(s): header.topbar 1440px | div.service-list 692px | a.service-item 692px | a.service-item 692px",
+   "fix": "Delete. Separate with space, a tone change, or scale. Lines are only for real tables and form fields.",
+   "alsoAt": [
+    768,
+    390
+   ]
+  },
+  {
+   "level": "WARN",
+   "id": "outlined-box",
+   "width": 1440,
+   "message": "2 box(es) drawn with a 1px outline.",
+   "fix": "Prefer a filled surface or no box.",
+   "alsoAt": [
+    768
+   ]
+  },
+  {
+   "level": "WARN",
+   "id": "palette-cream",
+   "width": 1440,
+   "message": "Yellow-cream background (page background #f8f4f1).",
+   "fix": "Use the drawn palette. If you want warmth, take a low-chroma stone or bone, not a yellow cream.",
+   "alsoAt": [
+    768,
+    390
+   ]
+  },
+  {
+   "level": "WARN",
+   "id": "size-count",
+   "width": 1440,
+   "message": "12 different font sizes (8, 9, 10, 11, 12, 14, 15, 16, 19, 30, 35, 86).",
+   "fix": "A page needs about five: display, heading, lead, body, small.",
+   "alsoAt": [
+    768,
+    390
+   ]
+  },
+  {
+   "level": "WARN",
+   "id": "body-size",
+   "width": 1440,
+   "message": "Body text is 15px.",
+   "fix": "Body copy 16–20px.",
+   "alsoAt": [
+    768
+   ]
+  },
+  {
+   "level": "FAIL",
+   "id": "few-pictures",
+   "width": 1440,
+   "message": "Only 0 picture(s) on the page (0 photographs, footage or raster images, 0 interface fragments). Drawings in SVG do not count.",
+   "fix": "Find real pictures of the subject's world with scripts/assets.mjs (photographs, archival images, maps, engravings, footage), download them to assets/ and give them room: a hero picture, one per section that has a subject, a full-width band. At least four, usually six to twelve."
+  },
+  {
+   "level": "WARN",
+   "id": "no-footage",
+   "width": 1440,
+   "message": "No video anywhere on the page.",
+   "fix": "Look for one honest clip with scripts/assets.mjs --video (the place, the material, the process) and use it as a muted loop with a poster frame. Defend its absence only if no clip fits the subject."
+  },
+  {
+   "level": "FAIL",
+   "id": "small-text",
+   "width": 1440,
+   "message": "22 text blocks under 13px.",
+   "fix": "Nothing meant to be read goes below 13px.",
+   "alsoAt": [
+    768,
+    390
+   ]
+  },
+  {
+   "level": "WARN",
+   "id": "off-centre",
+   "width": 1440,
+   "message": "The margins differ: 146px on the left, 106px on the right, at 1440px.",
+   "fix": "Put the navigation and the content on one pair of margins; check for padding on one side only, a scrollbar gutter, or a header on another inset than the page.",
+   "alsoAt": [
+    768
+   ]
+  },
+  {
+   "level": "FAIL",
+   "id": "still-page",
+   "width": 1440,
+   "message": "Only 1 element(s) moved while the page loaded and scrolled.",
+   "fix": "Build the motion layer (SKILL.md step 9, references/motion.md): the signature move, an entrance for the parts of every section, feedback on every control, and one moving picture. Transform and opacity only, with a reduced-motion fallback."
+  },
+  {
+   "level": "WARN",
+   "id": "lopsided",
+   "width": 768,
+   "message": "A section keeps its content on one side and leaves 482px of the width empty: \"One place for\".",
+   "fix": "Fill the other side with what the section has (its picture, a second column, the figure), or defend the void in one sentence."
+  },
+  {
+   "level": "FAIL",
+   "id": "headline-lines",
+   "width": 390,
+   "message": "1 headline(s) wrap past two lines at 390px: \"Records that move with you.\" → 3 lines (5 words, 57px)",
+   "fix": "Cut words first (a headline is a title, not a sentence). Then give it a wider measure. Lower the size only as a last resort and never below the scale you chose. A real statement paragraph belongs in a <p> or <blockquote> at 24px or less."
+  },
+  {
+   "level": "WARN",
+   "id": "side-scroll",
+   "width": 390,
+   "message": "1 row(s) scroll sideways with content past their edge.",
+   "fix": "Jurors and most visitors read a row cut at the edge as clipped, not as scrollable. Wrap it onto more lines, or end it inside the grid."
+  }
+ ],
+ "images": [
+  {
+   "viewport": "desktop",
+   "width": 1440,
+   "fold": "C:\\Users\\windows11\\Documents\\GitHub\\Digitalization-Archiving-Management-System\\.taste-skill\\before\\desktop-fold.jpg",
+   "pages": [
+    "C:\\Users\\windows11\\Documents\\GitHub\\Digitalization-Archiving-Management-System\\.taste-skill\\before\\desktop-page-01.jpg"
+   ],
+   "film": []
+  },
+  {
+   "viewport": "tablet",
+   "width": 768,
+   "fold": "C:\\Users\\windows11\\Documents\\GitHub\\Digitalization-Archiving-Management-System\\.taste-skill\\before\\tablet-fold.jpg",
+   "pages": [
+    "C:\\Users\\windows11\\Documents\\GitHub\\Digitalization-Archiving-Management-System\\.taste-skill\\before\\tablet-page-01.jpg"
+   ],
+   "film": []
+  },
+  {
+   "viewport": "mobile",
+   "width": 390,
+   "fold": "C:\\Users\\windows11\\Documents\\GitHub\\Digitalization-Archiving-Management-System\\.taste-skill\\before\\mobile-fold.jpg",
+   "pages": [
+    "C:\\Users\\windows11\\Documents\\GitHub\\Digitalization-Archiving-Management-System\\.taste-skill\\before\\mobile-page-01.jpg"
+   ],
+   "film": []
+  }
+ ]
+}

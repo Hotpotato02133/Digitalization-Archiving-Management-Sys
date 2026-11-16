@@ -1,4 +1,4 @@
-﻿<?php require_once __DIR__ . '/../auth.php'; dats_require_role('Staff'); $currentUser = dats_current_user(); $displayName = htmlspecialchars($currentUser['full_name'], ENT_QUOTES, 'UTF-8'); $initials = dats_user_initials($currentUser); ?>
+<?php require_once __DIR__ . '/../auth.php'; dats_require_role('Staff'); $currentUser = dats_current_user(); $displayName = htmlspecialchars($currentUser['full_name'], ENT_QUOTES, 'UTF-8'); $initials = dats_user_initials($currentUser); ?>
 <!doctype html>
 <html lang="en">
 <head>
@@ -12,10 +12,12 @@
   <link rel="stylesheet" href="../admin/styles.css" />
   <link rel="stylesheet" href="student-table.css" />
   <script src="https://unpkg.com/lucide@latest"></script>
+  <link rel="stylesheet" href="../admin/shell.css?v=20261116c" />
 </head>
-<body>
+<body class="admin-page">
   <div class="admin-shell">
     <aside class="sidebar" id="sidebar">
+      <button class="drawer-close" type="button" aria-label="Close staff navigation" data-drawer-close><i data-lucide="x"></i></button>
       <a class="brand" href="index.php"><img src="../img/ZPPSU.png" alt="ZPPSU seal" /><span><strong>ZPPSU</strong><small>Digital Archive</small></span></a>
       <div class="workspace-label">Staff workspace</div>
       <nav aria-label="Staff navigation">
@@ -29,6 +31,7 @@
       </nav>
       <div class="sidebar-bottom"><a href="index.php#profile"><i data-lucide="badge-check"></i> Staff profile</a><a class="back-link" href="../logout.php"><i data-lucide="log-out"></i> Return to site</a></div>
     </aside>
+    <div class="drawer-scrim" data-drawer-scrim aria-hidden="true"></div>
     <main class="admin-main students-main">
       <header class="admin-header"><button class="mobile-menu" id="mobileMenu" aria-label="Open staff navigation" aria-expanded="false"><i data-lucide="menu"></i></button><div><span class="eyebrow">Staff workspace</span><h1>Good morning, <?= $displayName ?>.</h1></div><div class="header-actions"><button class="header-icon" aria-label="Notifications"><i data-lucide="bell"></i><span></span></button><div class="user-chip"><span class="avatar"><?= $initials ?></span><span><strong><?= $displayName ?></strong><small>Archive Staff</small></span><i data-lucide="chevron-down"></i></div></div></header>
       <section class="welcome-row students-welcome"><div><p class="page-kicker">Student records · <span data-current-datetime>Loading date and time...</span></p><h2>Student information</h2><p class="page-intro">Manage student profiles and the documents scanned under each student.</p></div><button class="gold-button" id="addStudentButton" type="button"><i data-lucide="user-round-plus"></i> Add student</button></section>
@@ -42,6 +45,7 @@
   <div class="student-modal-backdrop" id="studentModal" hidden><section class="student-modal" role="dialog" aria-modal="true" aria-labelledby="studentModalTitle"><button class="row-action modal-close" id="closeStudentModal" type="button" aria-label="Close add student dialog"><i data-lucide="x"></i></button><span class="panel-kicker">Student directory</span><h2 id="studentModalTitle">Add student</h2><p>Register a student profile before attaching scanned documents.</p><div class="student-form-grid"><label>Student number<input placeholder="2026-001234" /></label><label>Last name<input placeholder="Last name" /></label><label>First name<input placeholder="First name" /></label><label>Middle initial<input placeholder="M.I." /></label><label>Gender<select><option>Female</option><option>Male</option></select></label><label>Birthdate<input type="date" /></label><label>Address<input placeholder="Complete address" /></label><label>Civil status<select><option>Single</option><option>Married</option><option>Widowed</option></select></label><label>Contact number<input placeholder="09XX XXX XXXX" /></label></div><button class="login-submit" id="saveStudentButton" type="button">Save student <i data-lucide="arrow-right"></i></button></section></div>
   <script src="../data-sync.js?v=20260905"></script>
   <script src="../admin/script.js?v=20260906"></script>
+  <script src="../admin/shell-ui.js?v=20261116c"></script>
 </body>
 </html>
 

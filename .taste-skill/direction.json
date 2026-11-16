@@ -1,0 +1,400 @@
+{
+ "version": 1,
+ "at": "2026-11-15T04:02:33.135Z",
+ "seed": 1157225721,
+ "redraws": 0,
+ "input": {
+  "brief": "",
+  "sector": "education",
+  "tone": null,
+  "have": [],
+  "keep": [],
+  "avoid": [],
+  "sections": [
+   "5"
+  ],
+  "direction": "editorial-report"
+ },
+ "imagery": "atmosphere",
+ "allow": [],
+ "direction": {
+  "id": "editorial-report",
+  "name": "The printed annual",
+  "sectors": [
+   "culture",
+   "nonprofit",
+   "education",
+   "finance",
+   "saas",
+   "ai-product",
+   "health",
+   "agency",
+   "other"
+  ],
+  "tones": [
+   "editorial",
+   "bold"
+  ],
+  "needs": [],
+  "idea": "Lay the page out like a well-designed printed report or magazine feature: a masthead image, a tight oversized title, text held to a strict column line, and colour used in solid blocks the way a two-colour print job would. It gives weight and authority to subjects that are really about content: findings, a manifesto, a programme, a serious product. The reader should feel that someone edited this.",
+  "composition": "A fixed vertical axis at about 42% of the viewport width organises everything: headings begin on it, body columns hang from it, and the 0–42% zone holds small side notes, figures or stays empty. Masthead: a wide image band (photographic mosaic or a single crop) across the top 45% of the first screen; below it the title at 7–9vw starting on the axis, with a two-sentence standfirst at 20–24px. Sections alternate between text pages (title on the axis, body in one or two columns of 34–40ch to its right) and full-bleed colour pages carrying one large figure, quotation or image mosaic. Mosaics are gutterless: photographs and flat colour tiles butted together in a 4- or 6-cell grid. Page numbers, running heads and other print furniture are left out.",
+  "typography": "A tight heavy grotesk or a sharp serif for titles; an excellent text face for reading at 18–20px with leading near 1.5. Headings in sentence case, tracked tight.",
+  "typeClasses": [
+   "grotesk-tight",
+   "serif-display",
+   "serif-text"
+  ],
+  "colour": "Paper, ink and two or three solid block colours. A colour page is a whole section in one flat colour.",
+  "paletteTags": [
+   "flat-loud",
+   "two-tone",
+   "mono-accent"
+  ],
+  "imagery": "Photographs used as blocks in mosaics alongside flat colour tiles; mixed subjects are fine if cropped tight and converted to one treatment.",
+  "photoTreatment": "Give all photographs in a mosaic one treatment: greyscale via `filter: grayscale(1) contrast(1.05)`, or all full colour. Do not mix.",
+  "sectionTags": [
+   "type-led",
+   "colour-field",
+   "dense",
+   "poster"
+  ],
+  "motion": "masked-headline",
+  "richness": "The column line, the mosaics and whole pages of colour give structure and variety without ornaments.",
+  "pitfalls": "The axis must be exact and reused everywhere or it reads as random indentation. Keep paragraphs to a real reading measure. On a phone the axis collapses to the left margin and side notes move inline above their paragraph.",
+  "seenIn": [
+   "aww-ai-in-design-report-2026",
+   "opl-applied-imagination",
+   "opl-the-queue",
+   "opl-artem-taradash",
+   "opl-belgrade-architecture"
+  ],
+  "allow": []
+ },
+ "hero": {
+  "id": "view-with-two-cards-in-the-corner",
+  "name": "View with two cards in the corner",
+  "archetype": "fullbleed-media",
+  "directions": [
+   "place-carries-it",
+   "hero-object",
+   "editorial-report"
+  ],
+  "needs": [],
+  "blueprint": "One photograph or muted film fills the viewport, `object-fit: cover`, with the subject in the right half. The headline sits on the left at mid-height: two lines at clamp(44px, 3.9vw, 60px), bold, leading 1.08, flush to the 32px margin on columns 1–5, the block vertically centred; 20px below it, one supporting sentence at 18px, max 40ch, in the paper colour. In the bottom-right corner, 32px from the right and bottom edges, two cards sit side by side with a 16px gap, each two columns wide (about 210px) at 3:2: a photograph of the newest thing (a project, an edition, an article) with a paper-colour bar 40px tall fused to its lower edge, holding its title at 16px on the left and a small arrow on the right. They are the next steps after the single action, which is a solid rectangle top-right beside a menu word. One short fact at 16px in the paper colour may be pinned onto the subject itself, beside a solid 8px dot on the point it describes, with no line joining them. Wordmark top-left on the 32px margin. If the left half is light, lay a neutral dark scrim under columns 1–6 only.",
+  "mobile": "The picture is re-cropped to portrait with the subject in the upper half. The headline sits at 9vw on two lines on the 16px margin at 44% of the height, with the sentence at 16px beneath it. The two cards sit side by side across the full width at the bottom, 16px from the edges, each about 171px wide at 3:2 with its title bar. Wordmark top-left; the action and a menu word top-right.",
+  "headline": "A plain two-line claim of 4–7 words, at most about 17 characters per line at 3.9vw.",
+  "motion": "slow-crossfade",
+  "seenIn": [
+   "aww-cominvi",
+   "aww-no-art"
+  ]
+ },
+ "type": {
+  "id": "young-source",
+  "name": "Young Serif / Source Serif 4",
+  "class": "serif-text",
+  "display": {
+   "family": "Young Serif",
+   "source": "google",
+   "weights": [
+    400
+   ],
+   "italic": false,
+   "settings": "weight 400 (single heavy cut) · tracking -0.02em · leading 0.95 · sentence case",
+   "css": "<link rel=\"preconnect\" href=\"https://fonts.googleapis.com\">\n<link rel=\"preconnect\" href=\"https://fonts.gstatic.com\" crossorigin>\n<link href=\"https://fonts.googleapis.com/css2?family=Young+Serif:wght@400&family=Source+Serif+4:ital,wght@0,400;0,600;1,400;1,600&display=swap\" rel=\"stylesheet\">"
+  },
+  "text": {
+   "family": "Source Serif 4",
+   "source": "google",
+   "weights": [
+    400,
+    600
+   ],
+   "italic": true,
+   "settings": "400 for body, 600 for emphasis, italic for quotations · leading 1.55 · tracking 0",
+   "css": "<link rel=\"preconnect\" href=\"https://fonts.googleapis.com\">\n<link rel=\"preconnect\" href=\"https://fonts.gstatic.com\" crossorigin>\n<link href=\"https://fonts.googleapis.com/css2?family=Young+Serif:wght@400&family=Source+Serif+4:ital,wght@0,400;0,600;1,400;1,600&display=swap\" rel=\"stylesheet\">"
+  },
+  "standsInFor": [
+   "FS Kim",
+   "Recoleta",
+   "Gelica"
+  ],
+  "note": "A heavy, round old-style headline face with soft bracketed serifs over a clear transitional text serif. Suits essays, food, independent publishers and personal sites that want warmth with weight.",
+  "seenIn": [
+   "opl-applied-imagination",
+   "opl-flowjam-2",
+   "opl-marina-rachello"
+  ],
+  "links": [
+   "https://fonts.googleapis.com/css2?family=Young+Serif:wght@400&family=Source+Serif+4:ital,wght@0,400;0,600;1,400;1,600&display=swap"
+  ],
+  "scale": {
+   "step-small": "clamp(0.8125rem, 0.79rem + 0.1vw, 0.875rem)",
+   "step-body": "clamp(1.125rem, 1.05rem + 0.3vw, 1.3125rem)",
+   "step-lead": "clamp(1.25rem, 1.1rem + 0.7vw, 1.625rem)",
+   "step-head": "clamp(2rem, 1.3rem + 3.2vw, 4rem)"
+  }
+ },
+ "palette": {
+  "id": "offwhite-bottle-yellow",
+  "name": "Bottle ink, yellow",
+  "tags": [
+   "mono-accent"
+  ],
+  "bg": "#f7f7f7",
+  "surface": "#ebebeb",
+  "ink": "#0d2a1c",
+  "muted": "#5f6b64",
+  "accent": "#f6e016",
+  "accentInk": "#0d2a1c",
+  "fields": [
+   {
+    "bg": "#f6e016",
+    "ink": "#0d2a1c"
+   }
+  ],
+  "note": "Off-white ground with all type in a near-black bottle green instead of black. Yellow is the only saturated note: the button or one small object on most screens, and one later section that turns fully yellow.",
+  "seenIn": [
+   "aww-leo-parpeix-portfolio-2026",
+   "opl-wild-as"
+  ]
+ },
+ "photos": {
+  "set": "people",
+  "title": "People",
+  "note": "figures, silhouettes and portraits, mostly unposed",
+  "treatment": "Give all photographs in a mosaic one treatment: greyscale via `filter: grayscale(1) contrast(1.05)`, or all full colour. Do not mix.",
+  "others": [
+   "mountain",
+   "forest",
+   "field-and-farm",
+   "sky-and-space"
+  ],
+  "photos": [
+   {
+    "id": 177,
+    "alt": "Hiker with a backpack looking over a hazy mountain valley",
+    "tone": "mid",
+    "colours": [
+     "warm tan",
+     "hazy gold",
+     "olive"
+    ],
+    "mono": false,
+    "calm": "left",
+    "quality": 5,
+    "ratio": 1.37,
+    "by": "Danka & Peter",
+    "page": "https://unsplash.com/photos/tvicgTdh7Fg"
+   },
+   {
+    "id": 669,
+    "alt": "Person in a mustard jacket and grey beanie seen from behind in fog",
+    "tone": "light",
+    "colours": [
+     "mustard",
+     "pale grey",
+     "white"
+    ],
+    "mono": false,
+    "calm": "left",
+    "quality": 5,
+    "ratio": 1.41,
+    "by": "Luke Pamer",
+    "page": "https://unsplash.com/photos/oUhr-qMTJoc"
+   },
+   {
+    "id": 685,
+    "alt": "Man sitting on a rock looking over a sea of clouds",
+    "tone": "mid",
+    "colours": [
+     "pale gold",
+     "grey",
+     "dark brown"
+    ],
+    "mono": false,
+    "calm": "right",
+    "quality": 5,
+    "ratio": 1.5,
+    "by": "Joshua Earle",
+    "page": "https://unsplash.com/photos/Dwheufds6kQ"
+   },
+   {
+    "id": 338,
+    "alt": "Person in a hooded coat seen from behind facing a misty sea",
+    "tone": "mid",
+    "colours": [
+     "slate blue",
+     "grey",
+     "charcoal"
+    ],
+    "mono": false,
+    "calm": "left",
+    "quality": 5,
+    "ratio": 1.5,
+    "by": "Patryk Sobczak",
+    "page": "https://unsplash.com/photos/9VPtNW84vGI"
+   },
+   {
+    "id": 832,
+    "alt": "Woman in a pale blue shirt reading a book in soft window light",
+    "tone": "dark",
+    "colours": [
+     "dark olive",
+     "pale blue",
+     "warm skin"
+    ],
+    "mono": false,
+    "calm": "left",
+    "quality": 4,
+    "ratio": 1.5,
+    "by": "hieu le",
+    "page": "https://unsplash.com/photos/SrkuyPb3aUk"
+   },
+   {
+    "id": 334,
+    "alt": "Man carrying a guitar walking along a foggy beach, monochrome",
+    "tone": "light",
+    "colours": [
+     "light grey",
+     "white",
+     "charcoal"
+    ],
+    "mono": true,
+    "calm": "top",
+    "quality": 4,
+    "ratio": 1.5,
+    "by": "Kimberly Richards",
+    "page": "https://unsplash.com/photos/ERSauUNQ3ag"
+   },
+   {
+    "id": 22,
+    "alt": "Man in a dark suit walking across painted road markings",
+    "tone": "mid",
+    "colours": [
+     "warm grey",
+     "charcoal"
+    ],
+    "mono": false,
+    "calm": "left",
+    "quality": 4,
+    "ratio": 1.19,
+    "by": "Alejandro Escamilla",
+    "page": "https://unsplash.com/photos/du_OrQAA4r0"
+   },
+   {
+    "id": 447,
+    "alt": "Man standing on a wall facing a blue lake and distant mountains",
+    "tone": "mid",
+    "colours": [
+     "blue",
+     "slate",
+     "white"
+    ],
+    "mono": false,
+    "calm": "left",
+    "quality": 4,
+    "ratio": 1.5,
+    "by": "Joshua Earle",
+    "page": "https://unsplash.com/photos/YxJ5AfKFgFE"
+   }
+  ]
+ },
+ "motion": {
+  "id": "slow-crossfade",
+  "name": "Slow crossfade",
+  "description": "The principal photograph quietly changes: three or four images of the same framing crossfade over about 1.6 seconds, holding five to six seconds each, or the fixed image changes when its matching section arrives. It should feel like light shifting in a room. Pause when the tab is hidden; under reduced motion show only the first image."
+ },
+ "sections": [
+  {
+   "id": null,
+   "role": "5",
+   "shape": null,
+   "name": "5",
+   "blueprint": null
+  }
+ ],
+ "references": [
+  {
+   "id": "opl-belgrade-architecture",
+   "name": "Architecture of Socialist-Era Belgrade",
+   "url": "https://belgrade.klmln.com",
+   "source": "One Page Love",
+   "kind": "culture",
+   "score": 7.6,
+   "idea": "A two-colour printed guidebook on screen: signal-red type over greyscale concrete, with one modular display face as the only ornament.",
+   "mood": [
+    "austere",
+    "graphic",
+    "archival",
+    "bold"
+   ],
+   "archetype": "fullbleed-media-overlay",
+   "hero": "Full-bleed greyscale photograph of brutalist housing towers; pale sky fills the top half, concrete the bottom. The title is set over the sky, flush left at a 32px margin, three lines in a wide modular display face at 102px (7.1vw) in flat red, the longest line reaching 92% of the width, leading so tight that the lines almost touch. Under it, one row at 24px: a red one-line descriptor at left, and two paler-red facts right-aligned (an object count and a date range). Top-right, the word 'Index' with a diagonal arrow. No logo, no button, nothing else. Red and grey only.",
+   "type": "IntraNet, a wide modular display face with rounded, notched corners, used only for the title and its footer repeat. Funnel Sans carries the rest: about 50px for the long intro, 40px bold uppercase entry titles, 24px meta, 13px credits. Four sizes, two faces.",
+   "colour": "#f53843 #d1d1d1 #c7c7c7 #777777 #f1a7ab — Strictly red and grey: red text on grey photo or grey paper, then pale grey text on a solid red field for the essay and footer. Photographs are desaturated so nothing breaks the pair.",
+   "imagery": "Contemporary black-and-white architectural photographs of concrete towers and complexes, frontal or looking up, with big skies and visible grain; full-bleed in the hero, full column width and square-cornered in entries.",
+   "layout": "16 to 32px margins, everything flush left. A long red essay block in very large text, then twenty repeated entry blocks on grey: a two-column header split by a vertical red hairline, a meta row, then a wide photo. 81 screens of the same rhythm.",
+   "sections": [
+    {
+     "role": "intro",
+     "description": "Immediately under the hero photo a solid red field begins with no gap. The essay runs as one full-width column in pale grey sans at roughly 50px with tight leading, about 50 characters per line, paragraphs separated by one blank line, with no headings, pull-quotes or images for several screens. The photo's bottom edge butts straight against the red."
+    },
+    {
+     "role": "list",
+     "description": "Each building entry sits on light grey paper: a thin red rule across the top, then two columns divided by a vertical red hairline at the 50% mark. Left: the building's name in red bold uppercase at 40px over two lines. Right: its dates in pale red at the same size. Below, a small meta row with 'Credits' and 'Address' labels and values in 13px red, then a full-width greyscale photograph."
+    },
+    {
+     "role": "footer",
+     "description": "Solid red. At the top, two short 13px notes side by side in pale grey occupy the left 60%, a back-to-top link sits far right, and a third note runs beneath. A tall empty red gap follows. Then the full title is repeated in the display face at hero size but in pale grey, flush left, above a single row of small meta: sources link left, font credits centre, city and year right."
+    }
+   ],
+   "steal": [
+    "Limit the page to one saturated colour and one grey, desaturate all photos, and invert the pair (grey on red) for long reading blocks.",
+    "Set the title in a distinctive modular display face directly on the sky area of a photo and repeat it in the footer in the inverse colour.",
+    "Put facts in the hero as a right-aligned row of paler-tint figures (count, date range) on the same baseline as the subtitle."
+   ]
+  },
+  {
+   "id": "opl-the-queue",
+   "name": "The Queue",
+   "url": "https://sheets.works/data-viz/the-queue/",
+   "source": "One Page Love",
+   "kind": "culture",
+   "score": 8.1,
+   "idea": "An essay on queueing where the queue is the ornament: a line of drawn figures stands along the bottom of the hero and returns between chapters in changing period dress.",
+   "mood": [
+    "literary",
+    "quiet",
+    "wry",
+    "bookish"
+   ],
+   "archetype": "centred-statement-media-below",
+   "hero": "Pinkish warm-grey page. A 12px mono breadcrumb sits top-left; there is no other navigation. The two-word title is set in a light serif at 200px (14vw), centred, its middle slightly above the viewport centre, spanning about 60% of the width with tight tracking. One centred line of grey 20px serif sits 40px beneath. The lower third stays empty until a single row of about 25 small greyscale drawn figures, each around 110px tall, stands on a hairline rule 20px above the bottom edge and runs the full width like a frieze.",
+   "type": "Newsreader does everything: Light at 200px with -0.05em tracking for the title, regular near 30px for chapter headings, 18px body with open leading, and pale ghost numerals around 22vw. A monospace appears only in the breadcrumb and footer labels.",
+   "colour": "#ebe4e0 #2b2622 #6f6763 #d9d2ce #16a05a — One warm rosy-grey ground throughout, brown-black text, mid-grey secondary lines, greyscale drawings. A single green appears only in the breadcrumb and one footer button.",
+   "imagery": "Hand-drawn greyscale figures with fine outlines, standing in single file on a hairline; each band changes era costume and spacing. No boxes or backgrounds: figures sit directly on the page colour, full width.",
+   "layout": "After the centred hero, text runs in one narrow column about 40% of the viewport wide, starting 30% from the left; the right third holds only a huge pale chapter numeral. Chapters are separated by full-width bands of figures on hairlines.",
+   "sections": [
+    {
+     "role": "other",
+     "description": "Chapter block. A 30px serif question heads a text column about 590px wide, offset 30% from the left. Behind it in the top-right corner sits a chapter numeral roughly 22vw tall in a tint barely darker than the page, cropped by the section's top edge. Body is 18px serif at about 1.8 leading; bold run-in phrases open key paragraphs in place of subheads. No pull quotes, side notes or images inside the text."
+    },
+    {
+     "role": "gallery",
+     "description": "Divider band between chapters: a full-width strip about 180px tall in which 10 to 15 drawn figures stand at uneven intervals on a 1px rule, with 120px of empty page above. The number and spacing of figures follow the story (few and scattered early, an evenly spaced orderly line later), so the divider carries part of the argument instead of acting as a spacer."
+    },
+    {
+     "role": "footer",
+     "description": "The ending switches voice. A white rounded promo bar with a blue pill button, then a heavy sans heading with a short grey paragraph and one green button, then a hairline, a mono uppercase label, and four small white cards in a row (thumbnail, mono number, bold title). It is narrower than the page and sits on a different axis from the essay column, so it reads as site furniture attached afterwards."
+    }
+   ],
+   "steal": [
+    "Turn the subject into the section divider: a frieze of small figures on a hairline, redrawn for each chapter, in place of rules or spacers.",
+    "Set one serif family at three far-apart sizes (200px title, 30px heading, 18px body) and mark chapters with a pale 22vw numeral cropped off the corner.",
+    "Hold body text to a narrow column offset left of centre and leave the right third empty instead of filling it with sidebars."
+   ]
+  }
+ ],
+ "scenes": []
+}

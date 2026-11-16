@@ -1,4 +1,4 @@
-﻿<?php require_once __DIR__ . '/../auth.php'; dats_require_role('Admin'); $currentUser = dats_current_user(); $displayName = htmlspecialchars($currentUser['full_name'], ENT_QUOTES, 'UTF-8'); $initials = dats_user_initials($currentUser); ?>
+<?php require_once __DIR__ . '/../auth.php'; dats_require_role('Admin'); $currentUser = dats_current_user(); $displayName = htmlspecialchars($currentUser['full_name'], ENT_QUOTES, 'UTF-8'); $initials = dats_user_initials($currentUser); ?>
 <!doctype html>
 <html lang="en">
 <head>
@@ -11,10 +11,12 @@
   <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="styles.css" />
   <script src="https://unpkg.com/lucide@latest"></script>
+  <link rel="stylesheet" href="shell.css?v=20261116c" />
 </head>
-<body>
+<body class="admin-page">
   <div class="admin-shell">
     <aside class="sidebar" id="sidebar">
+      <button class="drawer-close" type="button" aria-label="Close admin navigation" data-drawer-close><i data-lucide="x"></i></button>
       <a class="brand" href="../index.php"><img src="../img/ZPPSU.png" alt="ZPPSU seal" /><span><strong>ZPPSU</strong><small>Digital Archive</small></span></a>
       <div class="workspace-label">Workspace</div>
       <nav aria-label="Admin navigation">
@@ -30,6 +32,7 @@
       </nav>
       <div class="sidebar-bottom"><a href="index.php#settings"><i data-lucide="settings-2"></i> Settings</a><a class="back-link" href="../logout.php"><i data-lucide="log-out"></i> Return to site</a></div>
     </aside>
+    <div class="drawer-scrim" data-drawer-scrim aria-hidden="true"></div>
     <main class="admin-main pending-main">
       <header class="admin-header"><button class="mobile-menu" id="mobileMenu" aria-label="Open admin navigation" aria-expanded="false"><i data-lucide="menu"></i></button><div><span class="eyebrow">Administrator workspace</span><h1>Good morning, <?= $displayName ?>.</h1></div><div class="header-actions"><button class="header-icon" aria-label="Notifications"><i data-lucide="bell"></i><span></span></button><div class="user-chip"><span class="avatar"><?= $initials ?></span><span><strong><?= $displayName ?></strong><small>System Administrator</small></span><i data-lucide="chevron-down"></i></div></div></header>
       <section class="welcome-row pending-welcome"><div><p class="page-kicker">Archive intake · <span data-current-datetime>Loading date and time...</span></p><h2>Pending reviews</h2><p class="page-intro">Review scanned documents before they become part of the official archive.</p></div><span class="review-count"><strong id="pendingCount">4</strong> documents waiting</span></section>
@@ -47,6 +50,7 @@
   <div class="admin-toast" id="adminToast" role="status">Document review updated.</div>
   <script src="../data-sync.js?v=20260911"></script>
   <script src="script.js"></script>
+  <script src="shell-ui.js?v=20261116c"></script>
 </body>
 </html>
 

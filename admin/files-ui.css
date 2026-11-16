@@ -1,0 +1,276 @@
+/* Student Files page makeover (admin/files.php only).
+   Loaded after admin/styles.css, the page's inline styles, dashboard-tables.css,
+   dashboard-buttons.css and shell.css, and scoped to body.files-page. The
+   sidebar, top bar and phone drawer come from shell.css. Presentation only:
+   every id, data-* hook, class the script toggles and the markup it renders
+   are unchanged. */
+
+.files-page {
+  --d-ink: #241517;
+  --d-body: #42343a;
+  --d-muted: #6f6166;
+  --d-line: #e6dcd8;
+  --d-line-strong: #d3c4bf;
+  --d-paper: #f7f3ee;
+  --d-paper-deep: #efe8df;
+  --d-maroon: #6b1d2a;
+  --d-maroon-deep: #4a111b;
+  --d-maroon-tint: #f6e9ea;
+  --d-gold: #d6ad3a;
+  --d-gold-deep: #a9811c;
+  --d-gold-pale: #f8efd5;
+  --d-danger: #8a1f2d;
+  --d-danger-bg: #fbe4e6;
+  --d-success: #22593a;
+  --d-success-bg: #e3f1dc;
+  --d-radius: 14px;
+  --d-radius-sm: 10px;
+  --d-shadow: 0 1px 2px rgba(42, 23, 26, .04), 0 14px 34px -22px rgba(42, 23, 26, .24);
+  --d-shadow-hover: 0 2px 4px rgba(42, 23, 26, .05), 0 22px 44px -22px rgba(42, 23, 26, .3);
+  --d-ease: cubic-bezier(.2, .8, .2, 1);
+  --d-gap: 16px;
+  --d-field-height: 44px;
+  color: var(--d-body);
+  background: var(--d-paper);
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}
+
+.files-page h1, .files-page h2, .files-page h3 { color: var(--d-ink); line-height: 1.25; }
+
+/* ---------- Focus ---------- */
+.files-page .gold-button:focus-visible,
+.files-page .outline-button:focus-visible,
+.files-page .login-submit:focus-visible,
+.files-page .view-files-btn:focus-visible,
+.files-page .year-pagination button:focus-visible,
+.files-page .row-action:focus-visible,
+.files-page .student-file-actions a:focus-visible {
+  outline: 2px solid var(--d-gold);
+  outline-offset: 2px;
+}
+
+/* ---------- Page heading ---------- */
+.files-page .welcome-row { align-items: flex-end; gap: 24px; padding: 36px 0 20px; }
+.files-page .page-kicker { margin: 0 0 8px; color: var(--d-muted); font: 500 12px/1.4 var(--mono); letter-spacing: .04em; text-transform: none; }
+.files-page .welcome-row h2 { margin: 0 0 6px; font-size: 32px; font-weight: 700; letter-spacing: -.03em; }
+.files-page .page-intro { max-width: 60ch; color: var(--d-muted); font-size: 14px; }
+.files-page .files-welcome-actions { gap: 10px; }
+
+/* ---------- Buttons ---------- */
+.files-page .gold-button,
+.files-page .outline-button,
+.files-page .login-submit {
+  height: 42px;
+  padding: 0 18px;
+  border-radius: var(--d-radius-sm);
+  font: 700 13px/1 var(--sans);
+  letter-spacing: 0;
+}
+.files-page .gold-button svg, .files-page .outline-button svg, .files-page .login-submit svg { width: 16px; height: 16px; flex-basis: 16px; }
+.files-page .gold-button:hover, .files-page .login-submit:hover { background: #e0b94a; border-color: #e0b94a; box-shadow: 0 4px 12px rgba(42, 23, 26, .18); }
+.files-page .outline-button { color: var(--d-ink); border-color: var(--d-line-strong); }
+.files-page .outline-button:hover { color: var(--d-maroon); background: var(--d-paper); border-color: var(--d-gold); }
+.files-page .view-files-btn { height: 36px; padding: 0 14px; border-radius: 8px; font: 700 12px/1 var(--sans); }
+.files-page .view-files-btn svg { width: 14px; height: 14px; }
+.files-page .row-action.modal-close { display: grid; place-items: center; width: 36px; height: 36px; padding: 0; color: var(--d-muted); background: var(--d-paper); border: 0; border-radius: 50%; cursor: pointer; transition: background .15s var(--d-ease), color .15s var(--d-ease); }
+.files-page .row-action.modal-close:hover { color: var(--d-ink); background: var(--d-paper-deep); }
+.files-page .row-action.modal-close svg { width: 18px; height: 18px; }
+
+/* ---------- Year filter row ---------- */
+.files-page .files-filters { margin-bottom: var(--d-gap); }
+.files-page .enrollment-year-filter { grid-template-columns: auto 200px auto; gap: 12px; }
+.files-page .enrollment-year-filter .panel-kicker { color: var(--d-muted); font: 500 12px/1.3 var(--mono); letter-spacing: .04em; text-transform: none; }
+.files-page .enrollment-year-filter select {
+  width: 200px;
+  min-height: var(--d-field-height);
+  padding: 0 40px 0 14px;
+  border: 1px solid var(--d-line-strong);
+  border-radius: var(--d-radius-sm);
+  font: 600 14px/1.3 var(--sans);
+  appearance: none;
+  -webkit-appearance: none;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%236f6166' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><path d='m6 9 6 6 6-6'/></svg>");
+  background-repeat: no-repeat;
+  background-position: right 14px center;
+  transition: border-color .15s var(--d-ease), box-shadow .15s var(--d-ease);
+}
+.files-page .enrollment-year-filter select:hover { border-color: #bfaaa6; }
+.files-page .enrollment-year-filter select:focus-visible { outline: 0; border-color: var(--d-maroon); box-shadow: 0 0 0 3px rgba(107, 29, 42, .14); }
+.files-page .enrollment-year-filter .folder-delete { flex-basis: 44px; width: 44px; height: 44px; color: var(--d-muted); background: #fff; border-color: var(--d-line-strong); border-radius: var(--d-radius-sm); }
+.files-page .enrollment-year-filter .folder-delete:hover:not(:disabled) { color: var(--d-danger); background: var(--d-danger-bg); border-color: var(--d-danger-bg); }
+.files-page .enrollment-year-filter .folder-delete svg { width: 17px; height: 17px; }
+
+/* ---------- Panel ---------- */
+.files-page .files-panel { padding: 22px 24px 24px; background: #fff; border: 1px solid var(--d-line); border-radius: var(--d-radius); box-shadow: var(--d-shadow); }
+.files-page .panel-heading { align-items: flex-start; gap: 16px; margin-bottom: 18px; }
+.files-page .panel-kicker { color: var(--d-maroon); font-size: 11px; letter-spacing: .12em; }
+.files-page .panel-heading h3 { margin: 6px 0 0; font-size: 18px; font-weight: 700; letter-spacing: -.02em; }
+
+/* Toolbar */
+.files-page .year-student-toolbar { gap: 12px 16px; margin-bottom: var(--d-gap); }
+.files-page .year-student-toolbar .search-box { min-height: var(--d-field-height); max-width: 480px; gap: 10px; padding: 0 14px; border: 1px solid var(--d-line-strong); border-radius: 12px; transition: border-color .15s var(--d-ease), box-shadow .15s var(--d-ease); }
+.files-page .search-box:hover { border-color: #bfaaa6; }
+.files-page .search-box:focus-within { border-color: var(--d-maroon); box-shadow: 0 0 0 3px rgba(107, 29, 42, .14); }
+.files-page .search-box svg { width: 18px; height: 18px; flex: 0 0 18px; }
+.files-page .search-box input { padding: 12px 0; font: 500 14px/1.3 var(--sans); }
+.files-page .search-box input::placeholder { color: #a39498; font-weight: 400; }
+.files-page .year-student-count { gap: 10px; min-height: var(--d-field-height); padding: 0 16px; border: 0; border-radius: 999px; }
+.files-page .year-student-count span { font: 500 11px/1.3 var(--mono); letter-spacing: .04em; text-transform: none; }
+.files-page .year-student-count strong { font-size: 15px; font-weight: 700; font-variant-numeric: tabular-nums; }
+.files-page .search-suggestions { top: calc(100% + 6px); left: 0; right: 0; padding: 6px; border-color: var(--d-line); box-shadow: var(--d-shadow-hover); }
+.files-page .search-suggestion-item { gap: 12px; padding: 10px 12px; }
+.files-page .search-suggestion-item .student-mini-avatar { flex-basis: 32px; width: 32px; height: 32px; font-size: 10px; }
+.files-page .search-suggestion-item strong { font-size: 14px; font-weight: 600; }
+.files-page .search-suggestion-item small { font-size: 12px; }
+.files-page .search-suggestion-empty { padding: 14px 12px; font-size: 13px; }
+
+/* ---------- Student table ---------- */
+.files-page .student-year-table-wrap { border: 1px solid var(--d-line); border-radius: 12px; }
+.files-page .student-year-table thead th { padding: 12px 16px; font: 600 11px/1.3 var(--mono); letter-spacing: .06em; border-bottom-color: var(--d-line); }
+.files-page .student-year-table th.sortable-th { padding: 0; }
+.files-page .sort-th { gap: 6px; padding: 12px 16px; font: 600 11px/1.3 var(--mono); letter-spacing: .06em; }
+.files-page .sort-th svg { width: 14px; height: 14px; }
+.files-page .sort-th:hover { background: var(--d-gold-pale); }
+.files-page .student-year-table tbody td { padding: 13px 16px; font-size: 13px; border-bottom-color: var(--d-line); }
+.files-page .student-year-table tbody td small { font-size: 12px; }
+.files-page .student-year-table tbody td a { color: var(--d-maroon); }
+.files-page .student-mini-avatar { width: 36px; height: 36px; font: 500 11px/1 var(--mono); }
+.files-page .student-name-cell { gap: 12px; }
+.files-page .student-meta { gap: 2px; }
+.files-page .student-meta strong { font-size: 14px; font-weight: 600; }
+.files-page .student-meta small { font-size: 12px; }
+.files-page .student-row-actions, .files-page .recycle-row-actions { gap: 8px; }
+.files-page .student-row-delete { flex-basis: 34px; width: 34px; height: 34px; border-color: var(--d-line-strong); border-radius: 8px; }
+.files-page .student-row-delete:hover { color: var(--d-danger); background: var(--d-danger-bg); border-color: var(--d-danger-bg); }
+.files-page .student-row-delete svg { width: 15px; height: 15px; }
+.files-page .year-pagination { gap: 6px; margin-top: var(--d-gap); }
+.files-page .year-pagination button { height: 36px; min-width: 36px; padding: 0 12px; border-radius: 8px; font: 700 12px/1 var(--sans); }
+.files-page .year-pagination button.active { color: #fff; background: var(--d-maroon); border-color: var(--d-maroon); }
+.files-page .year-empty-state { padding: 36px 20px; background: var(--d-paper); border: 1.5px dashed var(--d-line-strong); border-radius: 12px; font-size: 13px; }
+
+/* ---------- Modals ---------- */
+.files-page .student-modal { padding: 28px 30px; border-top-width: 4px; border-radius: 16px; box-shadow: 0 30px 70px -20px rgba(42, 23, 26, .45); }
+.files-page .student-modal .panel-kicker { display: block; }
+.files-page .student-modal h2 { margin: 6px 0 6px; font-size: 22px; font-weight: 700; letter-spacing: -.03em; }
+.files-page .student-modal > p, .files-page .student-modal .page-intro { margin: 0 0 20px; font-size: 13px; line-height: 1.55; }
+.files-page .student-modal .modal-close { top: 16px; right: 16px; }
+.files-page .folder-modal .modal-actions > button,
+.files-page .delete-folder-modal .modal-actions > button { height: 42px; min-width: 120px; padding: 0 18px; border-radius: var(--d-radius-sm); font-size: 13px; }
+.files-page .folder-modal .modal-actions, .files-page .delete-folder-modal .modal-actions { padding-top: 20px; border-top-color: var(--d-line); }
+
+/* Add folder */
+.files-page .year-field > label { font: 600 13px/1.3 var(--sans); }
+.files-page .year-stepper { grid-template-columns: 44px 1fr 44px; border-color: var(--d-line-strong); }
+.files-page .year-stepper input { height: 48px; font-size: 20px; }
+.files-page .year-step { width: 44px; height: 48px; }
+.files-page .year-step svg { width: 16px; height: 16px; }
+.files-page .year-hint { font-size: 12px; }
+.files-page .year-suggestions { gap: 8px; margin-top: 4px; }
+.files-page .year-chip { height: 32px; padding: 0 14px; border-color: var(--d-line-strong); font: 500 12px/1 var(--mono); }
+.files-page .folder-modal-message { gap: 8px; padding: 11px 14px; border-radius: var(--d-radius-sm); font-size: 13px; }
+.files-page .folder-modal-message svg { width: 16px; height: 16px; flex-basis: 16px; }
+
+/* Delete confirmations */
+.files-page .delete-folder-target { gap: 14px; padding: 14px 16px; border: 0; border-radius: 12px; }
+.files-page .delete-folder-target .folder-icon, .files-page .folder-icon { width: 44px; height: 44px; flex-basis: 44px; background: var(--d-maroon-tint); border-radius: var(--d-radius-sm); }
+.files-page .folder-icon svg { width: 20px; height: 20px; }
+.files-page .delete-folder-target strong { font-size: 20px; letter-spacing: -.02em; overflow-wrap: anywhere; }
+.files-page .delete-folder-target small { font-size: 13px; }
+.files-page .delete-folder-note { gap: 10px; padding: 12px 14px; border-radius: var(--d-radius-sm); font-size: 13px; }
+.files-page .delete-folder-note svg { flex-basis: 16px; width: 16px; height: 16px; margin-top: 2px; }
+.files-page .delete-folder-note.warning { color: var(--d-danger); background: var(--d-danger-bg); }
+
+/* Student files */
+.files-page .student-files-modal { width: min(92vw, 840px); }
+.files-page .recycle-bin-modal { width: min(92vw, 880px); }
+.files-page .student-files-header { gap: 6px; margin-bottom: 20px; }
+.files-page .student-files-header h2 { margin: 0; }
+.files-page .student-files-meta { gap: 12px; margin-bottom: 20px; }
+.files-page .student-files-meta .meta-box { padding: 12px 16px; border: 0; border-radius: var(--d-radius-sm); }
+.files-page .student-files-meta .meta-box span { font: 500 11px/1.3 var(--mono); letter-spacing: .04em; text-transform: none; }
+.files-page .student-files-meta .meta-box strong { margin-top: 4px; font-size: 15px; font-weight: 700; overflow-wrap: anywhere; }
+.files-page .student-file-toolbar { gap: 12px; margin-bottom: 18px; padding: 12px 16px; border: 0; border-radius: 12px; }
+.files-page .bulk-select-toggle { gap: 10px; font: 600 13px/1.3 var(--sans); }
+.files-page .student-file-checkbox { width: 18px; height: 18px; }
+.files-page .student-file-list { gap: 20px; }
+.files-page .student-file-group { gap: 10px; }
+.files-page .student-file-group h3 { font: 600 11px/1.3 var(--mono); letter-spacing: .12em; }
+.files-page .student-file-item { grid-template-columns: 24px 44px 1fr auto; gap: 14px; padding: 14px 16px; border-color: var(--d-line); border-radius: 12px; }
+.files-page .student-file-item:hover { border-color: var(--d-gold); box-shadow: var(--d-shadow); }
+.files-page .student-file-item.selected { border-color: var(--d-gold); box-shadow: 0 0 0 3px rgba(214, 173, 58, .2); }
+.files-page .student-file-icon { width: 44px; height: 44px; background: var(--d-maroon-tint); border-radius: var(--d-radius-sm); }
+.files-page .student-file-icon svg { width: 20px; height: 20px; }
+.files-page .student-file-details strong { font-size: 14px; font-weight: 600; line-height: 1.35; }
+.files-page .student-file-details small { margin-top: 4px; font-size: 12px; }
+.files-page .student-file-actions { gap: 8px; }
+.files-page .student-file-actions a,
+.files-page .student-file-actions button { height: 36px; min-width: 0; padding: 0 14px; border-radius: 8px; font: 700 12px/1 var(--sans); }
+.files-page .student-file-actions button.student-file-delete:hover { color: var(--d-danger); background: var(--d-danger-bg); border-color: var(--d-danger-bg); }
+.files-page .student-files-empty { padding: 28px 18px; border: 1.5px dashed var(--d-line-strong); border-radius: 12px; font-size: 13px; }
+.files-page .student-preview-placeholder { font-size: 13px; }
+.files-page .recycle-bin-list { gap: 16px; }
+.files-page .recycle-bin-list h3 { margin: 0 0 8px; font: 600 11px/1.3 var(--mono); letter-spacing: .12em; text-transform: uppercase; color: var(--d-maroon); }
+
+/* ---------- Footer and toast ---------- */
+.files-page .admin-main > footer { margin-top: 32px; padding: 20px var(--d-gutter); color: var(--d-muted); font: 500 12px/1.5 var(--mono); letter-spacing: .02em; text-transform: none; }
+.files-page .admin-main > footer b { color: var(--d-gold-deep); }
+.files-page .admin-toast { right: 24px; bottom: 24px; max-width: min(360px, calc(100vw - 48px)); padding: 14px 18px; border-radius: 10px; font-size: 13px; line-height: 1.4; box-shadow: var(--d-shadow-hover); }
+
+/* ---------- Breakpoints ---------- */
+@media (max-width: 760px) {
+  /* dashboard-tables.css stacks each row into a card and labels cells from data-label,
+     which this page's rows do not carry; supply the labels by column instead. */
+  .files-page .student-year-table, .files-page .student-year-table tbody { display: block; width: 100%; }
+  .files-page .student-year-table tbody tr { width: 100%; padding: 8px 16px 12px; }
+  .files-page .student-name-cell .student-mini-avatar { flex: 0 0 36px; }
+  .files-page .student-meta { min-width: 0; }
+  .files-page .student-year-table tbody td { grid-template-columns: 96px 1fr; padding: 6px 0; font-size: 13px; }
+  .files-page .student-year-table tbody td:first-child,
+  .files-page .student-year-table tbody td:last-child { grid-template-columns: 1fr; }
+  .files-page .student-year-table tbody td::before { font: 500 11px/1.3 var(--mono); letter-spacing: .04em; text-transform: none; }
+  .files-page #yearStudentList .student-year-table tbody td:nth-child(2)::before { content: "Student ID"; }
+  .files-page #yearStudentList .student-year-table tbody td:nth-child(3)::before { content: "School year"; }
+  .files-page #recycleBinList .student-year-table tbody td:nth-child(2)::before { content: "Student"; }
+  .files-page #recycleBinList .student-year-table tbody td:nth-child(3)::before { content: "School year"; }
+  .files-page #recycleBinList .student-year-table tbody td:nth-child(4)::before { content: "Removed"; }
+  .files-page .student-year-table tbody td:last-child { padding-top: 10px; }
+  .files-page .student-row-actions { width: 100%; }
+  .files-page .student-row-actions .view-files-btn { flex: 1 1 auto; }
+  .files-page .year-pagination { flex-wrap: wrap; justify-content: center; }
+}
+
+@media (max-width: 700px) {
+  .files-page .files-filters { justify-content: stretch; }
+  .files-page .enrollment-year-filter { grid-template-columns: minmax(0, 1fr) 44px; width: 100%; }
+  .files-page .enrollment-year-filter .panel-kicker { grid-column: 1 / -1; }
+  .files-page .enrollment-year-filter select { width: 100%; }
+  .files-page .files-welcome-actions > button { flex: 1 1 0; }
+}
+
+@media (max-width: 640px) {
+  .files-page .welcome-row { padding-top: 24px; }
+  .files-page .welcome-row h2 { font-size: 26px; }
+  .files-page .page-intro { font-size: 13px; }
+  .files-page .files-filters, .files-page .files-panel { width: 90%; }
+  .files-page .files-panel { padding: 18px; }
+  .files-page .year-student-toolbar { flex-wrap: wrap; }
+  .files-page .year-student-toolbar .search-box { flex-basis: 100%; max-width: none; }
+  .files-page .year-student-count { margin-left: auto; }
+  .files-page .student-modal { padding: 22px 18px 20px; border-radius: 14px; }
+  .files-page .student-modal-backdrop { padding: 12px; }
+  .files-page .student-modal h2 { font-size: 20px; }
+  .files-page .student-files-meta { grid-template-columns: 1fr; }
+  .files-page .student-file-toolbar { flex-wrap: wrap; }
+  .files-page .student-file-toolbar .student-file-actions { width: 100%; }
+  .files-page .student-file-toolbar .student-file-actions button { flex: 1 1 0; max-width: none; }
+  .files-page .student-file-item { grid-template-columns: 24px 40px 1fr; }
+  .files-page .student-file-item .student-file-actions { grid-column: 1 / -1; flex-wrap: wrap; }
+  .files-page .student-file-item .student-file-actions a, .files-page .student-file-item .student-file-actions button { flex: 1 1 auto; max-width: none; }
+  .files-page .admin-main > footer { margin-top: 20px; font-size: 11px; }
+  .files-page .admin-toast { right: 16px; bottom: 16px; left: 16px; max-width: none; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .files-page *, .files-page *::before, .files-page *::after { transition: none !important; }
+}

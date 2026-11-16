@@ -1,0 +1,293 @@
+/* Students Information page makeover (admin/students.php only).
+   Loaded after admin/styles.css, student-table.css, dashboard-tables.css,
+   dashboard-buttons.css, student-gradesheet-modal.css, student-import.css and
+   shell.css, and scoped to body.students-page. The sidebar, top bar and
+   phone drawer come from shell.css. Presentation only: every id, data-* hook,
+   class the scripts toggle and the markup they render are unchanged. */
+
+.students-page {
+  --d-ink: #241517;
+  --d-body: #42343a;
+  --d-muted: #6f6166;
+  --d-line: #e6dcd8;
+  --d-line-strong: #d3c4bf;
+  --d-paper: #f7f3ee;
+  --d-paper-deep: #efe8df;
+  --d-maroon: #6b1d2a;
+  --d-maroon-deep: #4a111b;
+  --d-maroon-tint: #f6e9ea;
+  --d-gold: #d6ad3a;
+  --d-gold-deep: #a9811c;
+  --d-gold-pale: #f8efd5;
+  --d-danger: #8a1f2d;
+  --d-danger-bg: #fbe4e6;
+  --d-success: #22593a;
+  --d-success-bg: #e3f1dc;
+  --d-radius: 14px;
+  --d-radius-sm: 10px;
+  --d-shadow: 0 1px 2px rgba(42, 23, 26, .04), 0 14px 34px -22px rgba(42, 23, 26, .24);
+  --d-shadow-hover: 0 2px 4px rgba(42, 23, 26, .05), 0 22px 44px -22px rgba(42, 23, 26, .3);
+  --d-ease: cubic-bezier(.2, .8, .2, 1);
+  --d-gap: 16px;
+  --d-field-height: 44px;
+  --d-select-chevron: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%236f6166' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><path d='m6 9 6 6 6-6'/></svg>");
+  color: var(--d-body);
+  background: var(--d-paper);
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}
+
+.students-page h1, .students-page h2, .students-page h3 { color: var(--d-ink); line-height: 1.25; }
+
+/* ---------- Focus ---------- */
+.students-page .gold-button:focus-visible,
+.students-page .ghost-button:focus-visible,
+.students-page .login-submit:focus-visible,
+.students-page .row-action:focus-visible,
+.students-page .si-link:focus-visible,
+.students-page .student-action-menu button:focus-visible {
+  outline: 2px solid var(--d-gold);
+  outline-offset: 2px;
+}
+
+/* ---------- Page heading ---------- */
+.students-page .welcome-row { align-items: flex-end; gap: 24px; padding: 36px 0 20px; }
+.students-page .page-kicker { margin: 0 0 8px; color: var(--d-muted); font: 500 12px/1.4 var(--mono); letter-spacing: .04em; text-transform: none; }
+.students-page .welcome-row h2 { margin: 0 0 6px; font-size: 32px; font-weight: 700; letter-spacing: -.03em; }
+.students-page .page-intro { max-width: 60ch; color: var(--d-muted); font-size: 14px; }
+
+/* ---------- Buttons ---------- */
+.students-page .gold-button,
+.students-page .login-submit,
+.students-page .students-actions .ghost-button,
+.students-page .si-actions .ghost-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  height: 42px;
+  min-height: 0;
+  padding: 0 18px;
+  border-radius: var(--d-radius-sm);
+  font: 700 13px/1 var(--sans);
+  letter-spacing: 0;
+  cursor: pointer;
+  transition: background .15s var(--d-ease), border-color .15s var(--d-ease), box-shadow .15s var(--d-ease), color .15s var(--d-ease);
+}
+.students-page .gold-button svg, .students-page .login-submit svg, .students-page .ghost-button svg { width: 16px; height: 16px; flex: 0 0 16px; }
+.students-page .gold-button:hover, .students-page .login-submit:hover:not(:disabled) { background: #e0b94a; border-color: #e0b94a; box-shadow: 0 4px 12px rgba(42, 23, 26, .18); }
+.students-page .login-submit:disabled { opacity: .6; cursor: not-allowed; }
+.students-page .students-actions .ghost-button,
+.students-page .si-actions .ghost-button { color: var(--d-maroon-deep); background: #fff; border: 1px solid var(--d-line-strong); }
+.students-page .students-actions .ghost-button:hover,
+.students-page .si-actions .ghost-button:hover { color: var(--d-maroon); background: var(--d-paper); border-color: var(--d-gold); }
+.students-page .student-modal .modal-close { top: 16px; right: 16px; display: grid; place-items: center; width: 36px; height: 36px; padding: 0; color: var(--d-muted); background: var(--d-paper); border: 0; border-radius: 50%; cursor: pointer; transition: background .15s var(--d-ease), color .15s var(--d-ease); }
+.students-page .student-modal .modal-close:hover { color: var(--d-ink); background: var(--d-paper-deep); }
+.students-page .student-modal .modal-close svg { width: 18px; height: 18px; }
+
+/* ---------- Summary tiles ---------- */
+.students-page .student-summary { gap: var(--d-gap); margin-bottom: var(--d-gap); }
+.students-page .student-summary div { gap: 6px; padding: 20px 22px; border-color: var(--d-line); border-radius: var(--d-radius); box-shadow: var(--d-shadow); }
+.students-page .student-summary strong { color: var(--d-ink); font-size: 32px; font-weight: 700; letter-spacing: -.03em; line-height: 1; font-variant-numeric: tabular-nums; }
+.students-page .student-summary span { font: 500 12px/1.4 var(--mono); letter-spacing: .04em; text-transform: none; }
+
+/* ---------- Toolbar ---------- */
+.students-page .student-toolbar { gap: 12px; margin-bottom: var(--d-gap); padding: 14px 16px; background: #fff; border: 1px solid var(--d-line); border-radius: var(--d-radius); box-shadow: var(--d-shadow); }
+.students-page .student-toolbar .search-box { min-height: var(--d-field-height); gap: 10px; padding: 0 14px; border: 1px solid var(--d-line-strong); border-radius: 12px; transition: border-color .15s var(--d-ease), box-shadow .15s var(--d-ease); }
+.students-page .search-box:hover { border-color: #bfaaa6; }
+.students-page .search-box:focus-within { border-color: var(--d-maroon); box-shadow: 0 0 0 3px rgba(107, 29, 42, .14); }
+.students-page .search-box svg { width: 18px; height: 18px; flex: 0 0 18px; }
+.students-page .search-box input { flex: 1; padding: 12px 0; font: 500 14px/1.3 var(--sans); }
+.students-page .search-box input::placeholder { color: #a39498; font-weight: 400; }
+.students-page .student-toolbar select,
+.students-page .student-form-grid select,
+.students-page .si-controls select {
+  height: var(--d-field-height);
+  padding: 0 40px 0 14px;
+  color: var(--d-ink);
+  background: #fff var(--d-select-chevron) no-repeat right 14px center;
+  border: 1px solid var(--d-line-strong);
+  border-radius: var(--d-radius-sm);
+  font: 500 14px/1.3 var(--sans);
+  appearance: none;
+  -webkit-appearance: none;
+  transition: border-color .15s var(--d-ease), box-shadow .15s var(--d-ease);
+}
+.students-page .student-toolbar select { min-width: 190px; font-weight: 600; }
+.students-page .student-toolbar select:hover { border-color: #bfaaa6; }
+.students-page .student-toolbar select:focus { border-color: var(--d-maroon); box-shadow: 0 0 0 3px rgba(107, 29, 42, .14); }
+.students-page .student-search-suggestions { top: calc(100% + 6px); padding: 6px; border-color: var(--d-line); border-radius: 12px; box-shadow: var(--d-shadow-hover); }
+.students-page .student-search-suggestion { padding: 10px 12px; border-radius: 8px; }
+.students-page .student-search-suggestion strong { font-size: 14px; font-weight: 600; }
+.students-page .student-search-suggestion small { font-size: 12px; }
+.students-page .student-search-empty { padding: 14px 12px; font-size: 13px; }
+
+/* ---------- Table panel ---------- */
+.students-page .student-table-panel { padding: 0; overflow: hidden; background: #fff; border: 1px solid var(--d-line); border-radius: var(--d-radius); box-shadow: var(--d-shadow); }
+.students-page .table-heading { gap: 16px; padding: 22px 24px 16px; }
+.students-page .panel-kicker { color: var(--d-maroon); font-size: 11px; letter-spacing: .12em; }
+.students-page .table-heading h3 { margin: 6px 0 0; font-size: 18px; font-weight: 700; letter-spacing: -.02em; }
+.students-page .table-note { margin-top: 2px; padding: 4px 10px; color: var(--d-muted); background: var(--d-paper); border-radius: 999px; font: 500 12px/1.4 var(--mono); }
+.students-page .students-table-wrap { border: 0; border-top: 1px solid var(--d-line); border-radius: 0; scrollbar-width: thin; scrollbar-color: var(--d-line-strong) transparent; }
+.students-page .students-table thead th { padding: 12px 16px; font: 600 11px/1.3 var(--mono); letter-spacing: .06em; border-bottom-color: var(--d-line); }
+.students-page .students-table tbody td { padding: 13px 16px; font-size: 13px; line-height: 1.45; border-bottom-color: var(--d-line); }
+.students-page .students-table tbody td small { font-size: 12px; }
+.students-page .students-table tbody tr:nth-child(even) { --row-bg: #fff; }
+.students-page .students-table tbody tr:hover { --row-bg: #fbf5ec; }
+.students-page .students-table tbody tr.is-search-selected { --row-bg: var(--d-gold-pale); }
+.students-page .student-identity { gap: 12px; min-width: 260px; }
+.students-page .student-avatar { flex-basis: 36px; width: 36px; height: 36px; font: 500 11px/1 var(--mono); }
+.students-page .student-identity strong { font-size: 14px; font-weight: 600; line-height: 1.35; }
+.students-page .student-identity em { gap: 6px; margin-top: 4px; font: 500 12px/1.3 var(--mono); white-space: nowrap; }
+.students-page .student-identity em svg { width: 14px; height: 14px; }
+.students-page .status-badge { gap: 6px; padding: 5px 10px; font: 600 11px/1.3 var(--mono); letter-spacing: .02em; }
+.students-page .status-badge.active-status { color: var(--d-success); background: var(--d-success-bg); }
+.students-page .status-badge.inactive-status { color: var(--d-muted); background: var(--d-paper); }
+.students-page .students-table .student-row-action { display: inline-flex; align-items: center; gap: 6px; width: auto; height: 34px; padding: 0 12px; border-radius: 8px; font: 700 12px/1 var(--sans); }
+.students-page .students-table .student-row-action svg { width: 15px; height: 15px; }
+.students-page .table-loading, .students-page .empty-students { padding: 36px 24px; font-size: 13px; }
+.students-page .empty-students { background: var(--d-paper); border: 1.5px dashed var(--d-line-strong); border-radius: 12px; }
+.students-page .student-action-menu { top: 52px; right: 16px; width: 232px; padding: 6px; border-color: var(--d-line); border-radius: 12px; box-shadow: var(--d-shadow-hover); }
+.students-page .student-action-menu button { gap: 10px; padding: 10px 12px; border-radius: 8px; font-size: 13px; font-weight: 600; }
+.students-page .student-action-menu svg { width: 16px; height: 16px; }
+
+/* ---------- Student dialog ---------- */
+.students-page .student-modal { padding: 28px 30px; border-top-width: 4px; border-radius: 16px; box-shadow: 0 30px 70px -20px rgba(42, 23, 26, .45); }
+.students-page .student-modal .panel-kicker { display: block; }
+.students-page .student-modal h2 { margin: 6px 0 6px; font-size: 22px; font-weight: 700; letter-spacing: -.03em; }
+.students-page .student-modal > p { margin: 0 0 20px; font-size: 13px; line-height: 1.55; }
+.students-page .student-form-grid { gap: 16px; }
+.students-page .student-form-grid + .student-form-grid { margin-top: 16px; padding-top: 20px; border-top: 1px solid var(--d-line); }
+.students-page .student-form-grid label { gap: 8px; color: var(--d-ink); font-size: 13px; font-weight: 600; line-height: 1.3; }
+.students-page .student-form-grid input {
+  height: var(--d-field-height);
+  padding: 0 14px;
+  border: 1px solid var(--d-line-strong);
+  border-radius: var(--d-radius-sm);
+  font: 500 14px/1.3 var(--sans);
+  transition: border-color .15s var(--d-ease), box-shadow .15s var(--d-ease);
+}
+.students-page .student-form-grid input::placeholder { color: #a39498; font-weight: 400; }
+.students-page .student-form-grid input:focus, .students-page .student-form-grid select:focus { border-color: var(--d-maroon); box-shadow: 0 0 0 3px rgba(107, 29, 42, .14); }
+.students-page .student-modal .login-submit { margin-top: 24px; }
+
+/* ---------- Import dialog ---------- */
+.students-page .si-modal p { font-size: 13px; }
+.students-page .si-controls { gap: 16px; margin-bottom: 16px; }
+.students-page .si-controls label { gap: 8px; color: var(--d-ink); font-size: 13px; font-weight: 600; }
+.students-page .si-controls input[type="file"] { padding: 11px 12px; border: 1.5px dashed var(--d-line-strong); border-radius: var(--d-radius-sm); font: 500 13px/1.3 var(--sans); }
+.students-page .si-controls input[type="file"]::file-selector-button { margin-right: 10px; padding: 6px 12px; color: var(--d-maroon-deep); background: var(--d-gold-pale); border: 0; border-radius: 6px; font: 700 12px/1 var(--sans); cursor: pointer; }
+.students-page .si-controls input[type="number"] { width: 120px; height: var(--d-field-height); padding: 0 14px; border: 1px solid var(--d-line-strong); border-radius: var(--d-radius-sm); font: 500 14px/1.3 var(--sans); }
+.students-page .si-controls input[type="number"]:focus { outline: 0; border-color: var(--d-maroon); box-shadow: 0 0 0 3px rgba(107, 29, 42, .14); }
+.students-page .si-link { height: var(--d-field-height); font: 700 13px/1 var(--sans); text-underline-offset: 3px; }
+.students-page .si-summary { gap: 12px; margin-bottom: 16px; }
+.students-page .si-summary div { gap: 4px; padding: 14px 16px; background: var(--d-paper); border: 0; border-radius: var(--d-radius-sm); }
+.students-page .si-summary strong { font-size: 26px; font-weight: 700; letter-spacing: -.03em; line-height: 1.1; }
+.students-page .si-summary span { font: 500 11px/1.3 var(--mono); letter-spacing: .04em; text-transform: none; }
+.students-page .si-note { margin-bottom: 12px; padding: 11px 14px; border: 0; border-radius: var(--d-radius-sm); font-size: 13px; line-height: 1.5; }
+.students-page .si-table-wrap { max-height: 280px; margin-bottom: 16px; border-color: var(--d-line); border-radius: var(--d-radius-sm); }
+.students-page .si-table { font-size: 13px; }
+.students-page .si-table th, .students-page .si-table td { padding: 10px 12px; border-bottom-color: var(--d-line); }
+.students-page .si-table th { font: 600 11px/1.3 var(--mono); letter-spacing: .06em; }
+.students-page .si-tag { padding: 3px 8px; font: 600 10px/1.3 var(--mono); letter-spacing: .04em; }
+.students-page .si-status { min-height: 20px; margin-bottom: 12px; font-size: 13px; }
+.students-page .si-actions { gap: 10px; padding-top: 16px; border-top: 1px solid var(--d-line); }
+
+/* ---------- Gradesheet dialog (already structured; scale and finish only) ---------- */
+.students-page .sgm-dialog { border-radius: 16px; }
+.students-page .sgm-kicker { font-size: 11px; }
+.students-page .sgm-meta li { padding: 4px 10px; font-size: 12px; }
+.students-page .sgm-meta li svg { width: 14px; height: 14px; }
+.students-page .sgm-stats { gap: 12px; background: transparent; border: 0; }
+.students-page .sgm-stat { border: 1px solid var(--d-line); border-radius: var(--d-radius-sm); }
+.students-page .sgm-stat.is-highlight { border-color: transparent; }
+.students-page .sgm-stat span { font-size: 11px; letter-spacing: .04em; text-transform: none; }
+.students-page .sgm-notice { border-radius: var(--d-radius-sm); font-size: 13px; }
+.students-page .sgm-chip { padding: 7px 12px; font-size: 12px; }
+.students-page .sgm-term { border-radius: 12px; overflow: hidden; }
+.students-page .sgm-term-stats { font-size: 12px; }
+.students-page .sgm-table { font-size: 13px; }
+.students-page .sgm-table th { font-size: 11px; letter-spacing: .06em; }
+.students-page .sgm-code { font-size: 12px; }
+.students-page .sgm-grade { font-size: 13px; }
+.students-page .sgm-remark { font-size: 11px; }
+.students-page .sgm-flag { font-size: 10px; }
+.students-page .sgm-foot-note { font-size: 12px; }
+.students-page .sgm-button { height: 40px; padding: 0 16px; border-radius: var(--d-radius-sm); font-size: 13px; }
+.students-page .sgm-state { border-radius: 12px; }
+.students-page .sgm-state p { font-size: 13px; }
+.students-page .sgm-state-steps li { border-radius: var(--d-radius-sm); font-size: 13px; }
+
+/* ---------- Footer and toast ---------- */
+.students-page .admin-main > footer { margin-top: 32px; padding: 20px var(--d-gutter); color: var(--d-muted); font: 500 12px/1.5 var(--mono); letter-spacing: .02em; text-transform: none; }
+.students-page .admin-main > footer b { color: var(--d-gold-deep); }
+.students-page .admin-toast { right: 24px; bottom: 24px; max-width: min(360px, calc(100vw - 48px)); padding: 14px 18px; border-radius: 10px; font-size: 13px; line-height: 1.4; box-shadow: var(--d-shadow-hover); }
+
+/* ---------- Breakpoints ---------- */
+@media (max-width: 1024px) {
+  .students-page .student-form-grid { grid-template-columns: repeat(2, 1fr); }
+}
+
+@media (max-width: 760px) {
+  /* dashboard-tables.css stacks each row into a card and labels cells from data-label,
+     which this page's rows do not carry; supply the labels by column instead. */
+  .students-page .students-table, .students-page .students-table tbody { display: block; width: 100%; }
+  .students-page .students-table tbody tr { width: 100%; padding: 8px 16px 12px; }
+  .students-page .students-table tbody td { grid-template-columns: 112px 1fr; padding: 6px 0; font-size: 13px; }
+  .students-page .students-table tbody td:first-child,
+  .students-page .students-table tbody td:last-child { grid-template-columns: 1fr; }
+  .students-page .students-table tbody td::before { font: 500 11px/1.3 var(--mono); letter-spacing: .04em; text-transform: none; }
+  .students-page .students-table tbody td:nth-child(2)::before { content: "College"; }
+  .students-page .students-table tbody td:nth-child(3)::before { content: "Course"; }
+  .students-page .students-table tbody td:nth-child(4)::before { content: "Academic year"; }
+  .students-page .students-table tbody td:nth-child(5)::before { content: "Year level"; }
+  .students-page .students-table tbody td:nth-child(6)::before { content: "Gender"; }
+  .students-page .students-table tbody td:nth-child(7)::before { content: "Birthdate / age"; }
+  .students-page .students-table tbody td:nth-child(8)::before { content: "Address"; }
+  .students-page .students-table tbody td:nth-child(9)::before { content: "Civil status"; }
+  .students-page .students-table tbody td:nth-child(10)::before { content: "Contact number"; }
+  .students-page .students-table tbody td:nth-child(11)::before { content: "Documents"; }
+  .students-page .students-table tbody td:nth-child(12)::before { content: "Record status"; }
+  .students-page .students-table tbody td:nth-child(13)::before { content: "Created"; }
+  .students-page .students-table tbody td:first-child, .students-page .students-table tbody td:last-child { box-shadow: none; }
+  .students-page .students-table tbody td br { display: none; }
+  .students-page .students-table tbody td small { grid-column: 2; margin-top: -4px; }
+  .students-page .students-table tbody td:last-child { padding-top: 10px; }
+  .students-page .student-identity { min-width: 0; }
+  .students-page .student-identity strong { overflow-wrap: anywhere; }
+  .students-page .student-action-menu { top: auto; right: auto; left: 0; margin-top: 6px; position: relative; width: 100%; }
+}
+
+@media (max-width: 700px) {
+  .students-page .welcome-row { align-items: flex-start; flex-direction: column; gap: 14px; }
+  .students-page .students-actions { width: 100%; }
+  .students-page .students-actions > button { flex: 1 1 0; padding: 0 12px; white-space: nowrap; }
+}
+
+@media (max-width: 640px) {
+  .students-page .welcome-row { padding-top: 24px; }
+  .students-page .welcome-row h2 { font-size: 26px; }
+  .students-page .page-intro { font-size: 13px; }
+  .students-page .student-summary, .students-page .student-toolbar, .students-page .student-table-panel, .students-page .empty-students { width: 90%; }
+  .students-page .student-summary { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; }
+  .students-page .student-summary div { gap: 4px; padding: 14px 12px; }
+  .students-page .student-summary strong { font-size: 24px; }
+  .students-page .student-summary span { font-size: 11px; line-height: 1.3; }
+  .students-page .student-toolbar { padding: 12px; }
+  .students-page .student-toolbar select { min-width: 0; }
+  .students-page .table-heading { padding: 18px 18px 14px; }
+  .students-page .student-modal { padding: 22px 18px 20px; border-radius: 14px; }
+  .students-page .student-modal-backdrop { padding: 12px; }
+  .students-page .student-modal h2 { font-size: 20px; }
+  .students-page .student-form-grid { grid-template-columns: 1fr; }
+  .students-page .student-modal .login-submit { width: 100%; }
+  .students-page .si-controls { flex-direction: column; align-items: stretch; }
+  .students-page .si-controls input[type="number"] { width: 100%; }
+  .students-page .si-actions > button { flex: 1 1 0; }
+  .students-page .admin-main > footer { margin-top: 20px; font-size: 11px; }
+  .students-page .admin-toast { right: 16px; bottom: 16px; left: 16px; max-width: none; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .students-page *, .students-page *::before, .students-page *::after { transition: none !important; }
+}

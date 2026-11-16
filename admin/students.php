@@ -10,17 +10,20 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&amp;family=Manrope:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="styles.css?v=20261115" />
+  <link rel="stylesheet" href="styles.css?v=20260914" />
   <link rel="stylesheet" href="student-table.css?v=<?= filemtime(__DIR__ . '/student-table.css') ?>" />
-  <link rel="stylesheet" href="../dashboard-tables.css?v=20261115" />
-  <link rel="stylesheet" href="../dashboard-buttons.css?v=20261115" />
-  <link rel="stylesheet" href="student-gradesheet-modal.css?v=20261115" />
+  <link rel="stylesheet" href="../dashboard-tables.css?v=20260914" />
+  <link rel="stylesheet" href="../dashboard-buttons.css?v=20260914" />
+  <link rel="stylesheet" href="student-gradesheet-modal.css?v=20260926" />
   <link rel="stylesheet" href="student-import.css?v=<?= filemtime(__DIR__ . '/student-import.css') ?>" />
   <script src="https://unpkg.com/lucide@latest"></script>
+  <link rel="stylesheet" href="shell.css?v=20261116c" />
+  <link rel="stylesheet" href="students-ui.css?v=20261116c" />
 </head>
-<body>
+<body class="admin-page students-page">
   <div class="admin-shell">
     <aside class="sidebar" id="sidebar">
+      <button class="drawer-close" type="button" aria-label="Close admin navigation" data-drawer-close><i data-lucide="x"></i></button>
       <a class="brand" href="../index.php"><img src="../img/ZPPSU.png" alt="ZPPSU seal" /><span><strong>ZPPSU REGISTRAR</strong><small>Digital Archive</small></span></a>
       <div class="workspace-label">Workspace</div>
       <nav aria-label="Admin navigation">
@@ -40,16 +43,15 @@
       </nav>
       <?php if (dats_can_access_admin_page($currentUser, 'settings.php')): ?><div class="sidebar-bottom"><a href="settings.php"><i data-lucide="settings-2"></i> Settings</a></div><?php endif; ?>
     </aside>
+    <div class="drawer-scrim" data-drawer-scrim aria-hidden="true"></div>
     <main class="admin-main students-main">
       <header class="admin-header"><button class="mobile-menu" id="mobileMenu" aria-label="Open admin navigation" aria-expanded="false"><i data-lucide="menu"></i></button><div><span class="eyebrow">Administrator workspace</span><h1><span data-greeting data-user-name="<?= $displayName ?>">Good morning</span></h1></div><div class="header-actions"><button class="header-icon" aria-label="Notifications"><i data-lucide="bell"></i><span></span></button><div class="user-chip"><span class="avatar"><?= $initials ?></span><span><strong><?= $displayName ?></strong><small><?= htmlspecialchars(dats_user_role_label($currentUser), ENT_QUOTES, 'UTF-8') ?></small></span><i data-lucide="chevron-down"></i></div></div></header>
-      <div class="admin-sheet">
       <section class="welcome-row students-welcome"><div><p class="page-kicker">Student records · <span data-current-datetime>Loading date and time...</span></p><h2>Students information</h2><p class="page-intro">Manage student profiles and the documents scanned under each student.</p></div><div class="students-actions"><button class="ghost-button" id="importStudentsButton" type="button"><i data-lucide="file-up"></i> Import students</button><button class="gold-button" id="addStudentButton"><i data-lucide="user-round-plus"></i> Add student</button></div></section>
       <section class="student-summary"><div><strong data-stat="total_students"><?= number_format($studentTotal) ?></strong><span>Total students</span></div><div><strong data-stat="total_colleges"><?= number_format($collegeTotal) ?></strong><span>Colleges</span></div><div><strong data-stat="total_documents"><?= number_format($documentTotal) ?></strong><span>Documents scanned</span></div></section>
       <section class="student-toolbar panel"><div class="student-search-field"><div class="search-box"><i data-lucide="search"></i><input id="studentSearch" type="search" placeholder="Search student number or name" autocomplete="off" role="combobox" aria-expanded="false" aria-controls="studentSearchSuggestions" /></div><div id="studentSearchSuggestions" class="student-search-suggestions" role="listbox" aria-label="Student name suggestions" hidden></div></div><select id="studentGender" aria-label="Filter by gender"><option value="all">All genders</option><option>Female</option><option>Male</option></select><select id="studentCollege" aria-label="Filter by college"><option value="all">All colleges</option><option>College of Computing</option><option>College of Education</option><option>College of Business &amp; Accountancy</option></select></section>
       <section class="student-table-panel panel"><div class="table-heading"><div><span class="panel-kicker">Student directory</span><h3>Registered students</h3></div><span class="table-note">Documents are listed below each student's name</span></div><div class="students-table-wrap"><table class="students-table"><thead><tr><th>Student</th><th>College</th><th>Course</th><th>Academic Year</th><th>Year Level</th><th>Gender</th><th>Birthdate / Age</th><th>Address</th><th>Civil status</th><th>Contact number</th><th>Documents</th><th>Record status</th><th>Created</th><th><span class="sr-only">Actions</span></th></tr></thead><tbody id="studentRows"><tr><td colspan="14" class="table-loading">Loading student records...</td></tr></tbody></table></div></section>
       <p class="empty-students" id="emptyStudents" hidden>No students match your search or filters.</p>
       <footer><span>Digitalization Archiving Management System</span><span>Students Information <b>·</b> ZPPSU Registrar</span></footer>
-      </div>
     </main>
   </div>
   <div class="admin-toast" id="adminToast" role="status">Student information updated.</div>
@@ -63,5 +65,6 @@
   <script src="script.js?v=20260926"></script>
   <script src="student-import.js?v=<?= filemtime(__DIR__ . '/student-import.js') ?>"></script>
   <script src="../dashboard-tables.js?v=20260914"></script>
+  <script src="shell-ui.js?v=20261116c"></script>
 </body>
 </html>

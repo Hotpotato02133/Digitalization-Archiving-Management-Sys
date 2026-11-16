@@ -1,0 +1,284 @@
+/* Admin shell makeover: collapsible sidebar, top bar and phone drawer shared by
+   every admin and staff page. Loaded after styles.css (and the page's own CSS)
+   and scoped to body.admin-page. Presentation only: every id, data-* hook and
+   the existing #mobileMenu / #sidebar.open toggle in script.js are unchanged.
+   The dashboard-only makeover (KPI tiles, panels, chart, lists) stays in
+   dashboard.css; both files use the same --d-* tokens. */
+
+.admin-page {
+  --d-ink: #241517;
+  --d-body: #42343a;
+  --d-muted: #6f6166;
+  --d-line: #e6dcd8;
+  --d-line-strong: #d3c4bf;
+  --d-paper: #f7f3ee;
+  --d-paper-deep: #efe8df;
+  --d-maroon: #6b1d2a;
+  --d-maroon-deep: #4a111b;
+  --d-maroon-tint: #f6e9ea;
+  --d-gold: #d6ad3a;
+  --d-gold-deep: #a9811c;
+  --d-gold-pale: #f8efd5;
+  --d-radius-sm: 10px;
+  --d-ease: cubic-bezier(.2, .8, .2, 1);
+  --d-sidebar-width: 244px;
+  --d-gutter: clamp(20px, 2.2vw, 32px);
+}
+
+/* ---------- Focus ---------- */
+.admin-page nav a:focus-visible,
+.admin-page .setup-menu > summary:focus-visible,
+.admin-page .sidebar-bottom a:focus-visible,
+.admin-page .brand:focus-visible,
+.admin-page .header-icon:focus-visible,
+.admin-page .user-chip:focus-visible,
+.admin-page .mobile-menu:focus-visible,
+.admin-page .drawer-close:focus-visible {
+  outline: 2px solid var(--d-gold);
+  outline-offset: 2px;
+}
+
+/* ---------- Shell & Sidebar ---------- */
+.admin-page .admin-shell,
+.admin-page .staff-shell {
+  position: relative;
+  min-height: 100vh;
+  min-height: 100dvh;
+}
+.admin-page .admin-shell::before,
+.admin-page .staff-shell::before {
+  content: "";
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: var(--d-sidebar-width);
+  background: linear-gradient(180deg, #4e121d 0%, var(--d-maroon-deep) 100%);
+  pointer-events: none;
+  transform: translateX(0);
+}
+.admin-page .sidebar {
+  z-index: 20;
+  width: var(--d-sidebar-width);
+  height: 100vh;
+  height: 100dvh;
+  padding: 26px 16px 22px;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255, 255, 255, .22) transparent;
+  background: linear-gradient(180deg, #4e121d 0%, var(--d-maroon-deep) 100%);
+  transform: translateX(0);
+  visibility: visible;
+}
+.admin-page .brand { gap: 12px; padding: 4px 10px 28px; border-radius: var(--d-radius-sm); }
+.admin-page .brand img { width: 40px; height: 40px; }
+.admin-page .brand strong { font-size: 13px; letter-spacing: .06em; line-height: 1.2; }
+.admin-page .brand small { margin-top: 3px; color: #d8bfc1; font-size: 11px; }
+.admin-page .workspace-label { padding: 0 12px 10px; color: #c9a7a9; font-size: 11px; letter-spacing: .12em; }
+.admin-page nav { gap: 2px; }
+.admin-page nav a,
+.admin-page .sidebar-bottom a,
+.admin-page .setup-menu > summary {
+  position: relative;
+  gap: 12px;
+  padding: 10px 12px;
+  color: #e3d3d4;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 600;
+  line-height: 1.3;
+  transition: background .15s var(--d-ease), color .15s var(--d-ease);
+}
+.admin-page nav a svg,
+.admin-page .sidebar-bottom svg,
+.admin-page .setup-menu > summary svg { width: 18px; height: 18px; flex: 0 0 18px; opacity: .85; }
+.admin-page nav a:hover,
+.admin-page .sidebar-bottom a:hover,
+.admin-page .setup-menu > summary:hover { color: #fff; background: rgba(255, 255, 255, .08); }
+.admin-page nav a.active,
+.admin-page .setup-menu > summary.active { color: #fff; background: rgba(255, 255, 255, .12); border-left: 0; }
+.admin-page nav a.active::before,
+.admin-page .setup-menu > summary.active::before {
+  content: "";
+  position: absolute;
+  top: 10px;
+  bottom: 10px;
+  left: 0;
+  width: 3px;
+  background: var(--d-gold);
+  border-radius: 0 3px 3px 0;
+}
+.admin-page nav a.active svg { opacity: 1; color: var(--d-gold); }
+.admin-page .setup-menu > summary .setup-chevron { width: 15px; height: 15px; flex-basis: 15px; }
+.admin-page .setup-submenu a { padding-left: 42px; font-size: 13px; font-weight: 500; }
+.admin-page .sidebar-bottom { padding-top: 16px; border-top-color: rgba(255, 255, 255, .1); }
+
+/* ---------- Main panel & responsive gutters ---------- */
+.admin-page .admin-main,
+.admin-page .staff-main {
+  display: flex;
+  flex-direction: column;
+  width: calc(100% - var(--d-sidebar-width));
+  min-width: 0;
+  min-height: 100vh;
+  min-height: 100dvh;
+  margin-left: var(--d-sidebar-width);
+}
+.admin-page.shell-ready .sidebar,
+.admin-page.shell-ready .admin-shell::before,
+.admin-page.shell-ready .staff-shell::before {
+  transition: transform .26s var(--d-ease), width .26s var(--d-ease), box-shadow .26s var(--d-ease), visibility .26s;
+}
+.admin-page.shell-ready .admin-main,
+.admin-page.shell-ready .staff-main {
+  transition: width .26s var(--d-ease), margin-left .26s var(--d-ease);
+}
+.admin-page .admin-main > :not(.admin-header):not(.staff-header):not(footer),
+.admin-page .staff-main > :not(.admin-header):not(.staff-header):not(footer) {
+  width: calc(100% - (var(--d-gutter) * 2));
+  max-width: none;
+  margin-left: auto;
+  margin-right: auto;
+}
+.admin-page .admin-main > footer,
+.admin-page .staff-main > footer {
+  width: 100%;
+  margin-top: auto;
+  padding: 20px var(--d-gutter);
+}
+
+.admin-page.sidebar-collapsed .sidebar,
+.admin-page.sidebar-collapsed .admin-shell::before,
+.admin-page.sidebar-collapsed .staff-shell::before {
+  transform: translateX(-100%);
+  visibility: hidden;
+  pointer-events: none;
+}
+.admin-page.sidebar-collapsed .admin-main,
+.admin-page.sidebar-collapsed .staff-main {
+  width: 100%;
+  margin-left: 0;
+}
+
+/* ---------- Top bar & sidebar toggle ---------- */
+.admin-page .admin-header,
+.admin-page .staff-header {
+  justify-content: flex-start;
+  align-items: center;
+  gap: 14px;
+  width: 100%;
+  min-height: 72px;
+  padding: 14px var(--d-gutter);
+}
+.admin-page .admin-header > div:nth-child(2),
+.admin-page .staff-header > div:nth-child(2) {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+.admin-page .mobile-menu {
+  position: relative;
+  z-index: 2;
+  display: inline-grid;
+  place-items: center;
+  flex: 0 0 40px;
+  width: 40px;
+  height: 40px;
+  margin: 0;
+  padding: 0;
+  color: var(--d-ink);
+  background: var(--d-paper);
+  border: 1px solid var(--d-line);
+  border-radius: var(--d-radius-sm);
+  cursor: pointer;
+  user-select: none;
+  transition: background .15s var(--d-ease), color .15s var(--d-ease), border-color .15s var(--d-ease), transform .15s var(--d-ease);
+}
+.admin-page .mobile-menu * {
+  pointer-events: none;
+}
+.admin-page .mobile-menu:hover {
+  color: var(--d-maroon);
+  background: var(--d-maroon-tint);
+  border-color: var(--d-gold);
+}
+.admin-page .mobile-menu:active {
+  transform: scale(.96);
+}
+.admin-page.sidebar-collapsed .mobile-menu {
+  color: var(--d-maroon);
+  background: var(--d-maroon-tint);
+  border-color: rgba(107, 29, 42, .24);
+}
+.admin-page .mobile-menu svg { width: 20px; height: 20px; }
+.admin-page .admin-header .eyebrow,
+.admin-page .staff-header .eyebrow { display: none; }
+.admin-page .admin-header h1,
+.admin-page .staff-header h1 { margin: 0; color: var(--d-ink); font-size: 20px; font-weight: 700; letter-spacing: -.02em; }
+.admin-page .header-actions { margin-left: auto; gap: 18px; }
+.admin-page .header-icon { width: 40px; height: 40px; padding: 0; display: grid; place-items: center; color: var(--d-body); border-radius: 50%; transition: background .15s var(--d-ease); }
+.admin-page .header-icon:hover { background: var(--d-paper); }
+.admin-page .header-icon svg { width: 20px; height: 20px; }
+/* The badge span is always in the markup; only show it once the script marks it as a count. */
+.admin-page .header-icon > span:not(.notification-count) { display: none; }
+.admin-page .header-icon > span.notification-count { top: 6px; right: 6px; min-width: 16px; height: 16px; padding: 0 4px; font-size: 10px; line-height: 14px; border-radius: 8px; }
+.admin-page .user-chip { gap: 10px; padding: 4px 6px 4px 4px; border-radius: 999px; cursor: pointer; transition: background .15s var(--d-ease); }
+.admin-page .user-chip:hover { background: var(--d-paper); }
+.admin-page .user-chip .avatar { width: 36px; height: 36px; font-size: 12px; font-weight: 500; }
+.admin-page .user-chip strong { font-size: 13px; line-height: 1.2; }
+.admin-page .user-chip small { margin-top: 2px; color: var(--d-muted); font-size: 12px; line-height: 1.2; }
+.admin-page .user-chip > svg { width: 16px; height: 16px; }
+
+/* ---------- Phone drawer chrome ---------- */
+.admin-page .drawer-scrim { position: fixed; inset: 0; z-index: 15; background: rgba(36, 21, 23, .55); opacity: 0; pointer-events: none; transition: opacity .25s var(--d-ease); }
+.admin-page .drawer-close { display: none; }
+.admin-page.drawer-open .drawer-scrim { opacity: 1; pointer-events: auto; }
+.admin-page.drawer-open { overflow: hidden; }
+
+/* ---------- Breakpoints ---------- */
+@media (max-width: 850px) {
+  .admin-page {
+    --d-sidebar-width: 220px;
+    --d-gutter: 20px;
+  }
+  .admin-page .sidebar { padding-left: 12px; padding-right: 12px; }
+  .admin-page .brand strong { font-size: 12px; letter-spacing: .03em; }
+  .admin-page .user-chip > span:not(.avatar), .admin-page .user-chip > svg { display: none; }
+}
+
+@media (max-width: 640px) {
+  .admin-page {
+    --d-gutter: 16px;
+  }
+  .admin-page .admin-shell::before,
+  .admin-page .staff-shell::before { display: none; }
+  .admin-page .admin-header,
+  .admin-page .staff-header { gap: 10px; padding: 12px var(--d-gutter); min-height: 64px; }
+  .admin-page .mobile-menu { width: 40px; height: 40px; margin-right: 0; padding: 0; }
+  .admin-page .mobile-menu svg { width: 20px; height: 20px; }
+  .admin-page .admin-header h1,
+  .admin-page .staff-header h1 { font-size: 17px; }
+  .admin-page .header-actions { gap: 4px; }
+  .admin-page .user-chip { padding: 0; }
+  .admin-page .drawer-close { position: absolute; top: 14px; right: 12px; display: grid; place-items: center; width: 36px; height: 36px; padding: 0; color: #f3e6e7; background: rgba(255, 255, 255, .1); border: 0; border-radius: 50%; }
+  .admin-page .drawer-close * { pointer-events: none; }
+  .admin-page .drawer-close svg { width: 18px; height: 18px; }
+  .admin-page .sidebar { width: 248px; transform: translateX(-100%); visibility: hidden; pointer-events: none; }
+  .admin-page .sidebar.open { transform: translateX(0); visibility: visible; pointer-events: auto; box-shadow: 12px 0 40px rgba(36, 21, 23, .35); }
+  .admin-page .admin-main,
+  .admin-page .staff-main { width: 100%; margin-left: 0; }
+  .admin-page .brand { padding-right: 52px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .admin-page .sidebar,
+  .admin-page .admin-shell::before,
+  .admin-page .staff-shell::before,
+  .admin-page .admin-main,
+  .admin-page .staff-main,
+  .admin-page .drawer-scrim,
+  .admin-page nav a,
+  .admin-page .sidebar-bottom a,
+  .admin-page .setup-menu > summary,
+  .admin-page .header-icon,
+  .admin-page .user-chip,
+  .admin-page .mobile-menu { transition: none !important; }
+}

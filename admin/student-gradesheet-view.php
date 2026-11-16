@@ -78,85 +78,69 @@ foreach ($entries as $entry) {
     :root {
       --maroon: #6b1d2a;
       --maroon-dark: #4a111b;
-      --maroon-soft: #f6eaec;
-      --maroon-border: #e4c6cb;
       --gold: #d6ad3a;
-      --gold-pale: #fbf4df;
-      --ground: #f4f3f1;
-      --surface: #ffffff;
-      --raised: #f8f7f5;
-      --text: #1c1917;
-      --muted: #57534e;
-      --border: #e5e2de;
-      --rule: #efece9;
-      --control: #d2ceca;
-      --sans: 'Manrope', system-ui, sans-serif;
-      --mono: 'DM Mono', ui-monospace, monospace;
+      --gold-pale: #f5ebd1;
+      --paper: #f8f5f2;
+      --ink: #2a171a;
+      --muted: #6a5f5d;
+      --line: #e8dedb;
+      --white: #ffffff;
     }
     * { box-sizing: border-box; }
     body {
       margin: 0;
-      min-height: 100dvh;
-      font-family: var(--sans);
-      font-size: 14px;
-      line-height: 1.5;
-      background: var(--ground);
-      color: var(--text);
+      min-height: 100vh;
+      font-family: 'Manrope', sans-serif;
+      background: linear-gradient(180deg, #f8f3ee 0%, #f2e9e4 100%);
+      color: var(--ink);
     }
-    .view-shell { max-width: 1140px; margin: 24px auto; padding: 0 20px 44px; }
-    .topbar { display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px; gap: 12px; flex-wrap: wrap; }
+    .view-shell { max-width: 1100px; margin: 32px auto; padding: 0 20px 48px; }
+    .topbar { display: flex; align-items: center; justify-content: space-between; margin-bottom: 24px; gap: 12px; flex-wrap: wrap; }
     .back-link {
       display: inline-flex; align-items: center; justify-content: center; gap: 6px;
-      height: 36px; padding: 0 15px; border-radius: 8px; background: var(--gold);
-      border: 1px solid #c59b2c; color: var(--maroon-dark);
-      text-decoration: none; font-weight: 700; font-size: 13px;
-      transition: background-color 0.15s ease, border-color 0.15s ease;
+      padding: 8px 12px; border-radius: 8px; background: var(--gold);
+      border: 1px solid rgba(214,173,58,0.9); color: var(--maroon-dark);
+      text-decoration: none; font-weight: 800; font-size: 11px; letter-spacing: 0.04em;
+      text-transform: uppercase; box-shadow: 0 8px 18px rgba(214,173,58,0.2);
     }
-    .back-link:hover { background: #dfba4e; border-color: #b78e24; }
-    .page-title { margin: 0; font-size: clamp(20px, 2.2vw, 24px); font-weight: 700; letter-spacing: -0.02em; color: var(--text); }
+    .page-title { margin: 0; font-size: clamp(22px, 3vw, 32px); letter-spacing: -0.05em; color: var(--maroon-dark); }
     .panel {
-      background: var(--surface); border: 1px solid var(--border); border-radius: 14px;
-      padding: 22px; margin-bottom: 18px; overflow-x: auto;
+      background: rgba(255,255,255,0.7); border: 1px solid var(--line); border-radius: 22px;
+      box-shadow: 0 18px 42px rgba(59, 38, 26, 0.07); backdrop-filter: blur(4px);
+      padding: 24px; margin-bottom: 20px;
     }
     .student-summary { display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap; }
-    .student-name { margin: 0 0 6px; font-size: clamp(20px, 2.2vw, 24px); font-weight: 700; letter-spacing: -0.02em; color: var(--text); }
-    .student-meta { display: flex; flex-wrap: wrap; gap: 10px 20px; color: var(--muted); font-size: 13px; }
-    .student-meta strong { color: var(--text); font-weight: 600; }
-    .semester-heading { display: flex; align-items: baseline; justify-content: space-between; flex-wrap: wrap; gap: 10px; margin: 0 0 14px; }
-    .semester-heading h3 { margin: 0; font-size: 16px; font-weight: 700; color: var(--maroon-dark); }
-    .semester-heading span { font: 600 11px/1.2 var(--mono); letter-spacing: 0.06em; text-transform: uppercase; color: var(--muted); }
-    table.gradesheet-table { width: 100%; min-width: 620px; border-collapse: collapse; font-size: 13px; font-variant-numeric: tabular-nums; }
+    .student-name { margin: 0 0 6px; font-size: clamp(22px, 2.4vw, 28px); letter-spacing: -0.04em; }
+    .student-meta { display: flex; flex-wrap: wrap; gap: 16px; color: var(--muted); font-size: 12px; }
+    .student-meta strong { color: var(--ink); }
+    .semester-heading { display: flex; align-items: baseline; justify-content: space-between; gap: 10px; margin: 0 0 14px; }
+    .semester-heading h3 { margin: 0; font-size: 16px; color: var(--maroon-dark); }
+    .semester-heading span { font: 700 10px var(--mono); letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
+    table.gradesheet-table { width: 100%; border-collapse: collapse; font-size: 13px; }
     table.gradesheet-table th {
-      text-align: left; padding: 11px 12px; color: var(--muted); background: var(--raised);
-      font: 600 12px/1.25 var(--sans); border-bottom: 1px solid var(--border); white-space: nowrap;
+      text-align: left; padding: 10px 8px; color: var(--muted); font: 700 10px var(--mono);
+      letter-spacing: .06em; text-transform: uppercase; border-bottom: 2px solid var(--line);
     }
-    table.gradesheet-table td { padding: 11px 12px; border-bottom: 1px solid var(--rule); color: var(--text); }
-    table.gradesheet-table tbody tr:hover td { background: var(--raised); }
+    table.gradesheet-table td { padding: 9px 8px; border-bottom: 1px solid var(--line); }
     table.gradesheet-table tr:last-child td { border-bottom: 0; }
-    .row-actions { display: flex; gap: 6px; justify-content: flex-end; }
+    .row-actions { display: flex; gap: 6px; }
     .row-actions button {
-      display: grid; place-items: center; width: 30px; height: 30px; padding: 0;
-      color: var(--muted); background: var(--surface); border: 1px solid var(--control); border-radius: 6px; cursor: pointer;
+      display: grid; place-items: center; width: 26px; height: 26px; padding: 0;
+      color: var(--maroon); background: transparent; border: 1px solid var(--line); cursor: pointer;
     }
-    .row-actions button:hover { color: var(--maroon); border-color: var(--maroon-border); background: var(--maroon-soft); }
-    .row-actions button svg { width: 14px; height: 14px; }
-    .semester-average { margin-top: 12px; text-align: right; font-size: 13px; color: var(--muted); font-variant-numeric: tabular-nums; }
-    .semester-average strong { color: var(--maroon-dark); font-size: 14px; }
-    .empty-state { text-align: center; padding: 48px 20px; color: var(--muted); font-size: 14px; }
-    .empty-state strong { display: block; margin-bottom: 8px; color: var(--text); font-size: 16px; }
-    .edit-field { width: 100%; min-height: 32px; padding: 6px 8px; border: 1px solid var(--control); border-radius: 6px; font: 13px var(--sans); color: var(--text); background: var(--surface); }
-    .edit-field:focus { outline: 0; border-color: var(--maroon); }
+    .row-actions button svg { width: 13px; height: 13px; }
+    .semester-average { margin-top: 10px; text-align: right; font-size: 12px; color: var(--muted); }
+    .semester-average strong { color: var(--ink); }
+    .empty-state { text-align: center; padding: 48px 20px; color: var(--muted); }
+    .empty-state strong { display: block; margin-bottom: 8px; color: var(--ink); font-size: 16px; }
+    .edit-field { width: 100%; padding: 6px; border: 1px solid var(--line); font: 12px var(--sans); }
     .admin-toast {
-      position: fixed; left: 50%; bottom: 24px; transform: translate(-50%, 16px);
-      padding: 12px 18px; background: var(--text); color: #ffffff; border-left: 3px solid var(--gold); border-radius: 8px;
-      font-size: 13px; font-weight: 500; opacity: 0; pointer-events: none; transition: opacity 0.2s ease, transform 0.2s ease;
-      z-index: 30; box-shadow: 0 12px 28px rgba(28, 25, 23, 0.22);
+      position: fixed; left: 50%; bottom: 24px; transform: translate(-50%, 20px);
+      padding: 12px 18px; background: var(--maroon-dark); color: #fff; border-radius: 8px;
+      font-size: 12px; opacity: 0; pointer-events: none; transition: opacity .2s ease, transform .2s ease;
+      z-index: 30;
     }
     .admin-toast.show { opacity: 1; transform: translate(-50%, 0); }
-    @media (max-width: 640px) {
-      .view-shell { margin: 16px auto; padding: 0 14px 36px; }
-      .panel { padding: 16px; }
-    }
   </style>
 </head>
 <body>

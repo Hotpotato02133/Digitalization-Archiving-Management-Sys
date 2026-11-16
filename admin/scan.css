@@ -1,0 +1,301 @@
+/* File Scanning page makeover (admin/scan.php only).
+   Loaded after admin/styles.css, the page's inline styles and shell.css, and
+   scoped to body.scan-page. The sidebar, top bar and phone drawer come from
+   shell.css. Presentation only: every id, data-* hook, input name and the
+   markup the scan scripts render are unchanged. */
+
+.scan-page {
+  --d-ink: #241517;
+  --d-body: #42343a;
+  --d-muted: #6f6166;
+  --d-line: #e6dcd8;
+  --d-line-strong: #d3c4bf;
+  --d-paper: #f7f3ee;
+  --d-paper-deep: #efe8df;
+  --d-maroon: #6b1d2a;
+  --d-maroon-deep: #4a111b;
+  --d-maroon-tint: #f6e9ea;
+  --d-gold: #d6ad3a;
+  --d-gold-deep: #a9811c;
+  --d-gold-pale: #f8efd5;
+  --d-danger: #8a1f2d;
+  --d-danger-bg: #fbe4e6;
+  --d-success: #22593a;
+  --d-success-bg: #e3f1dc;
+  --d-radius: 14px;
+  --d-radius-sm: 10px;
+  --d-shadow: 0 1px 2px rgba(42, 23, 26, .04), 0 14px 34px -22px rgba(42, 23, 26, .24);
+  --d-shadow-hover: 0 2px 4px rgba(42, 23, 26, .05), 0 22px 44px -22px rgba(42, 23, 26, .3);
+  --d-ease: cubic-bezier(.2, .8, .2, 1);
+  --d-gap: 16px;
+  --d-field-height: 44px;
+  color: var(--d-body);
+  background: var(--d-paper);
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}
+
+.scan-page h1, .scan-page h2, .scan-page h3 { color: var(--d-ink); line-height: 1.25; }
+
+/* ---------- Focus (shell links are covered by shell.css) ---------- */
+.scan-page .panel-heading a:focus-visible,
+.scan-page .upload-zone:focus-within,
+.scan-page .preview-tool-btn:focus-visible,
+.scan-page .preview-remove:focus-visible,
+.scan-page .archive-button:focus-visible {
+  outline: 2px solid var(--d-gold);
+  outline-offset: 2px;
+}
+
+/* ---------- Page heading ---------- */
+.scan-page .welcome-row { align-items: flex-end; gap: 24px; padding: 36px 0 24px; }
+.scan-page .page-kicker { margin: 0 0 8px; color: var(--d-muted); font: 500 12px/1.4 var(--mono); letter-spacing: .04em; text-transform: none; }
+.scan-page .welcome-row h2 { margin: 0 0 6px; font-size: 32px; font-weight: 700; letter-spacing: -.03em; }
+.scan-page .page-intro { max-width: 60ch; color: var(--d-muted); font-size: 14px; }
+.scan-page .scanner-status { flex: 0 0 auto; gap: 8px; padding: 8px 14px 8px 12px; color: var(--d-success); background: var(--d-success-bg); border-radius: 999px; font: 600 12px/1.3 var(--mono); }
+.scan-page .scanner-status i { width: 8px; height: 8px; background: #3f9a57; box-shadow: 0 0 0 3px rgba(63, 154, 87, .22); }
+
+/* ---------- Shared card recipe and widths ---------- */
+.scan-page .scan-layout,
+.scan-page .scan-layout.single,
+.scan-page .ocr-status-banner,
+.scan-page .scan-details,
+.scan-page .recent-scans { width: calc(100% - (var(--d-gutter) * 2)); max-width: none; margin-right: auto; margin-left: auto; }
+
+.scan-page .scan-layout .scan-card,
+.scan-page .scan-details,
+.scan-page .recent-scans {
+  padding: 22px 24px 24px;
+  background: #fff;
+  border: 1px solid var(--d-line);
+  border-radius: var(--d-radius);
+  box-shadow: var(--d-shadow);
+}
+.scan-page .scan-layout .scan-card { min-height: 0; }
+.scan-page .scan-details { margin-top: var(--d-gap); }
+.scan-page .recent-scans { margin-top: var(--d-gap); }
+
+.scan-page .panel-heading { display: flex; align-items: flex-start; justify-content: space-between; gap: 16px; margin-bottom: 18px; padding-bottom: 0; }
+.scan-page .panel-kicker { display: flex; align-items: center; gap: 8px; color: var(--d-maroon); font-size: 11px; letter-spacing: .12em; }
+.scan-page .panel-heading h3 { margin: 6px 0 0; font-size: 18px; font-weight: 700; letter-spacing: -.02em; }
+.scan-page .recent-scans .panel-heading h3 { margin-bottom: 0; }
+/* Step markers for the two tasks on the page. */
+.scan-page .scan-card .panel-kicker::before,
+.scan-page .scan-details .panel-kicker::before {
+  content: "1";
+  display: inline-grid;
+  place-items: center;
+  width: 20px;
+  height: 20px;
+  color: #fff;
+  background: var(--d-maroon);
+  border-radius: 50%;
+  font: 600 11px/1 var(--mono);
+  letter-spacing: 0;
+}
+.scan-page .scan-details .panel-kicker::before { content: "2"; }
+.scan-page .required-note { color: var(--d-muted); font: 500 12px/1.4 var(--mono); }
+.scan-page .panel-heading > a,
+.scan-page .recent-scans .panel-heading > a { display: inline-flex; align-items: center; gap: 6px; margin: -4px -10px 0 0; padding: 6px 10px; color: var(--d-maroon); border-radius: 8px; font-size: 13px; font-weight: 700; transition: background .15s var(--d-ease); }
+.scan-page .panel-heading > a:hover { background: var(--d-maroon-tint); }
+.scan-page .panel-heading a svg { width: 15px; height: 15px; }
+
+/* ---------- Upload zone ---------- */
+.scan-page .upload-zone {
+  display: grid;
+  place-items: center;
+  align-content: center;
+  height: auto;
+  min-height: 272px;
+  margin: 0;
+  padding: 28px 20px;
+  background: var(--d-paper);
+  border: 1.5px dashed var(--d-line-strong);
+  border-radius: var(--d-radius);
+  transition: border-color .15s var(--d-ease), background .15s var(--d-ease), box-shadow .15s var(--d-ease);
+}
+.scan-page .upload-zone:hover,
+.scan-page .upload-zone.drag-over { background: var(--d-gold-pale); border-color: var(--d-gold); }
+.scan-page .upload-zone.drag-over { box-shadow: inset 0 0 0 3px rgba(214, 173, 58, .25); }
+.scan-page .upload-icon { width: 60px; height: 60px; margin-bottom: 14px; color: var(--d-maroon); background: var(--d-maroon-tint); transition: transform .2s var(--d-ease), background .15s var(--d-ease); }
+.scan-page .upload-zone:hover .upload-icon,
+.scan-page .upload-zone.drag-over .upload-icon { background: #fff; transform: translateY(-2px); }
+.scan-page .upload-icon svg { width: 26px; height: 26px; }
+.scan-page .upload-zone strong { color: var(--d-ink); font-size: 16px; font-weight: 700; }
+.scan-page .upload-zone small { margin-top: 6px; color: var(--d-muted); font-size: 13px; }
+
+/* Compact zone once a document preview is showing above it. */
+.scan-page .document-preview:not([hidden]) + .upload-zone {
+  grid-template-columns: auto 1fr;
+  justify-items: start;
+  gap: 2px 14px;
+  min-height: 0;
+  height: auto;
+  padding: 14px 18px;
+  text-align: left;
+}
+.scan-page .document-preview:not([hidden]) + .upload-zone .upload-icon { grid-row: span 2; width: 40px; height: 40px; margin: 0; }
+.scan-page .document-preview:not([hidden]) + .upload-zone .upload-icon svg { width: 18px; height: 18px; }
+.scan-page .document-preview:not([hidden]) + .upload-zone strong { font-size: 14px; }
+.scan-page .document-preview:not([hidden]) + .upload-zone small { display: block; margin: 0; font-size: 12px; }
+
+.scan-page .upload-result { gap: 10px; min-height: 0; margin-top: 14px; padding: 10px 14px; color: var(--d-muted); background: var(--d-paper); border-radius: var(--d-radius-sm); font-size: 13px; }
+.scan-page .upload-result svg { width: 18px; height: 18px; flex: 0 0 18px; color: var(--d-maroon); }
+.scan-page .upload-result:has(.lucide-file-check-2) { color: var(--d-success); background: var(--d-success-bg); }
+.scan-page .upload-result:has(.lucide-file-check-2) svg { color: var(--d-success); }
+
+/* ---------- Document preview ---------- */
+.scan-page .document-preview { margin: 0 0 var(--d-gap); }
+.scan-page .preview-cover { min-height: 360px; margin-bottom: 12px; background: var(--d-paper-deep); border-color: var(--d-line); border-radius: 12px; }
+.scan-page .preview-cover img { height: 360px; background: var(--d-paper-deep); }
+.scan-page .preview-fallback, .scan-page .preview-spinner { font-size: 13px; }
+.scan-page .preview-fallback svg { width: 44px; height: 44px; }
+.scan-page .preview-spinner svg { width: 30px; height: 30px; }
+.scan-page .preview-page-badge { top: 14px; left: 14px; padding: 6px 11px; background: rgba(36, 21, 23, .78); border-radius: 999px; font: 500 11px/1.2 var(--mono); letter-spacing: .04em; text-transform: none; }
+.scan-page .preview-toolbar { bottom: 14px; gap: 4px; padding: 6px; background: rgba(36, 21, 23, .8); border-radius: 999px; backdrop-filter: blur(6px); }
+.scan-page .preview-tool-btn { width: 32px; height: 32px; transition: background .15s var(--d-ease); }
+.scan-page .preview-tool-btn svg { width: 16px; height: 16px; }
+.scan-page .preview-remove { width: 24px; height: 24px; background: rgba(36, 21, 23, .62); transition: background .15s var(--d-ease); }
+.scan-page .preview-remove svg { width: 13px; height: 13px; }
+.scan-page .preview-remove-cover { top: 14px; right: 14px; width: 32px; height: 32px; }
+.scan-page .preview-remove-cover svg { width: 16px; height: 16px; }
+.scan-page .preview-thumbs { gap: 10px; padding-bottom: 4px; scrollbar-width: thin; scrollbar-color: var(--d-line-strong) transparent; }
+.scan-page .preview-thumb-item, .scan-page .preview-more-pages { flex-basis: 84px; }
+.scan-page .preview-thumb-box { height: 106px; border-radius: var(--d-radius-sm); transition: border-color .15s var(--d-ease), box-shadow .15s var(--d-ease); }
+.scan-page .preview-thumb-item[role="button"]:hover .preview-thumb-box { border-color: var(--d-line-strong); box-shadow: var(--d-shadow); }
+.scan-page .preview-thumb-item.is-active .preview-thumb-box { border-color: var(--d-maroon); box-shadow: 0 0 0 3px rgba(107, 29, 42, .16); }
+.scan-page .preview-thumb-box svg { width: 24px; height: 24px; }
+.scan-page .preview-thumb-item small { margin-top: 6px; font: 500 11px/1.3 var(--mono); }
+.scan-page .preview-more-pages { height: 106px; border-radius: var(--d-radius-sm); font: 500 11px/1.3 var(--mono); }
+
+/* ---------- OCR status banner ---------- */
+.scan-page .ocr-status-banner { gap: 10px; margin-top: var(--d-gap); margin-bottom: 0; padding: 12px 16px; border-radius: 12px; font-size: 13px; line-height: 1.45; }
+.scan-page .ocr-status-banner::before { content: ""; width: 8px; height: 8px; background: var(--d-gold-deep); border-radius: 50%; flex: 0 0 8px; }
+.scan-page .ocr-status-banner.is-error::before { background: var(--d-danger); }
+
+/* ---------- Record details form ---------- */
+.scan-page .student-mode-group { display: inline-flex; gap: 4px; margin: 0 0 22px; padding: 4px; background: var(--d-paper); border-radius: 999px; }
+.scan-page .student-mode-option { position: relative; gap: 0; padding: 8px 16px; color: var(--d-muted); border-radius: 999px; font-size: 13px; font-weight: 600; line-height: 1.3; transition: background .15s var(--d-ease), color .15s var(--d-ease), box-shadow .15s var(--d-ease); }
+.scan-page .student-mode-option input { position: absolute; width: 1px; height: 1px; margin: 0; opacity: 0; pointer-events: none; }
+.scan-page .student-mode-option:hover { color: var(--d-ink); }
+.scan-page .student-mode-option:has(input:checked) { color: var(--d-maroon); background: #fff; box-shadow: 0 1px 3px rgba(42, 23, 26, .12); }
+.scan-page .student-mode-option:has(input:focus-visible) { outline: 2px solid var(--d-gold); outline-offset: 2px; }
+
+.scan-page .details-grid, .scan-page .registration-grid { gap: 20px 16px; }
+.scan-page .details-grid > label,
+.scan-page .registration-grid label,
+.scan-page .scan-field,
+.scan-page .scan-field > label { gap: 8px; color: var(--d-ink); font-size: 13px; font-weight: 600; line-height: 1.3; }
+.scan-page .details-grid input,
+.scan-page .details-grid select,
+.scan-page .registration-grid input,
+.scan-page .registration-grid select {
+  height: var(--d-field-height);
+  padding: 0 14px;
+  color: var(--d-ink);
+  background: #fff;
+  border: 1px solid var(--d-line-strong);
+  border-radius: var(--d-radius-sm);
+  font: 500 14px/1.3 var(--sans);
+  transition: border-color .15s var(--d-ease), box-shadow .15s var(--d-ease), background .15s var(--d-ease);
+}
+.scan-page .details-grid input::placeholder,
+.scan-page .registration-grid input::placeholder { color: #a39498; font-weight: 400; }
+.scan-page .details-grid input:hover:not(:focus):not([readonly]),
+.scan-page .details-grid select:hover:not(:focus),
+.scan-page .registration-grid input:hover:not(:focus),
+.scan-page .registration-grid select:hover:not(:focus) { border-color: #bfaaa6; }
+.scan-page .details-grid input:focus,
+.scan-page .details-grid select:focus,
+.scan-page .registration-grid input:focus,
+.scan-page .registration-grid select:focus { border-color: var(--d-maroon); box-shadow: 0 0 0 3px rgba(107, 29, 42, .14); }
+.scan-page .details-grid select,
+.scan-page .registration-grid select {
+  padding-right: 40px;
+  appearance: none;
+  -webkit-appearance: none;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%236f6166' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><path d='m6 9 6 6 6-6'/></svg>");
+  background-repeat: no-repeat;
+  background-position: right 14px center;
+}
+.scan-page .details-grid input[readonly] { color: var(--d-muted); background: var(--d-paper); border-color: var(--d-line); cursor: not-allowed; }
+.scan-page .details-grid input[readonly]:focus { box-shadow: none; border-color: var(--d-line-strong); }
+.scan-page .field-help { color: var(--d-muted); font: 400 12px/1.45 var(--mono); }
+.scan-page .field-help.is-detected { color: var(--d-maroon); font-weight: 600; }
+
+.scan-page .student-suggestions { top: calc(100% + 6px); padding: 6px; border-color: var(--d-line); border-radius: 12px; box-shadow: var(--d-shadow-hover); }
+.scan-page .student-suggestion { gap: 2px; padding: 10px 12px; border-radius: 8px; }
+.scan-page .student-suggestion strong { color: var(--d-ink); font-size: 14px; font-weight: 600; }
+.scan-page .student-suggestion small { font-size: 12px; }
+
+.scan-page .new-student-fields { margin-top: 22px; padding-top: 22px; border-top-color: var(--d-line); }
+
+.scan-page .scan-details > .archive-button {
+  height: 46px;
+  margin-top: 24px;
+  padding: 0 22px;
+  border-radius: var(--d-radius-sm);
+  font: 700 14px/1 var(--sans);
+  letter-spacing: 0;
+  box-shadow: 0 1px 2px rgba(42, 23, 26, .08);
+  transition: background .15s var(--d-ease), box-shadow .15s var(--d-ease), transform .15s var(--d-ease);
+}
+.scan-page .scan-details > .archive-button svg { width: 17px; height: 17px; }
+.scan-page .scan-details > .archive-button:hover { box-shadow: 0 4px 12px rgba(42, 23, 26, .18); transform: translateY(-1px); }
+.scan-page .scan-details > .archive-button:disabled { opacity: .6; cursor: progress; transform: none; box-shadow: none; }
+
+/* ---------- Recently archived ---------- */
+.scan-page .recent-list { background: transparent; border: 0; }
+.scan-page .recent-list > div { gap: 14px; padding: 14px 0; border-bottom: 1px solid var(--d-line); }
+.scan-page .recent-list > div:first-child { padding-top: 2px; }
+.scan-page .recent-list > div:last-child { border-bottom: 0; padding-bottom: 2px; }
+.scan-page .recent-file { flex: 0 0 40px; width: 40px; height: 40px; background: var(--d-maroon-tint); border-radius: var(--d-radius-sm); }
+.scan-page .recent-file svg { width: 18px; height: 18px; }
+.scan-page .recent-file.gold-file { color: var(--d-gold-deep); background: var(--d-gold-pale); }
+.scan-page .recent-list p { min-width: 0; flex: 1 1 auto; }
+.scan-page .recent-list strong { overflow: hidden; color: var(--d-ink); font-size: 14px; font-weight: 600; line-height: 1.35; text-overflow: ellipsis; white-space: nowrap; }
+.scan-page .recent-list small { margin-top: 3px; font: 500 12px/1.4 var(--mono); }
+.scan-page .pill { flex: 0 0 auto; padding: 5px 10px; border-radius: 999px; font: 600 11px/1.3 var(--mono); letter-spacing: .02em; white-space: nowrap; }
+.scan-page .pill.success { color: var(--d-success); background: var(--d-success-bg); }
+.scan-page .pill.pending { color: var(--d-gold-deep); background: var(--d-gold-pale); }
+.scan-page .recent-empty { margin: 0; padding: 14px 16px; color: var(--d-muted); background: var(--d-paper); border-radius: var(--d-radius-sm); font-size: 13px; }
+
+/* ---------- Footer and toast ---------- */
+.scan-page .admin-main > footer { margin-top: 32px; padding: 20px var(--d-gutter); color: var(--d-muted); font: 500 12px/1.5 var(--mono); letter-spacing: .02em; text-transform: none; }
+.scan-page .admin-main > footer b { color: var(--d-gold-deep); }
+.scan-page .admin-toast { right: 24px; bottom: 24px; max-width: min(360px, calc(100vw - 48px)); padding: 14px 18px; border-radius: 10px; font-size: 13px; line-height: 1.4; box-shadow: var(--d-shadow-hover); }
+
+/* ---------- Breakpoints ---------- */
+@media (max-width: 1024px) {
+  .scan-page .details-grid { grid-template-columns: repeat(2, 1fr); }
+  .scan-page .registration-grid { grid-template-columns: repeat(2, 1fr); }
+}
+
+@media (max-width: 640px) {
+  .scan-page .welcome-row { align-items: flex-start; flex-direction: column; gap: 14px; padding-top: 24px; }
+  .scan-page .welcome-row h2 { font-size: 26px; }
+  .scan-page .page-intro { font-size: 13px; }
+  .scan-page .scan-layout, .scan-page .scan-layout.single, .scan-page .ocr-status-banner, .scan-page .scan-details, .scan-page .recent-scans { width: calc(100% - (var(--d-gutter) * 2)); }
+  .scan-page .scan-layout .scan-card, .scan-page .scan-details, .scan-page .recent-scans { padding: 18px; }
+  .scan-page .scan-details, .scan-page .recent-scans, .scan-page .ocr-status-banner { margin-top: 12px; }
+  .scan-page .panel-heading { flex-wrap: wrap; gap: 10px; }
+  .scan-page .upload-zone { min-height: 212px; padding: 22px 16px; }
+  .scan-page .upload-icon { width: 52px; height: 52px; }
+  .scan-page .upload-zone strong { font-size: 15px; }
+  .scan-page .preview-cover { min-height: 260px; }
+  .scan-page .preview-cover img { height: 260px; }
+  .scan-page .student-mode-group { display: flex; flex-direction: row; width: 100%; }
+  .scan-page .student-mode-option { flex: 1 1 0; justify-content: center; width: auto; padding: 9px 10px; text-align: center; }
+  .scan-page .details-grid, .scan-page .registration-grid { grid-template-columns: 1fr; gap: 16px; }
+  .scan-page .scan-details > .archive-button { width: 100%; }
+  .scan-page .recent-list > div { flex-wrap: wrap; }
+  .scan-page .recent-list p { flex-basis: calc(100% - 54px); }
+  .scan-page .recent-list .pill { margin-left: 54px; }
+  .scan-page .admin-main > footer { margin-top: 20px; font-size: 11px; }
+  .scan-page .admin-toast { right: 16px; bottom: 16px; left: 16px; max-width: none; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .scan-page *, .scan-page *::before, .scan-page *::after { transition: none !important; }
+  .scan-page .preview-spinner svg { animation: none; }
+}

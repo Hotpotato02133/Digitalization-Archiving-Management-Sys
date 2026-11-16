@@ -17,6 +17,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   const mobileMenu = $('#mobileMenu');
   mobileMenu?.addEventListener('click', () => {
+    if (window.__datsShellUiMounted) return;
     const isOpen = mobileMenu.getAttribute('aria-expanded') === 'true';
     mobileMenu.setAttribute('aria-expanded', String(!isOpen));
     $('#sidebar')?.classList.toggle('open', !isOpen);

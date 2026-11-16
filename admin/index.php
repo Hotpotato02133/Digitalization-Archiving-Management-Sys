@@ -18,14 +18,17 @@ $initials = dats_user_initials($currentUser);
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="styles.css?v=20261115" />
-  <link rel="stylesheet" href="../dashboard-buttons.css?v=20261115" />
+  <link rel="stylesheet" href="styles.css?v=20260922" />
+  <link rel="stylesheet" href="../dashboard-buttons.css?v=20260914" />
+  <link rel="stylesheet" href="shell.css?v=<?= filemtime(__DIR__ . '/shell.css') ?>" />
+  <link rel="stylesheet" href="dashboard.css?v=<?= filemtime(__DIR__ . '/dashboard.css') ?>" />
   <script src="https://unpkg.com/lucide@latest"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 </head>
-<body>
+<body class="admin-page dashboard-page">
   <div class="admin-shell">
     <aside class="sidebar" id="sidebar">
+      <button class="drawer-close" type="button" aria-label="Close admin navigation" data-drawer-close><i data-lucide="x"></i></button>
       <a class="brand" href="../index.php"><img src="../img/ZPPSU.png" alt="ZPPSU seal" /><span><strong>ZPPSU REGISTRAR</strong><small>Digital Archive</small></span></a>
       <div class="workspace-label">Workspace</div>
       <nav aria-label="Admin navigation">
@@ -45,6 +48,7 @@ $initials = dats_user_initials($currentUser);
       </nav>
       <div class="sidebar-bottom"><a href="settings.php"><i data-lucide="settings-2"></i> Settings</a></div>
     </aside>
+    <div class="drawer-scrim" data-drawer-scrim aria-hidden="true"></div>
 
     <main class="admin-main" id="dashboard" data-dashboard-root>
       <header class="admin-header">
@@ -52,7 +56,6 @@ $initials = dats_user_initials($currentUser);
         <div><span class="eyebrow">Administrator workspace</span><h1><span data-greeting data-user-name="<?= $displayName ?>">Good morning</span></h1></div>
         <div class="header-actions"><button class="header-icon" aria-label="Notifications"><i data-lucide="bell"></i><span></span></button><div class="user-chip"><span class="avatar"><?= $initials ?></span><span><strong><?= $displayName ?></strong><small><?= htmlspecialchars(dats_user_role_label($currentUser), ENT_QUOTES, 'UTF-8') ?></small></span><i data-lucide="chevron-down"></i></div></div>
       </header>
-      <div class="admin-sheet">
 
       <section class="welcome-row">
         <div><p class="page-kicker"><span data-current-datetime>Loading date and time...</span></p><h2>Archive overview</h2><p class="page-intro">Live archive coverage, throughput, search readiness, and records requiring attention.</p></div>
@@ -130,13 +133,14 @@ $initials = dats_user_initials($currentUser);
         </div>
       </section>
       <footer><span>Digitalization Archiving Management System</span><span>Archive dashboard <b>·</b> ZPPSU Registrar</span></footer>
-      </div>
     </main>
   </div>
 
   <div class="admin-toast" id="adminToast" role="status">Your report is being prepared.</div>
   <div class="structure-modal-backdrop" id="adminCategoryModal" hidden><section class="structure-modal" role="dialog" aria-modal="true" aria-labelledby="adminCategoryTitle"><button class="row-action modal-close" id="closeAdminCategoryModal" type="button" aria-label="Close category dialog"><i data-lucide="x"></i></button><span class="panel-kicker">Document categories</span><h2 id="adminCategoryTitle">Add document category</h2><p>Create a category for an approved Registrar's Office document type.</p><label>Category code<input id="adminCategoryCode" type="text" maxlength="8" placeholder="e.g. CTC" /></label><label>Category name<input id="adminCategoryName" type="text" maxlength="150" placeholder="e.g. Certified True Copy" /></label><label>Description<textarea id="adminCategoryDescription" rows="3" maxlength="255" placeholder="Briefly describe this document type"></textarea></label><p id="adminCategoryMessage" role="alert"></p><button class="login-submit" id="saveAdminCategory" type="button">Add category <i data-lucide="arrow-right"></i></button></section></div>
   <script src="../data-sync.js?v=<?= filemtime(__DIR__ . '/../data-sync.js') ?>"></script>
-  <script src="script.js?v=20260922"></script>
+  <script src="script.js?v=<?= filemtime(__DIR__ . '/script.js') ?>"></script>
+  <script src="shell-ui.js?v=<?= filemtime(__DIR__ . '/shell-ui.js') ?>"></script>
+  <script src="dashboard-ui.js?v=<?= filemtime(__DIR__ . '/dashboard-ui.js') ?>"></script>
 </body>
 </html>
